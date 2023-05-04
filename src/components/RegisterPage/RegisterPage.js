@@ -2,6 +2,8 @@ import React,{useRef, useState} from 'react'
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import firebase from '../../firebase';
+import md5 from 'md5';
+
 function RegisterPage() {
     const {register,watch, formState:{errors}, handleSubmit} = useForm();
 	const [errorFromSubmit, setErrorFromSubmit] = useState("")
@@ -17,6 +19,13 @@ function RegisterPage() {
 				.auth()
 				.createUserWithEmailAndPassword(data.email,data.password)
 			console.log('createdUser',createdUser)
+
+			await createdUser.user.updateProfile({
+				displayName: data.name,
+				photoURL: 'http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon'
+			})
+
+
 			setLoading(false)
 		}catch(error){
 			setErrorFromSubmit(error.message)
