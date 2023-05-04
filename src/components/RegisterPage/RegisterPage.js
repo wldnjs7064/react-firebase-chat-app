@@ -25,6 +25,11 @@ function RegisterPage() {
 				photoURL: 'http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon'
 			})
 
+			//firebase DB에 저장
+			await firebase.database().ref("users").child(createdUser.user.uid).set({
+				name: createdUser.user.displayName,
+				image: createdUser.user.photoURL
+			})
 
 			setLoading(false)
 		}catch(error){
