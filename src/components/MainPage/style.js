@@ -1,17 +1,5 @@
 import styled from "styled-components";
 
-export const Board = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: solid;
-  border-width: thin;
-  border-color: #cccccc;
-  border-radius: 10px;
-  width: 905px;
-  height: 815px;
-  margin-left: 620px;
-`;
 export const Profile = styled.div`
   border-radius: 50%;
   background-color: #cccccc;
@@ -38,6 +26,9 @@ export const Login = styled.div`
   color: #404040;
   position: absolute;
   gap: 12px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export const Categories = styled.div`
   display: flex;
@@ -83,6 +74,9 @@ export const Icon = styled.div`
   width: fit-content;
   margin-left: 340px;
   margin-right: 680px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const SigninButton = styled.div`
@@ -100,4 +94,7 @@ export const SigninButton = styled.div`
   min-width: 162px;
   height: 40px;
   margin-right: 340px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
