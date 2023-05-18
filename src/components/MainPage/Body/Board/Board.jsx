@@ -7,6 +7,7 @@ function Board() {
       <Content>안녕하세요</Content>
       <Content>안녕하세요</Content>
       <Content>안녕하세요</Content>
+      <Content>안녕하세요</Content>
     </Contents>
   );
 }
@@ -15,6 +16,13 @@ const Content = styled.div`
   width: 100%;
   height: 180px;
   background-color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-bottom: solid;
+  border-width: thin;
+  border-color: #cccccc;
+
   &::after {
     content: "";
     width: 80px;
