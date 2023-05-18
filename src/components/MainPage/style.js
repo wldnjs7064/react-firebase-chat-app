@@ -65,6 +65,10 @@ export const Category = styled.div`
   height: 100%;
   font-family: "pretendard";
   min-width: 60px;
+  &:hover {
+    cursor: pointer;
+    color: #438afc;
+  }
 `;
 
 export const Icon = styled.div`
@@ -96,5 +100,7 @@ export const SigninButton = styled.div`
   margin-right: 340px;
   &:hover {
     cursor: pointer;
+    background-color: (67, 138, 252, 0.2);
+    color: black;
   }
 `;

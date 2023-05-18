@@ -23,6 +23,7 @@ const Content = styled.div`
   border-width: thin;
   border-color: #cccccc;
 
+  /* 컨텐츠 아래 가운데만 얇게 border 처리하고싶어서 쓴 코드인데 잘 안됨. 수정예정 */
   &::after {
     content: "";
     width: 80px;
