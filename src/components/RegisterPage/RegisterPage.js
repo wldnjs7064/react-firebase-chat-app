@@ -2,23 +2,42 @@ import React, { useRef,useState } from 'react'
 import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form';
 import firebase from '../../firebase';
+import md5 from 'md5';
 
 function RegisterPage() {
   
   const {register, watch, formState:{errors}, handleSubmit} = useForm();
   const [errorFromSubmit, setErrorFromSubmit] = useState("")
+ 
+  const [loading, setLoading] = useState(false);
+
   const password = useRef();
   password.current = watch("password");
 
   const onSubmit = async (data) => {
 
     try {
+		setLoading(true)
 		let createdUser = await firebase
 			.auth()
 			.createUserWithEmailAndPassword(data.email,data.password)
 		console.log('createdUser',createdUser)
+		console.log(data)
+		await createdUser.user.updateProfile( {
+			displayName: data.name,
+			photoURL:'http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon'
+		})
+
+		//firebase DB에 저장해주기
+		await firebase.database().ref("users").child(createdUser.user.uid).set({
+			name: createdUser.user.displayName,
+			image: createdUser.user.photoURL
+		})
+		
+		setLoading(false)
     } catch (error) {
         setErrorFromSubmit(error.message)
+		setLoading(false)
         setTimeout(() => {
           setErrorFromSubmit("")
         },5000);
@@ -65,20 +84,7 @@ function RegisterPage() {
         />
         {errors.password_confirm && errors.password_confirm.type === "required" && <p>This password confirm field is required</p>}
 			  {errors.password_confirm && errors.password_confirm.type === "validate" && <p>The passwords do not match </p>}
-          <input type="radio" name="job" value="officer"
-            {...register("job", {
-                required: true
-            })} />
-            <label>현직자</label>
-          <input type="radio" name="job" value="student"
-            {...register("job")} />
-            <label>취준생</label>
-          {errors.job && <p>Please select your job</p>}
-        
-          {errorFromSubmit &&
-              <p>{errorFromSubmit}</p>}
-
-        <input type="submit" />
+        <input type="submit" disabled={loading} />
         <Link style={{color:'gray', textDecoration:'none'}} to="../login">이미 아이디가 있다면... </Link>
       </form>
     </div>
