@@ -6,22 +6,23 @@ import firebase from '../../firebase';
 function RegisterPage() {
   
   const {register, watch, formState:{errors}, handleSubmit} = useForm();
-
+  const [errorFromSubmit, setErrorFromSubmit] = useState("")
   const password = useRef();
   password.current = watch("password");
 
-  const [job, setJob]=useState('');
-
-  const handleClickRadioButton=(e)=>{
-    console.log(e.target.value)
-    setJob(e.target.value);
-  }
-
   const onSubmit = async (data) => {
-    console.log('data',data);
-    // let createdUser = await firebase
-    //   .auth()
-    //   .createdUserWithEmailAndPassword()
+
+    try {
+		let createdUser = await firebase
+			.auth()
+			.createUserWithEmailAndPassword(data.email,data.password)
+		console.log('createdUser',createdUser)
+    } catch (error) {
+        setErrorFromSubmit(error.message)
+        setTimeout(() => {
+          setErrorFromSubmit("")
+        },5000);
+    }
   }
 
   return (
@@ -73,6 +74,10 @@ function RegisterPage() {
             {...register("job")} />
             <label>취준생</label>
           {errors.job && <p>Please select your job</p>}
+        
+          {errorFromSubmit &&
+              <p>{errorFromSubmit}</p>}
+
         <input type="submit" />
         <Link style={{color:'gray', textDecoration:'none'}} to="../login">이미 아이디가 있다면... </Link>
       </form>
