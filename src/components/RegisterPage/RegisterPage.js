@@ -65,11 +65,14 @@ function RegisterPage() {
         {errors.password_confirm && errors.password_confirm.type === "required" && <p>This password confirm field is required</p>}
 			  {errors.password_confirm && errors.password_confirm.type === "validate" && <p>The passwords do not match </p>}
           <input type="radio" name="job" value="officer"
-            {...register("job")} />
+            {...register("job", {
+                required: true
+            })} />
             <label>현직자</label>
           <input type="radio" name="job" value="student"
             {...register("job")} />
             <label>취준생</label>
+          {errors.job && <p>Please select your job</p>}
         <input type="submit" />
         <Link style={{color:'gray', textDecoration:'none'}} to="../login">이미 아이디가 있다면... </Link>
       </form>
