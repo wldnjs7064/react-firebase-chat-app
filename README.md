@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+## 취뽀스테이션
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![기본 페이지](https://github.com/wldnjs7064/react-firebase-chat-app/assets/108210492/2cbab302-7e61-41f9-a626-f13f044beb39)
 
-## Available Scripts
+> 서울 과학기술대학교 컴퓨터공학과 23년도 졸업작품
+>
+> 개발기간 : 2023.03 ~
 
-In the project directory, you can run:
+## 프로젝트 소개
 
-### `npm start`
+- 서울과학기술대학교 컴퓨터공학과 23년도 졸업작품입니다.
+- 취준생들 간의 소통을 도모하는 서비스입니다.
+- 취준생이 현직자에게 직접 DM을 보내 보다 정확한 정보를 얻을 수 있습니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Members
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<table align="center">
+  <tr align="center">
+    <td>이효린</td>
+    <td>송지원</td>
+  </tr>
+  <tr>
+    <td align="center">
+        <a href="https://github.com/hyorish03"><img src="https://avatars.githubusercontent.com/u/108210492?v=4" width="150px" alt="이효린"/><br /></a>
+     </td>
+     <td align="center">
+        <a href="https://github.com/wldnjs7064"><img src="https://avatars.githubusercontent.com/u/72726948?v=4" width="150px" alt="송지원"/><br /></a>
+     </td>
 
-### `npm test`
+  <tr>
+</table>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tool Stack
 
-### `npm run build`
+### Frontend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<div align="center">
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
+<img src="https://img.shields.io/badge/styledcomponent-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white">
+<img src="https://img.shields.io/badge/esLint-4B32C3?style=for-the-badge&logo=esLint&logoColor=white">
+<img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white">
+</div>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Backend
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<div align="center">
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white">
+</div>
