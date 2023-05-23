@@ -30,7 +30,7 @@ body {
   font-size:20px;
   text-align:center;
   font-weight: bold;
-  margin-top:30px;
+  margin-top:35px;
 }
 .auth-wrapper #id2 {
   font-size:13px;
@@ -70,8 +70,8 @@ body {
   background: #636ee6;
 }
 .auth-wrapper img {
-  width:12%;
-  height:12%;
+  width:auto;
+  height:auto;
   margin:auto;
   margin-top: 60px;
 }
