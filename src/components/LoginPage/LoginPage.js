@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form';
 import firebase from '../../firebase';
+import Logo from '../../assets/svg/ColoredLogo.svg';
 
 function LoginPage() {
   
@@ -28,9 +28,13 @@ function LoginPage() {
 
   return (
     <div className='auth-wrapper'>
-      <div style={{ textAlign: 'center'}}>
-        <h3>Login</h3>
-      </div>
+       <img src={Logo} />
+        <div id="id1">
+          취업의 시작점, 취뽀스테이션
+        </div>
+        <div id="id2"> 
+          취업, 이직, 커리어 콘텐츠까지<br/>커리어 성장의 모든 것
+        </div>
       <form onSubmit={handleSubmit(onSubmit)}>
       <label>Email</label>
         <input
@@ -47,8 +51,10 @@ function LoginPage() {
         />
         {errors.password && errors.password.type === "required" && <p>This password field is required</p>}
 			  {errors.password && errors.password.type === "minLength" && <p>Password must have at least 6 characters</p>}
-        <input type="submit" disabled={loading} />
-        <Link style={{color:'gray', textDecoration:'none'}} to="../register">아직 아이디가 없다면... </Link>
+        <input type="submit" value="이메일로 계속하기" disabled={loading} />
+        <div style={{textAlign:"center", marginTop:70}}>
+            <a href="../register">아직 계정이 없으시나요? </a>
+        </div>
       </form>
     </div>
   )
