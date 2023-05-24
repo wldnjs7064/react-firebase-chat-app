@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 function Board() {
+  const [content, setContent] = useState(""); // 게시글 내용
+  const [title, setTitle] = useState(""); // 게시글 제목
+  const [name, setName] = useState(""); // 게시글 작성자
+  const [date, setDate] = useState(""); // 게시글 작성일
+
+  useEffect(() => {
+    const contentHandler = (e) => {
+      fetch("http://localhost:3000/mockdata.json", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setContent(res.content);
+          setTitle(res.title);
+          setName(res.name);
+          setDate(res.date);
+        });
+    };
+    contentHandler();
+  }, []);
+
   return (
     <Contents>
-      <Content>안녕하세요</Content>
+      <Content>
+        <h1>{title}</h1>
+      </Content>
       <Content>안녕하세요</Content>
       <Content>안녕하세요</Content>
       <Content>안녕하세요</Content>
@@ -29,7 +53,7 @@ const Content = styled.div`
     width: 80px;
     height: 2px;
     background-color: rebeccapurple;
-    position: absolute;
+    /* position: absolute; */
     left: 0;
     bottom: -25px;
   }
@@ -45,6 +69,6 @@ const Contents = styled.div`
   border-radius: 1px;
   width: 905px;
   height: 815px;
-  margin-left: 620px;
+  /* margin-left: 620px; */
 `;
 export default Board;

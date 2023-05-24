@@ -20,11 +20,10 @@ export const Login = styled.div`
   border: solid;
   border-width: thin;
   border-color: #cccccc;
-  margin-left: 340px;
+  /* margin-left: 340px; */
   font-family: "pretendard";
   font-size: 20px;
   color: #404040;
-  position: absolute;
   gap: 12px;
   &:hover {
     cursor: pointer;
@@ -54,7 +53,8 @@ export const Wrapper = styled.div`
 export const Body = styled.div`
   width: 100%;
   height: 100vh;
-  justify-content: space-around;
+  justify-content: center;
+  display: flex;
   padding-top: 60px;
 `;
 
