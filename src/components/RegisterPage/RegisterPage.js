@@ -1,8 +1,8 @@
 import React, { useRef,useState } from 'react'
-import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form';
 import firebase from '../../firebase';
 import md5 from 'md5';
+import Logo from '../../assets/svg/ColoredLogo.svg';
 
 function RegisterPage() {
   
@@ -46,8 +46,12 @@ function RegisterPage() {
 
   return (
     <div className='auth-wrapper'>
-      <div style={{ textAlign: 'center'}}>
-        <h3>Register</h3>
+        <img src={Logo} />
+      <div id="id1">
+        취업의 시작점, 취뽀스테이션
+      </div>
+      <div id="id2"> 
+        취업, 이직, 커리어 콘텐츠까지 <br/>커리어 성장의 모든 것
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
       <label>Email</label>
@@ -84,8 +88,10 @@ function RegisterPage() {
         />
         {errors.password_confirm && errors.password_confirm.type === "required" && <p>This password confirm field is required</p>}
 			  {errors.password_confirm && errors.password_confirm.type === "validate" && <p>The passwords do not match </p>}
-        <input type="submit" disabled={loading} />
-        <Link style={{color:'gray', textDecoration:'none'}} to="../login">이미 아이디가 있다면... </Link>
+        <input type="submit" value="이메일로 계속하기" disabled={loading} />
+        <div style={{textAlign:"center", marginTop:70}}>
+            <a href="../login">이미 계정이 있으시나요? </a>
+        </div>
       </form>
     </div>
   )
