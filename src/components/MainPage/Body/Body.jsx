@@ -30,7 +30,6 @@ const Wrapper = styled.div`
   padding: 10px;
   align-content: center;
   gap: 15px;
-  background-color: white;
 `;
 
 export default Body;
