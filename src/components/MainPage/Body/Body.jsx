@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { ForwardArrow, ProfileIcon } from "../../../assets";
 import * as S from "../style";
 import Board from "./Board/Board";
+import Chat from "./Chat/Chat";
 import styled from "styled-components";
+
 function Body() {
   const navigate = useNavigate();
   const navigateLogin = () => {
@@ -11,14 +13,15 @@ function Body() {
   };
   return (
     <S.Body>
-      <Wrapper>
+      <WrapperLoginChat>
         <S.Login onClick={navigateLogin}>
           <ProfileIcon />
           로그인해주세요
           <ForwardArrow />
         </S.Login>
-        <Board />
-      </Wrapper>
+        <Chat />
+      </WrapperLoginChat>
+      <Board />
     </S.Body>
   );
 }
@@ -30,6 +33,9 @@ const Wrapper = styled.div`
   padding: 10px;
   align-content: center;
   gap: 15px;
+`;
+const WrapperLoginChat = styled.div`
+  display: block;
 `;
 
 export default Body;
