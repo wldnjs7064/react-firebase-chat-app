@@ -42,11 +42,12 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  border: solid;
+  border-top: solid;
+  border-bottom: solid;
   border-width: thin;
   border-color: #cccccc;
   border-radius: 1px;
   width: 905px;
-  height: 815px;
+  height: 100vh;
 `;
 export default Board;
