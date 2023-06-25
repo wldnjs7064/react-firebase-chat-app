@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function Feed({ title, name, date, content }) {
+function BoardList({ title, name, date, content }) {
   return (
     <Content>
       {title}
@@ -37,4 +37,4 @@ const Content = styled.div`
     bottom: -25px;
   }
 `;
-export default Feed;
+export default BoardList;

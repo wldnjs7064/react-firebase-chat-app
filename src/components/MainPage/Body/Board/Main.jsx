@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Feed from "./Feed";
+import BoardList from "./List";
 
-function Board() {
+function BoardMain() {
   const [feed, setFeed] = useState([]);
   // const [content, setContent] = useState(""); // 게시글 내용
   // const [title, setTitle] = useState(""); // 게시글 제목
@@ -25,7 +25,7 @@ function Board() {
   return (
     <Contents>
       {feed.map((item) => (
-        <Feed
+        <BoardList
           key={item.id}
           title={item.title}
           name={item.name}
@@ -50,4 +50,4 @@ const Contents = styled.div`
   width: 905px;
   height: 100vh;
 `;
-export default Board;
+export default BoardMain;

@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ForwardArrow, ProfileIcon } from "../../../assets";
 import * as S from "../style";
-import Board from "./Board/Board";
 import styled from "styled-components";
-import Input from "./BodyHeader/BodyHeader";
 import BodyHeader from "./BodyHeader/BodyHeader";
+import BoardMain from "./Board/Main";
+
 function Body() {
   const navigate = useNavigate();
   const navigateLogin = () => {
@@ -21,7 +21,7 @@ function Body() {
         </S.Login>
         <RightWrapper>
           <BodyHeader />
-          <Board />
+          <BoardMain />
         </RightWrapper>
       </Wrapper>
     </S.Body>
