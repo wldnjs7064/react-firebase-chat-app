@@ -1,7 +1,12 @@
+import ToastEditor from "components/ToastEditor";
 import React from "react";
 
 function BoardWrite() {
-  return <div></div>;
+  return (
+    <div>
+      <ToastEditor />
+    </div>
+  );
 }
 
 export default BoardWrite;

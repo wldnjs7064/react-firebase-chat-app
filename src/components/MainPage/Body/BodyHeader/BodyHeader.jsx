@@ -2,10 +2,12 @@ import { PencilIcon, QuestionProfileIcon } from "assets";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Filtering from "./Filtering";
+import { useNavigate } from "react-router-dom";
 
 function BodyHeader() {
+  const navigate = useNavigate();
   const handleClick = () => {
-    console.log("clicked");
+    navigate("/write");
   };
   return (
     <>

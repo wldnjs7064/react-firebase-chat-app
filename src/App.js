@@ -14,7 +14,7 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="write" element={<BoardWrite />} />
+        <Route path="/write" element={<BoardWrite />} />
       </Routes>
     </Router>
   );
