@@ -37,10 +37,11 @@ function RegisterPage() {
       console.log("name : " + createdUser.user.displayName);
       console.log("PhotoURL : " + createdUser.user.photoURL);
       //firebase DB에 저장해주기
-      await firebase.database().ref("users").child(createdUser.user.uid).set({
-        name: createdUser.user.displayName,
-        image: createdUser.user.photoURL,
-      });
+      await firebase
+        .database()
+        .ref("users")
+        .child(createdUser.user.uid)
+        .set({});
       alert("회원가입이 완료되었습니다.");
       navigate("/");
       setLoading(false);
