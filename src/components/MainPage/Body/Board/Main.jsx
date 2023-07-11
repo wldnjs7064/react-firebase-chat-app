@@ -48,6 +48,7 @@ const Contents = styled.div`
   border-color: #cccccc;
   border-radius: 1px;
   width: 905px;
-  height: 100vh;
+  height: 815px;
+  margin-left: 20px;
 `;
 export default BoardMain;

@@ -2,9 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ForwardArrow, ProfileIcon } from "../../../assets";
 import * as S from "../style";
+import Chat from "./Chat/Chat";
 import styled from "styled-components";
 import BodyHeader from "./BodyHeader/BodyHeader";
 import BoardMain from "./Board/Main";
+import BoardList from "./Board/List";
 
 function Body() {
   const navigate = useNavigate();
@@ -13,17 +15,15 @@ function Body() {
   };
   return (
     <S.Body>
-      <Wrapper>
+      <WrapperLoginChat>
         <S.Login onClick={navigateLogin}>
           <ProfileIcon />
           로그인해주세요
           <ForwardArrow />
         </S.Login>
-        <RightWrapper>
-          <BodyHeader />
-          <BoardMain />
-        </RightWrapper>
-      </Wrapper>
+        <Chat />
+      </WrapperLoginChat>
+      <BoardList />
     </S.Body>
   );
 }
@@ -42,6 +42,9 @@ const Wrapper = styled.div`
   padding: 10px;
   align-content: center;
   gap: 15px;
+`;
+const WrapperLoginChat = styled.div`
+  display: block;
 `;
 
 export default Body;
