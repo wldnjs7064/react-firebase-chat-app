@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 function BodyHeader() {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/write");
+    // navigate("/write");
+    navigate("/page");
   };
   return (
     <>

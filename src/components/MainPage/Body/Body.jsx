@@ -23,7 +23,10 @@ function Body() {
         </S.Login>
         <Chat />
       </WrapperLoginChat>
-      <BoardList />
+      <RightWrapper>
+        <BodyHeader />
+        <BoardMain />
+      </RightWrapper>
     </S.Body>
   );
 }
@@ -33,16 +36,10 @@ const RightWrapper = styled.div`
   border: solid;
   border-width: thin;
   border-color: #cccccc;
-  padding: 0 10px;
+  margin: 0 15px;
+  border-radius: 10px;
 `;
-const Wrapper = styled.div`
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  padding: 10px;
-  align-content: center;
-  gap: 15px;
-`;
+
 const WrapperLoginChat = styled.div`
   display: block;
 `;

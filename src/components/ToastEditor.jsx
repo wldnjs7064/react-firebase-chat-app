@@ -17,7 +17,7 @@ export default function ToastEditor() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "0px 100px" }}>
       <Editor
         ref={editorRef} // DOM 선택용 useRef
         placeholder="내용을 입력해주세요."
@@ -34,8 +34,7 @@ export default function ToastEditor() {
         ]}
         useCommandShortcut={false} // 키보드 입력 컨트롤 방지
       ></Editor>
-
-      <button onClick={handleRegisterButton}>등록</button>
+      {/* <button onClick={handleRegisterButton}>등록</button> */}
     </div>
   );
 }
