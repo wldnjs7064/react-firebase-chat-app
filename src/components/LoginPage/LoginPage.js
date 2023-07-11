@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import firebase from "../../firebase";
 import Logo from "../../assets/svg/ColoredLogo.svg";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const {
@@ -11,7 +12,7 @@ function LoginPage() {
   } = useForm();
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       setLoading(true);
@@ -19,7 +20,8 @@ function LoginPage() {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password);
-
+      alert("로그인이 완료되었습니다.");
+      navigate("/");
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);

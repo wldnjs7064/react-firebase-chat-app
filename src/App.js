@@ -14,16 +14,16 @@ function App(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
 
   useEffect(() => {
-    // firebase.auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     //로그인 시에 메인페이지로 이동
-    //     //console.log(user);
-    //     navigate("/");
-    //     dispatch(setUser(user));
-    //   } else {
-    //     navigate("/login");
-    //   }
-    // });
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        //로그인 시에 메인페이지로 이동
+        //console.log(user);
+        navigate("/");
+        dispatch(setUser(user));
+      } else {
+        navigate("/login");
+      }
+    });
   }, []);
 
   // if (isLoading) {
