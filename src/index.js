@@ -10,21 +10,24 @@ import ReduxThunk from "redux-thunk";
 import Reducer from "./redux/reducers";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
+import rootReducer from "./redux/reducers";
 
-const createStoreWithMiddleware = applyMiddleware(
-  promiseMiddleware,
-  ReduxThunk
-)(createStore);
+// const createStoreWithMiddleware = applyMiddleware(
+//   promiseMiddleware,
+//   ReduxThunk
+// )(createStore);
 
+const store = createStore(rootReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider
-      store={createStoreWithMiddleware(
-        Reducer,
-        window.__REUDX_DEVTOOLS_EXTENSION__ &&
-          window.__REUDX_DEVTOOLS_EXTENSION__()
-      )}
+      store={store}
+      // store={createStoreWithMiddleware(
+      //   Reducer,
+      //   window.__REUDX_DEVTOOLS_EXTENSION__ &&
+      //     window.__REUDX_DEVTOOLS_EXTENSION__()
+      // )}
     >
       <Router>
         <App />

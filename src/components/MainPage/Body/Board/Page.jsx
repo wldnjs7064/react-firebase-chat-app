@@ -1,75 +1,69 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-// import { collection, addDoc } from "firebase/firestore";
-// import { db } from "config/firebase";
+import { collection, addDoc, Firestore } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ToastEditor from "components/ToastEditor";
 import styled from "styled-components";
-
-// const NoSsrEditor = dynamic(() => import("components/TuiEditor"), {
-//   ssr: false,
-// });
-
+import Header from "components/MainPage/Header/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
 const Page = () => {
   const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const 제목 = useSelector((state) => state.write.title);
+  const 내용 = useSelector((state) => state.write.content);
+  const editorRef = useRef();
 
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const ref = useRef(null);
+  const dispatch = useDispatch();
+
+  const ref = useRef();
 
   const handleGoBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
 
-  alert(errors.title?.message);
+  const handleTitleChange = (e) => {
+    e.preventDefault();
+    setTitle(e.target.value);
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const contentMark = editorRef.current?.getInstance().getMarkdown();
+    setContent(contentMark);
+    console.log("Content:", contentMark);
+    console.log("Title:", title);
+    dispatch({ type: "WRITE", title: title });
+    dispatch({ type: "WRITE", content: contentMark });
+    console.log("제목:", 제목);
+    console.log("내용:", 내용);
+  };
+  // 등록 버튼 핸들러
 
   return (
-    <>
+    <div>
+      <Header />
       <div>
-        <form
-          onSubmit={handleSubmit(async (data) => {
-            try {
-              const editorIns = ref?.current?.getInstance();
-              // 에디터 작성 내용 markdown으로 저장
-              const contentMark = editorIns.getMarkdown();
-
-              // contentMark 길이 체크
-              if (contentMark?.length === 0) {
-                throw new Error("내용을 입력해주세요.");
-              }
-
-              // add firestore
-              //   await addDoc(collection(db, "posts"), {
-              //     title: data.title,
-              //     content: contentMark,
-              //     createdAt: new Date(),
-              //   });
-              toast.success("포스트를 작성했습니다.", {
-                autoClose: 1000,
-              });
-            } catch (e) {
-              console.log(e);
-              toast.error(`${e}` || "다시 시도해주세요.", {
-                autoClose: 1000,
-              });
-            }
-          })}
-        >
-          <div
-            style={{
-              padding: "50px 100px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            <label style={{ fontFamily: "pretendard" }}>제목</label>
-            <Title
+        <form onSubmit={onSubmit}>
+          <TitleWrapper>
+            <p
+              style={{
+                fontFamily: "pretendard",
+                fontSize: "25px",
+              }}
+            >
+              제목
+            </p>
+            <p>{제목}</p>
+            <TitleInput
               {...register("title", {
                 required: "제목은 필수 입력 사항입니다.",
               })}
@@ -77,9 +71,31 @@ const Page = () => {
               id="title"
               name="title"
               placeholder="제목을 입력해주세요"
+              onChange={handleTitleChange}
             />
-          </div>
-          <ToastEditor />
+          </TitleWrapper>
+          <>
+            <div style={{ padding: "0px 100px" }}>
+              <Editor
+                ref={editorRef} // DOM 선택용 useRef
+                placeholder="내용을 입력해주세요."
+                previewStyle="vertical" // 미리보기 스타일 지정
+                height="500px" // 에디터 창 높이
+                initialEditType="wysiwyg" //
+                toolbarItems={[
+                  // 툴바 옵션 설정
+                  ["heading", "bold", "italic", "strike"],
+                  ["hr", "quote"],
+                  ["ul", "ol", "task", "indent", "outdent"],
+                  ["table", "image", "link"],
+                  ["code", "codeblock"],
+                ]}
+                useCommandShortcut={false} // 키보드 입력 컨트롤 방지
+              ></Editor>
+              <button onClick={onSubmit}>등록</button>
+            </div>
+            <p>{내용}</p>
+          </>
           {/* <NoSsrEditor content="" /> */}
           <Buttons>
             <Button onClick={handleGoBack}>뒤로가기</Button>
@@ -87,14 +103,21 @@ const Page = () => {
           </Buttons>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
-const Title = styled.input`
+const TitleWrapper = styled.div`
+  padding: 50px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+`;
+const TitleInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 95%;
+  width: 85%;
 `;
 const Buttons = styled.div`
   display: flex;
