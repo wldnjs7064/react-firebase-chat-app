@@ -5,12 +5,17 @@ const InitializeWriteState = {
   content: "",
 };
 
+export const writeAction = (title, content) => ({
+  type: WRITE,
+  payload: { title, content },
+});
+
 const write = (state = InitializeWriteState, action) => {
   switch (action.type) {
     case WRITE:
       return {
-        title: action.title,
-        content: action.content,
+        title: action.payload.title,
+        content: action.payload.content,
       };
     default:
       return state;

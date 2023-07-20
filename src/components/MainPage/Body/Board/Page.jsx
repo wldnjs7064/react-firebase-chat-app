@@ -1,14 +1,12 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { collection, addDoc, Firestore } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import ToastEditor from "components/ToastEditor";
 import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
+import { writeAction } from "redux/reducers/write_reducer";
 const Page = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -39,14 +37,12 @@ const Page = () => {
     e.preventDefault();
     const contentMark = editorRef.current?.getInstance().getMarkdown();
     setContent(contentMark);
-    console.log("Content:", contentMark);
-    console.log("Title:", title);
-    dispatch({ type: "WRITE", title: title });
-    dispatch({ type: "WRITE", content: contentMark });
-    console.log("제목:", 제목);
-    console.log("내용:", 내용);
+    dispatch(writeAction(title, content));
   };
-  // 등록 버튼 핸들러
+
+  useEffect(() => {
+    console.log(제목, 내용);
+  }, [제목, 내용]);
 
   return (
     <div>
@@ -77,8 +73,9 @@ const Page = () => {
           <>
             <div style={{ padding: "0px 100px" }}>
               <Editor
-                ref={editorRef} // DOM 선택용 useRef
-                placeholder="내용을 입력해주세요."
+                value={content} // DOM 선택용 useRef
+                onChange={(e) => console.log(e)}
+                placeholder="내용aaa을 입력해주세요."
                 previewStyle="vertical" // 미리보기 스타일 지정
                 height="500px" // 에디터 창 높이
                 initialEditType="wysiwyg" //
@@ -92,9 +89,9 @@ const Page = () => {
                 ]}
                 useCommandShortcut={false} // 키보드 입력 컨트롤 방지
               ></Editor>
+              <p style={{ color: "black" }}>{내용}</p>
               <button onClick={onSubmit}>등록</button>
             </div>
-            <p>{내용}</p>
           </>
           {/* <NoSsrEditor content="" /> */}
           <Buttons>
