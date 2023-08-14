@@ -58,13 +58,14 @@ export const Body = styled.div`
   padding-top: 60px;
 `;
 
-export const Category = styled.div`
+export const Category = styled.span`
   display: flex;
   align-items: center;
   width: fit-content;
   height: 100%;
   font-family: "pretendard";
-  min-width: 60px;
+  white-space: nowrap;
+  min-width: fit-content;
   &:hover {
     cursor: pointer;
     color: #438afc;
@@ -90,6 +91,7 @@ export const SigninButton = styled.div`
   border-radius: 999px;
   border: solid;
   border-width: thin;
+  white-space: nowrap;
   background-color: white;
   border-color: #438afc;
   padding: 7px 25px;
