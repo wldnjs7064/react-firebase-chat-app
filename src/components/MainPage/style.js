@@ -87,6 +87,7 @@ export const Icon = styled.div`
 export const SigninButton = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   width: fit-content;
   border-radius: 999px;
   border: solid;

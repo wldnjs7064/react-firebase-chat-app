@@ -6,7 +6,6 @@ import Chat from "./Chat/Chat";
 import styled from "styled-components";
 import BodyHeader from "./BodyHeader/BodyHeader";
 import BoardMain from "./Board/Main";
-import BoardList from "./Board/List";
 
 function Body() {
   const navigate = useNavigate();
