@@ -1,7 +1,22 @@
-import React from "react";
+import { boadDB } from "../../../../firebase.js";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+// import { getDocs } from "firebase/firestore";
 
-function BoardList({ title, name, date, content }) {
+function BoardList({ title, content }) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const boarddata = boadDB.collection("Board").doc("BoardContents");
+
+  useEffect(() => {
+    const getData = async () => {
+      // const data = await getDocs(boarddata);
+      // console.log(data);
+    };
+
+    getData();
+  }, []);
+
   return (
     <Content>
       <Title>{title}</Title>
