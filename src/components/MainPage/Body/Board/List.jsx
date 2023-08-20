@@ -6,7 +6,7 @@ import styled from "styled-components";
 function BoardList({ title, content }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  const boarddata = boadDB.collection("Board").doc("BoardContents");
+  // const boarddata = boadDB.collection("Board").doc("BoardContents");
 
   useEffect(() => {
     const getData = async () => {
