@@ -1,30 +1,40 @@
 import { boadDB } from "../../../../firebase.js";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 function BoardList({ title, content }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // const boarddata = boadDB.collection("Board").doc("BoardContents");
+  const [contents, setContents] = useState([]);
+
+  const getContents = async () => {
+    const dbData = await getDocs(collection(boadDB, "Board"));
+
+    console.log("dbData.docs", dbData.docs[0].data());
+    setContents(dbData.docs[0].data());
+    // setContents(dbData.docs.map((doc) => doc.data()));
+    // console.log("dbData", dbData);
+    // dbData.forEach((doc) => {
+    //   if (doc.exists) {
+    //     // setContents(doc.data());
+    //   }
+    // });
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      // const data = await getDocs(boarddata);
-      // console.log(data);
-    };
-
-    getData();
+    getContents();
   }, []);
 
   return (
     <Content>
-      <Title>{title}</Title>
+      <Title>{contents.title}</Title>
       <br />
       {/* <p>작성자 : {name}</p> */}
       {/* {date} */}
       {/* <br /> */}
-      {content}
+      {contents.content}
     </Content>
   );
 }

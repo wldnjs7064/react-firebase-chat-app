@@ -1,32 +1,37 @@
-import { BackwardVector, ForwardArrow, ForwardVector } from "assets";
 import React from "react";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "styled-components";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 function Filtering() {
   return (
     <div>
       <TagList>
         <Icon>
-          <BackwardVector />
+          <ArrowBackIosNewIcon />
         </Icon>
         <Tag tag={{ selected: true }}># 전체</Tag>
         <Tag tag={{ selected: false }}># 자유</Tag>
         <Tag tag={{ selected: false }}># 질문</Tag>
         <Icon>
-          <ForwardVector />
+          <ArrowForwardIosIcon />
         </Icon>
       </TagList>
     </div>
   );
 }
 export const Icon = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  font-size: medium;
   cursor: pointer;
   border-radius: 50%;
   display: flex;
   border: solid;
   border-width: thin;
+  color: gray;
   border-color: #cccccc;
 `;
 export const TagList = styled.div`
