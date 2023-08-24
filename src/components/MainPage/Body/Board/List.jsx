@@ -1,4 +1,4 @@
-import { boadDB } from "../../../../firebase.js";
+import { boardDB } from "../../../../firebase.js";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { collection, getDocs } from "firebase/firestore";
@@ -6,11 +6,11 @@ import { collection, getDocs } from "firebase/firestore";
 function BoardList({ title, content }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  // const boarddata = boadDB.collection("Board").doc("BoardContents");
+  // const boarddata = boardDB.collection("Board").doc("BoardContents");
   const [contents, setContents] = useState([]);
 
   const getContents = async () => {
-    const dbData = await getDocs(collection(boadDB, "Board"));
+    const dbData = await getDocs(collection(boardDB, "Board"));
 
     console.log("dbData.docs", dbData.docs[0].data());
     setContents(dbData.docs[0].data());

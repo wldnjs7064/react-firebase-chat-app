@@ -21,4 +21,4 @@ var firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export default app;
-export const boadDB = getFirestore(app);
+export const boardDB = getFirestore(app);

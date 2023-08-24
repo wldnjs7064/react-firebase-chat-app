@@ -4,12 +4,15 @@ import styled from "styled-components";
 import * as S from "../../style";
 import Header from "components/MainPage/Header/Header";
 function BoardWrite() {
+  const register = () => {
+    alert("등록되었습니다.");
+  };
   return (
     <div>
       <Header style={{ backgroundColor: "fafafa" }} />
       <S.Body>
         <Wrapper>
-          <RegisterButton>등록하기</RegisterButton>
+          <RegisterButton onClick={register}>하이</RegisterButton>
           <ToastEditor />
         </Wrapper>
       </S.Body>
