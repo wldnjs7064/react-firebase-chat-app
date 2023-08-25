@@ -17,7 +17,7 @@ function UserPanel() {
       </h3>
       <div style={{ display: "flex", marginBottom: "1rem" }}>
         <Image
-          src="holder.js/171x180"
+          src={user && user.photoURL}
           style={{ width: "30p", height: "30px", marginTop: "3px" }}
           roundedCircle
         />
@@ -26,7 +26,7 @@ function UserPanel() {
             style={{ background: "transparent", border: "0px" }}
             id="dropdown-basic"
           >
-            user name
+            {user.displayName}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
