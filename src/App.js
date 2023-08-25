@@ -11,6 +11,7 @@ function App() {
   const navigate = useNavigate();
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -23,18 +24,18 @@ function App() {
     });
   }, []);
 
-  if (isLoading) {
-    return <div>로딩중입니다.</div>;
-  } else {
-    return (
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
-    );
-  }
+  // if (isLoading) {
+  //   return <div>로딩중입니다.</div>;
+  // } else {
+  return (
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
+  );
 }
+// }
 
 export default App;
