@@ -31,7 +31,7 @@ function UserPanel() {
 
           <Dropdown.Menu>
             <Dropdown.Item href="#/action-1">프로필 사진 변경</Dropdown.Item>
-            <Dropdown.Item onCllick={handleLogout}>로그아웃</Dropdown.Item>
+            <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

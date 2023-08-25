@@ -21,7 +21,7 @@ function LoginPage() {
         .auth()
         .signInWithEmailAndPassword(data.email, data.password);
       alert("로그인이 완료되었습니다.");
-      navigate("/");
+      navigate("/chat");
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);

@@ -6,7 +6,7 @@ import RegisterPage from "./components/RegisterPage/RegisterPage";
 import ChatPage from "./components/ChatPage/ChatPage";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "./redux/actions/user_action";
+import { setUser, clearUser } from "./redux/actions/user_action";
 function App() {
   const navigate = useNavigate();
   let dispatch = useDispatch();
@@ -20,22 +20,23 @@ function App() {
         dispatch(setUser(user));
       } else {
         navigate("/login");
+        dispatch(clearUser());
       }
     });
   }, []);
 
-  // if (isLoading) {
-  //   return <div>로딩중입니다.</div>;
-  // } else {
-  return (
-    <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/chat" element={<ChatPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-    </Routes>
-  );
+  if (isLoading) {
+    return <div>로딩중입니다.</div>;
+  } else {
+    return (
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    );
+  }
 }
-// }
 
 export default App;
