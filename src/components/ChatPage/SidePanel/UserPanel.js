@@ -26,7 +26,7 @@ function UserPanel() {
             style={{ background: "transparent", border: "0px" }}
             id="dropdown-basic"
           >
-            {user.displayName}
+            {user && user.displayName}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>

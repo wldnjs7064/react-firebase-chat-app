@@ -7,7 +7,7 @@ import ChatPage from "./components/ChatPage/ChatPage";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
-function App() {
+function App(props) {
   let navigate = useNavigate();
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
