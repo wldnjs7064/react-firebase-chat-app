@@ -25,6 +25,7 @@ function LoginPage() {
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
+      alert("이메일 또는 비밀번호가 틀렸습니다.");
       setLoading(false);
       setTimeout(() => {
         setErrorFromSubmit("");
