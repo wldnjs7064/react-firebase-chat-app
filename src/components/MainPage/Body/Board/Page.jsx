@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 
 const Page = () => {
@@ -36,25 +36,25 @@ const Page = () => {
     createBoard();
   };
 
-  // content가 바뀔 때마다 db에 저장
-  const boardCollectionRef = getDocs(collection(boardDB, "board"));
-
-  useEffect(() => {
-    const getDB = async () => {
-      const data = await boardCollectionRef;
-      setDB(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getDB();
-  }, [content]);
-
   const uniqueId = useId();
   console.log(uniqueId);
 
   const createBoard = async () => {
-    // await setDoc(doc(DB, "board"), {
-    //   title: title,
-    //   content: content,
-    // });
+    try {
+      // const docRef = await addDoc(boardDB, "Board");
+      const docRef = await addDoc(collection(boardDB, "Board"), {
+        title: title,
+        content: content,
+      });
+      console.log("DocID", docRef.id)
+      // await setDoc(doc(boardDB, "Board", "BoardContents"), {
+      //   title: title,
+      //   content: content,
+      // });
+    } catch (error) {
+      alert(error);
+      console.log(error);
+    }
   };
 
   return (
@@ -62,6 +62,8 @@ const Page = () => {
       <Header />
       <div>
         <form onSubmit={onSubmit}>
+          {" "}
+          b
           <TitleWrapper>
             <p
               style={{
