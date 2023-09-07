@@ -15,16 +15,22 @@ export class ChatRooms extends Component {
     chatRoomsRef: firebase.database().ref("chatRooms"),
     chatRooms: [],
     firstLoad: true,
+    activeChatRoomId: "",
   };
 
   componentDidMount() {
     this.AddChatRoomsListener();
   }
 
+  componentWillUnmount() {
+    this.state.chatRoomsRef.off();
+  }
+
   setFirstChatRoom = () => {
     const firstChatRoom = this.state.chatRooms[0];
     if (this.state.firstLoad && this.state.chatRooms.length > 0) {
       this.props.dispatch(setCurrentChatRoom(firstChatRoom));
+      this.setState({ activeChatRoomId: firstChatRoom.id });
     }
     this.setState({ firstLoad: false });
   };
@@ -79,11 +85,19 @@ export class ChatRooms extends Component {
 
   changeChatRoom = (room) => {
     this.props.dispatch(setCurrentChatRoom(room));
+    this.setState({ activeChatRoomId: room.id });
   };
   renderChatRooms = (chatRooms) =>
     chatRooms.length > 0 &&
     chatRooms.map((room) => (
-      <li key={room.id} onClick={() => this.changeChatRoom(room)}>
+      <li
+        key={room.id}
+        style={{
+          backgroundColor:
+            room.id === this.state.activeChatRoomId && "#ffffff45",
+        }}
+        onClick={() => this.changeChatRoom(room)}
+      >
         #{room.name}
       </li>
     ));
