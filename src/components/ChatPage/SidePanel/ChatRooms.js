@@ -14,18 +14,28 @@ export class ChatRooms extends Component {
     description: "",
     chatRoomsRef: firebase.database().ref("chatRooms"),
     chatRooms: [],
+    firstLoad: true,
   };
 
   componentDidMount() {
     this.AddChatRoomsListener();
   }
 
+  setFirstChatRoom = () => {
+    const firstChatRoom = this.state.chatRooms[0];
+    if (this.state.firstLoad && this.state.chatRooms.length > 0) {
+      this.props.dispatch(setCurrentChatRoom(firstChatRoom));
+    }
+    this.setState({ firstLoad: false });
+  };
   AddChatRoomsListener = () => {
     let chatRoomsArray = [];
 
     this.state.chatRoomsRef.on("child_added", (DataSnapshot) => {
       chatRoomsArray.push(DataSnapshot.val());
-      this.setState({ chatRooms: chatRoomsArray });
+      this.setState({ chatRooms: chatRoomsArray }, () =>
+        this.setFirstChatRoom()
+      );
     });
   };
 
