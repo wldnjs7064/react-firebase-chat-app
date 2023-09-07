@@ -23,10 +23,11 @@ export class ChatRooms extends Component {
       this.addChatRoom();
     }
   };
+
   addChatRoom = async () => {
     const key = this.state.chatRoomsRef.push().key;
     const { name, description } = this.state;
-    const { user } = this.props.user;
+    const { user } = this.props;
     const newChatRoom = {
       id: key,
       name: name,
@@ -47,6 +48,7 @@ export class ChatRooms extends Component {
       alert(error);
     }
   };
+
   isFormValid = (name, description) => name && description;
   render() {
     return (
@@ -111,9 +113,11 @@ export class ChatRooms extends Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     user: state.user.currentUser,
   };
 };
+
 export default connect(mapStateToProps)(ChatRooms);
