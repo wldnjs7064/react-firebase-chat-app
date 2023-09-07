@@ -2,17 +2,47 @@ import React, { useRef } from "react";
 import { IoIosChatboxes } from "react-icons/io";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import firebase from "../../../firebase";
+import { setPhotoURL } from "../../../redux/actions/user_action";
 
 function UserPanel() {
   const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
   const inputOpenImageRef = useRef();
   const handleLogout = () => {
     firebase.auth().signOut();
   };
   const handleOpenImageRef = () => {
     inputOpenImageRef.current.click();
+  };
+
+  const handleUploadImage = async (event) => {
+    const file = event.target.files[0];
+    const metadata = { contentType: file.type };
+
+    try {
+      let uploadTaskSnapshot = await firebase
+        .storage()
+        .ref()
+        .child(`user_image/${user.uid}`)
+        .put(file, metadata);
+
+      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
+      await firebase.auth().currentUser.updateProfile({
+        photoURL: downloadURL,
+      });
+
+      dispatch(setPhotoURL(downloadURL));
+
+      await firebase
+        .database()
+        .ref("users")
+        .child(user.uid)
+        .update({ image: downloadURL });
+    } catch (error) {
+      alert(error);
+    }
   };
   return (
     <div>
@@ -42,6 +72,7 @@ function UserPanel() {
         </Dropdown>
       </div>
       <input
+        onChange={handleUploadImage}
         accept="image/jpeg, image/png"
         style={{ display: "none" }}
         ref={inputOpenImageRef}
