@@ -43,7 +43,7 @@ function RegisterPage() {
         .child(createdUser.user.uid)
         .set({});
       alert("회원가입이 완료되었습니다.");
-      navigate("/");
+      navigate("/login");
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
