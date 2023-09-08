@@ -6,13 +6,45 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { connect } from "react-redux";
 import firebase from "../../../firebase";
+import { setCurrentChatRoom } from "../../../redux/actions/chatRoom_action";
 export class ChatRooms extends Component {
   state = {
     show: false,
     name: "",
     description: "",
     chatRoomsRef: firebase.database().ref("chatRooms"),
+    chatRooms: [],
+    firstLoad: true,
+    activeChatRoomId: "",
   };
+
+  componentDidMount() {
+    this.AddChatRoomsListener();
+  }
+
+  componentWillUnmount() {
+    this.state.chatRoomsRef.off();
+  }
+
+  setFirstChatRoom = () => {
+    const firstChatRoom = this.state.chatRooms[0];
+    if (this.state.firstLoad && this.state.chatRooms.length > 0) {
+      this.props.dispatch(setCurrentChatRoom(firstChatRoom));
+      this.setState({ activeChatRoomId: firstChatRoom.id });
+    }
+    this.setState({ firstLoad: false });
+  };
+  AddChatRoomsListener = () => {
+    let chatRoomsArray = [];
+
+    this.state.chatRoomsRef.on("child_added", (DataSnapshot) => {
+      chatRoomsArray.push(DataSnapshot.val());
+      this.setState({ chatRooms: chatRoomsArray }, () =>
+        this.setFirstChatRoom()
+      );
+    });
+  };
+
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
@@ -23,10 +55,11 @@ export class ChatRooms extends Component {
       this.addChatRoom();
     }
   };
+
   addChatRoom = async () => {
     const key = this.state.chatRoomsRef.push().key;
     const { name, description } = this.state;
-    const { user } = this.props.user;
+    const { user } = this.props;
     const newChatRoom = {
       id: key,
       name: name,
@@ -47,7 +80,27 @@ export class ChatRooms extends Component {
       alert(error);
     }
   };
+
   isFormValid = (name, description) => name && description;
+
+  changeChatRoom = (room) => {
+    this.props.dispatch(setCurrentChatRoom(room));
+    this.setState({ activeChatRoomId: room.id });
+  };
+  renderChatRooms = (chatRooms) =>
+    chatRooms.length > 0 &&
+    chatRooms.map((room) => (
+      <li
+        key={room.id}
+        style={{
+          backgroundColor:
+            room.id === this.state.activeChatRoomId && "#ffffff45",
+        }}
+        onClick={() => this.changeChatRoom(room)}
+      >
+        #{room.name}
+      </li>
+    ));
   render() {
     return (
       <div>
@@ -70,6 +123,10 @@ export class ChatRooms extends Component {
             }}
           />
         </div>
+
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          {this.renderChatRooms(this.state.chatRooms)}
+        </ul>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
@@ -111,9 +168,11 @@ export class ChatRooms extends Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     user: state.user.currentUser,
   };
 };
+
 export default connect(mapStateToProps)(ChatRooms);
