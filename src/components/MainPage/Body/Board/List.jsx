@@ -1,41 +1,38 @@
 import { boardDB } from "../../../../firebase.js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { collection, getDocs } from "firebase/firestore";
 
-function BoardList({ title, content }) {
+function BoardList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // const boarddata = boardDB.collection("Board").doc("BoardContents");
-  const [contents, setContents] = useState([]);
-
-  const getContents = async () => {
-    const dbData = await getDocs(collection(boardDB, "Board"));
-
-    console.log("dbData.docs", dbData.docs[0].data());
-    setContents(dbData.docs[0].data());
-    // setContents(dbData.docs.map((doc) => doc.data()));
-    // console.log("dbData", dbData);
-    // dbData.forEach((doc) => {
-    //   if (doc.exists) {
-    //     // setContents(doc.data());
-    //   }
-    // });
-  };
+  const [DBData, setDBData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     getContents();
   }, []);
 
+  const getContents = async () => {
+    const dbData = await getDocs(collection(boardDB, "Board"));
+    console.log("docs", dbData.docs);
+    setDBData(dbData.docs);
+  };
+
+  console.log("DBData", DBData);
   return (
-    <Content>
-      <Title>{contents.title}</Title>
-      <br />
-      {/* <p>작성자 : {name}</p> */}
-      {/* {date} */}
-      {/* <br /> */}
-      {contents.content}
-    </Content>
+    <Contents>
+      <div style={{ backgroundColor: "#CCCCCC" }}>
+        {DBData.map((doc) => (
+          <div key={doc.data().id} style={{ backgroundColor: "#454685" }}>
+            <Title>{doc.data().title}</Title>
+            <Content>{doc.data().content}</Content>
+          </div>
+        ))}
+      </div>
+    </Contents>
   );
 }
 
@@ -43,12 +40,18 @@ const Title = styled.h3`
   font-size: 20px;
   font-weight: bold;
   margin: 0;
+  background-color: antiquewhite;
 `;
 
-const Content = styled.div`
+const Content = styled.p`
+  font-size: 15px;
+  margin: 0;
+`;
+
+const Contents = styled.div`
   width: 100%;
   height: 180px;
-  background-color: white;
+  background-color: aliceblue;
   /* text-align: center; */
   border-bottom: solid;
   border-width: thin;

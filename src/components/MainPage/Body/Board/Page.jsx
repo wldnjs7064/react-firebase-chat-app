@@ -14,7 +14,6 @@ const Page = () => {
   const editorRef = useRef();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [DB, setDB] = useState([]);
 
   // 뒤로가기 버튼
   const handleGoBack = useCallback(() => {
@@ -41,16 +40,11 @@ const Page = () => {
 
   const createBoard = async () => {
     try {
-      // const docRef = await addDoc(boardDB, "Board");
       const docRef = await addDoc(collection(boardDB, "Board"), {
         title: title,
         content: content,
       });
-      console.log("DocID", docRef.id)
-      // await setDoc(doc(boardDB, "Board", "BoardContents"), {
-      //   title: title,
-      //   content: content,
-      // });
+      console.log("DocID", docRef.id);
     } catch (error) {
       alert(error);
       console.log(error);
@@ -63,7 +57,6 @@ const Page = () => {
       <div>
         <form onSubmit={onSubmit}>
           {" "}
-          b
           <TitleWrapper>
             <p
               style={{
