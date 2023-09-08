@@ -4,12 +4,7 @@ import styled from "styled-components";
 import { collection, getDocs } from "firebase/firestore";
 
 function BoardList() {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  // const boarddata = boardDB.collection("Board").doc("BoardContents");
   const [DBData, setDBData] = useState([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
 
   useEffect(() => {
     getContents();
@@ -21,18 +16,21 @@ function BoardList() {
     setDBData(dbData.docs);
   };
 
-  console.log("DBData", DBData);
+  // console.log("DBData", DBData);
+
   return (
-    <Contents>
-      <div style={{ backgroundColor: "#CCCCCC" }}>
-        {DBData.map((doc) => (
-          <div key={doc.data().id} style={{ backgroundColor: "#454685" }}>
+    // <Contents>
+    <div style={{ backgroundColor: "#CCCCCC" }}>
+      {DBData.map((doc) => (
+        <Contents>
+          <div key={doc.data().id}>
             <Title>{doc.data().title}</Title>
             <Content>{doc.data().content}</Content>
           </div>
-        ))}
-      </div>
-    </Contents>
+        </Contents>
+      ))}
+    </div>
+    // </Contents>
   );
 }
 

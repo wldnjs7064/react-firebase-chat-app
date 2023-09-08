@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import BoardList from "./List";
+import BoardList from "./BoardList";
 
 function BoardMain() {
   const [feed, setFeed] = useState([]);
