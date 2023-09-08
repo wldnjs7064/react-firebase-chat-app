@@ -4,10 +4,6 @@ import BoardList from "./BoardList";
 
 function BoardMain() {
   const [feed, setFeed] = useState([]);
-  // const [content, setContent] = useState(""); // 게시글 내용
-  // const [title, setTitle] = useState(""); // 게시글 제목
-  // const [name, setName] = useState(""); // 게시글 작성자
-  // const [date, setDate] = useState(""); // 게시글 작성일
 
   useEffect(() => {
     const contentHandler = (e) => {

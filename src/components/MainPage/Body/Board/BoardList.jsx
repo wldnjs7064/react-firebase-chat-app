@@ -20,13 +20,11 @@ function BoardList() {
 
   return (
     // <Contents>
-    <div style={{ backgroundColor: "#CCCCCC" }}>
+    <div>
       {DBData.map((doc) => (
-        <Contents>
-          <div key={doc.data().id}>
-            <Title>{doc.data().title}</Title>
-            <Content>{doc.data().content}</Content>
-          </div>
+        <Contents key={doc.data().id}>
+          <Title>{doc.data().title}</Title>
+          <Content>{doc.data().content}</Content>
         </Contents>
       ))}
     </div>
