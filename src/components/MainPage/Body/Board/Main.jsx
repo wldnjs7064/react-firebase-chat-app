@@ -3,33 +3,9 @@ import styled from "styled-components";
 import BoardList from "./BoardList";
 
 function BoardMain() {
-  const [feed, setFeed] = useState([]);
-
-  useEffect(() => {
-    const contentHandler = (e) => {
-      fetch("http://localhost:3000/data/mockdata.json", {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setFeed(res);
-        });
-    };
-    contentHandler();
-  }, []);
-
   return (
     <Contents>
-      {feed.map((item) => (
-        <BoardList
-          key={item.id}
-          title={item.title}
-          name={item.name}
-          date={item.date}
-          src={item.imgSrc}
-          content={item.content}
-        />
-      ))}
+      <BoardList />
     </Contents>
   );
 }
@@ -44,7 +20,8 @@ const Contents = styled.div`
   border-color: #cccccc;
   border-radius: 1px;
   width: 905px;
-  height: 815px;
+  height: 635px;
   margin-left: 20px;
+  overflow: scroll;
 `;
 export default BoardMain;

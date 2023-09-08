@@ -6,6 +6,7 @@ import Chat from "./Chat/Chat";
 import styled from "styled-components";
 import BodyHeader from "./BodyHeader/BodyHeader";
 import BoardMain from "./Board/Main";
+import BoardList from "./Board/BoardList";
 
 function Body() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ function Body() {
       <RightWrapper>
         <BodyHeader />
         <BoardMain />
+        {/* <BoardList /> */}
       </RightWrapper>
     </S.Body>
   );
@@ -37,6 +39,7 @@ const RightWrapper = styled.div`
   border-color: #cccccc;
   margin: 0 15px;
   border-radius: 10px;
+  height: 815px;
 `;
 
 const WrapperLoginChat = styled.div`

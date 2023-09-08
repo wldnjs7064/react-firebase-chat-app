@@ -16,38 +16,51 @@ function BoardList() {
     setDBData(dbData.docs);
   };
 
-  // console.log("DBData", DBData);
-
   return (
-    // <Contents>
-    <div>
+    <ContentList style={{ overflow: "scroll" }}>
       {DBData.map((doc) => (
         <Contents key={doc.data().id}>
           <Title>{doc.data().title}</Title>
           <Content>{doc.data().content}</Content>
         </Contents>
       ))}
-    </div>
-    // </Contents>
+    </ContentList>
   );
 }
+
+const ContentList = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-top: solid;
+  border-bottom: solid;
+  border-width: thin;
+  border-color: #cccccc;
+  border-radius: 1px;
+  width: 905px;
+  height: 100%;
+  margin-left: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  ::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라 브라우저 */
+  }
+`;
 
 const Title = styled.h3`
   font-size: 20px;
   font-weight: bold;
-  margin: 0;
-  background-color: antiquewhite;
 `;
 
 const Content = styled.p`
   font-size: 15px;
-  margin: 0;
+  width: 100%;
 `;
 
 const Contents = styled.div`
-  width: 100%;
-  height: 180px;
-  background-color: aliceblue;
+  /* width: 100%; */
   /* text-align: center; */
   border-bottom: solid;
   border-width: thin;
@@ -55,6 +68,9 @@ const Contents = styled.div`
   flex-direction: column;
   padding: 20px;
 
+  ::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라 브라우저 */
+  }
   /* 컨텐츠 아래 가운데만 얇게 border 처리하고싶어서 쓴 코드인데 잘 안됨. 수정예정 */
   &::after {
     content: "";
