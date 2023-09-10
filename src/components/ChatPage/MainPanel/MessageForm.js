@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
@@ -13,6 +13,8 @@ function MessageForm() {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const messagesRef = firebase.database().ref("messages");
+  const inputOpenImageRef = useRef();
+  const storageRef = firebase.storage().ref();
   const handleChange = (event) => {
     setContent(event.target.value);
   };
@@ -52,6 +54,21 @@ function MessageForm() {
       }, 5000);
     }
   };
+  const handleOpenImageRef = () => {
+    inputOpenImageRef.current.click();
+  };
+  const handleUploadImage = async (event) => {
+    const file = event.target.files[0];
+
+    const filePath = `/message/public/${file.name}`;
+    const metadata = { contentType: file.type };
+
+    try {
+      await storageRef.child(filePath).put(file, metadata);
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <div>
       <Form onSubmit={handleSubmit}>
@@ -84,11 +101,21 @@ function MessageForm() {
           </button>
         </Col>
         <Col>
-          <button className="message-form-button" style={{ width: "100%" }}>
+          <button
+            onClick={handleOpenImageRef}
+            className="message-form-button"
+            style={{ width: "100%" }}
+          >
             UPLOAD
           </button>
         </Col>
       </Row>
+      <input
+        syle={{ display: "none" }}
+        type="file"
+        ref={inputOpenImageRef}
+        onChange={handleUploadImage}
+      />
     </div>
   );
 }
