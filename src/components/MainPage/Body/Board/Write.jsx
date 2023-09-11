@@ -90,7 +90,6 @@ const Write = () => {
                 placeholder="Please Enter Text."
                 previewStyle="tab" // or vertical
                 initialEditType="wysiwyg" // or markdow10n
-                initialValue="이야기를 적어주세요 !"
                 // hideModeSwitch={true} // 하단 숨기기
                 toolbarItems={[
                   // 툴바 옵션 설정

@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/actions/user_action";
 import Page from "components/MainPage/Body/Board/Write";
 import Write from "components/MainPage/Body/Board/Write";
+import UniBoard from "components/MainPage/Body/Board/UniBoard";
 
 function App(props) {
   let navigate = useNavigate();
@@ -46,6 +47,7 @@ function App(props) {
       <Route path="/register" element={<RegisterPage />} />
       {/* <Route path="/write" element={<BoardWrite />} /> */}
       <Route path="/write" element={<Write />} />
+      <Route path="/board/:id" element={<UniBoard />} />
     </Routes>
   );
 }

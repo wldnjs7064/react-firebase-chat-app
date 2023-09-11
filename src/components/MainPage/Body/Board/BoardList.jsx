@@ -2,9 +2,11 @@ import { boardDB } from "../../../../firebase.js";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { collection, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getContents();
@@ -12,14 +14,24 @@ function BoardList() {
 
   const getContents = async () => {
     const dbData = await getDocs(collection(boardDB, "Board"));
-    console.log("docs", dbData.docs);
     setDBData(dbData.docs);
+  };
+
+  const navigateUniBoard = (data) => {
+    navigate("/board/:id", {
+      state: { data: data },
+    });
   };
 
   return (
     <ContentList style={{ overflow: "scroll" }}>
       {DBData.map((doc) => (
-        <Contents key={doc.data().id}>
+        <Contents
+          key={doc.data().id}
+          onClick={() => {
+            navigateUniBoard(doc.data());
+          }}
+        >
           <Title>{doc.data().title}</Title>
           <Content>{doc.data().content}</Content>
         </Contents>
