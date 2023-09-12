@@ -13,23 +13,19 @@ function BoardList() {
   }, []);
 
   const getContents = async () => {
-    // const dbData = await getDocs(collection(boardDB, "Board"));
-    // setDBData(dbData.docs);
-
     const boardRef = query(
       collection(boardDB, "Board"),
       orderBy("date", "desc")
     );
     const boardSnapshot = await getDocs(boardRef);
-
-    console.log("boardSnapshot", boardSnapshot);
     setDBData(boardSnapshot.docs);
-    console.log("dbData", DBData[0].id);
   };
 
-  const navigateUniBoard = (data) => {
+  const navigateUniBoard = (id, data) => {
+    console.log("clicked", id);
+    console.log("clicked", data);
     navigate("/board/:id", {
-      state: { data: data },
+      state: { id: id, data: data },
     });
   };
 
@@ -37,9 +33,9 @@ function BoardList() {
     <ContentList style={{ overflow: "scroll" }}>
       {DBData.map((doc) => (
         <Contents
-          key={doc.data().id}
+          key={doc.id}
           onClick={() => {
-            navigateUniBoard(doc.data());
+            navigateUniBoard(doc.id, doc.data());
           }}
         >
           <Title>{doc.data().title}</Title>

@@ -7,16 +7,17 @@ import { boardDB } from "../../../../firebase";
 
 function UniBoard() {
   const navigate = useNavigate();
-
   const location = useLocation();
+  const id = location.state.id;
   const data = location.state.data;
-  console.log("unidata", data);
+
   const handleDelelte = async () => {
     console.log("delete");
-    await deleteDoc(doc(boardDB, "Board", "6EU2TEkeFKw6PnUYhqJM"));
+    await deleteDoc(doc(boardDB, "Board", id));
     alert("삭제되었습니다.");
     navigate(-1);
   };
+
   return (
     <div
       style={{
