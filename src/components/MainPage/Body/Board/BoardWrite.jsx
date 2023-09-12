@@ -9,7 +9,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 import { useDidMountEffect } from "Hooks/useDidMountEffect";
 
-const Write = () => {
+const BoardWrite = () => {
   const navigate = useNavigate();
   const { register } = useForm();
   const editorRef = useRef();
@@ -48,9 +48,8 @@ const Write = () => {
           id: uniqueId,
           date: new Date(),
         });
-        // console.log("DocID", docRef.id);
         alert("작성이 완료되었습니다.");
-        // navigate(-1);
+        navigate(-1);
       } catch (error) {
         alert(error);
         console.log(error);
@@ -161,4 +160,4 @@ const Button = styled.button`
   font-family: pretendard;
 `;
 
-export default Write;
+export default BoardWrite;

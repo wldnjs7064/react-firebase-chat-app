@@ -13,10 +13,12 @@ import ChatPage from "./components/ChatPage/ChatPage";
 import BoardWrite from "components/MainPage/Body/Board/Write2";
 import firebase from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
-import Page from "components/MainPage/Body/Board/Write";
-import Write from "components/MainPage/Body/Board/Write";
-import UniBoard from "components/MainPage/Body/Board/UniBoard";
+import Page from "components/MainPage/Body/Board/BoardWrite";
+import Write from "components/MainPage/Body/Board/BoardWrite";
+import UniBoard from "components/MainPage/Body/Board/BoardDetail";
 import { setUser, clearUser } from "./redux/actions/user_action";
+import BoardUpdate from "components/MainPage/Body/Board/BoardUpdate";
+import BoardDetail from "components/MainPage/Body/Board/BoardDetail";
 
 function App(props) {
   let navigate = useNavigate();
@@ -46,8 +48,9 @@ function App(props) {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/write" element={<Write />} />
-      <Route path="/board/:id" element={<UniBoard />} />
+      <Route path="/write" element={<BoardWrite />} />
+      <Route path="/board/:idx" element={<BoardDetail />} />
+      <Route path="/update/:idx" element={<BoardUpdate />} />
     </Routes>
   );
   // }
