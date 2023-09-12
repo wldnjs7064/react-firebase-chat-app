@@ -1,25 +1,29 @@
 import { boardDB } from "../../../../firebase.js";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const navigate = useNavigate();
-  console.log(DBData)
+
   useEffect(() => {
     getContents();
   }, []);
 
   const getContents = async () => {
-    const dbData = await getDocs(collection(boardDB, "Board"));
-    setDBData(dbData.docs);
+    const boardRef = query(
+      collection(boardDB, "Board"),
+      orderBy("date", "desc")
+    );
+    const boardSnapshot = await getDocs(boardRef);
+    setDBData(boardSnapshot.docs);
   };
 
-  const navigateUniBoard = (data) => {
+  const navigateUniBoard = (id, data) => {
     navigate("/board/:id", {
-      state: { data: data },
+      state: { id: id, data: data },
     });
   };
 
@@ -27,9 +31,9 @@ function BoardList() {
     <ContentList style={{ overflow: "scroll" }}>
       {DBData.map((doc) => (
         <Contents
-          key={doc.data().id}
+          key={doc.id}
           onClick={() => {
-            navigateUniBoard(doc.data());
+            navigateUniBoard(doc.id, doc.data());
           }}
         >
           <Title>{doc.data().title}</Title>
@@ -44,7 +48,6 @@ const ContentList = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-top: solid;
   border-bottom: solid;
   border-width: thin;
   border-color: #cccccc;
@@ -69,6 +72,7 @@ const Title = styled.h3`
 const Content = styled.p`
   font-size: 15px;
   width: 100%;
+  height: 50px;
 `;
 
 const Contents = styled.div`

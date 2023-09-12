@@ -7,57 +7,82 @@ import { boardDB } from "../../../../firebase";
 
 function UniBoard() {
   const navigate = useNavigate();
-
   const location = useLocation();
+  const id = location.state.id;
   const data = location.state.data;
-  console.log("unidata", data);
+
   const handleDelelte = async () => {
     console.log("delete");
-    await deleteDoc(doc(boardDB, "Board", "6EU2TEkeFKw6PnUYhqJM"));
+    await deleteDoc(doc(boardDB, "Board", id));
     alert("삭제되었습니다.");
     navigate(-1);
   };
+
   return (
     <div
       style={{
-        backgroundColor: "aliceblue",
         height: "100vh",
+        backgroundColor: "#fafafae1",
       }}
     >
       <Header />
       <UniBody>
         <UniContents>
           <UniTitle>{data.title}</UniTitle>
-          <button onClick={handleDelelte}>게시물 삭제</button>
+          <UniContent>{data.content}</UniContent>
+          <button
+            style={{
+              alignSelf: "flex-end",
+              marginTop: "500px",
+              width: "fit-content",
+              whiteSpace: "nowrap",
+              textAlign: "center",
+            }}
+            onClick={handleDelelte}
+          >
+            삭제
+          </button>
         </UniContents>
       </UniBody>
     </div>
   );
 }
 
+const UniContent = styled.div`
+  font-size: 18px;
+  margin-top: 20px;
+`;
+
 const UniContents = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: aliceblue;
   width: 905px;
   height: 100%;
-
+  background-color: white;
+  border-radius: 2%;
+  border: solid;
+  border-width: thin;
+  border-color: #cccccc;
   padding: 40px;
 `;
 
 const UniTitle = styled.div`
   font-size: 36px;
+  border-bottom: solid;
+  border-width: thin;
+  border-color: #cccccc;
+  font-weight: 600;
 `;
 
 const UniBody = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: white;
-  height: 100%;
+  padding-top: 50px;
+  background-color: #fafafae1;
+  height: 80%;
   width: 100%;
   margin: 0 auto;
   align-items: center;
-  padding-top: 5%;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
   ::-webkit-scrollbar {
