@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const navigate = useNavigate();
-  console.log(DBData)
+  console.log(DBData);
   useEffect(() => {
     getContents();
   }, []);
@@ -44,7 +44,6 @@ const ContentList = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-top: solid;
   border-bottom: solid;
   border-width: thin;
   border-color: #cccccc;
@@ -69,6 +68,7 @@ const Title = styled.h3`
 const Content = styled.p`
   font-size: 15px;
   width: 100%;
+  height: 50px;
 `;
 
 const Contents = styled.div`

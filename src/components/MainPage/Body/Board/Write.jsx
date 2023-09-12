@@ -26,11 +26,6 @@ const Write = () => {
     setTitle(e.target.value);
   };
 
-  useEffect(() => {
-    console.log("content", content);
-    createBoard();
-  }, [content]);
-
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -40,9 +35,8 @@ const Write = () => {
   };
   const uniqueId = Math.random().toString(36).substr(2, 16);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const createBoard = async () => {
-    console.log("title", title);
-    console.log("content", content);
     if (title === "") {
       alert("제목은 필수 입력사항입니다.");
     } else {
@@ -62,6 +56,11 @@ const Write = () => {
       }
     }
   };
+
+  useEffect(() => {
+    console.log("content", content);
+    createBoard();
+  }, [content]);
 
   return (
     <div>

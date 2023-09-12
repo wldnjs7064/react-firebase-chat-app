@@ -23,34 +23,34 @@ function App(props) {
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // 로그인 시에 채팅페이지로 이동
-        navigate("/chat");
-        dispatch(setUser(user));
-      } else {
-        navigate("/login");
-        dispatch(clearUser());
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       // 로그인 시에 채팅페이지로 이동
+  //       navigate("/chat");
+  //       dispatch(setUser(user));
+  //     } else {
+  //       navigate("/login");
+  //       dispatch(clearUser());
+  //     }
+  //   });
+  // }, []);
 
-  if (isLoading) {
-    return <div>로딩중입니다.</div>;
-  } else {
-    return (
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+  // if (isLoading) {
+  //   return <div>로딩중입니다.</div>;
+  // } else {
+  return (
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/write" element={<Write />} />
-        <Route path="/board/:id" element={<UniBoard />} />
-      </Routes>
-    );
-  }
+      <Route path="/write" element={<Write />} />
+      <Route path="/board/:id" element={<UniBoard />} />
+    </Routes>
+  );
+  // }
 }
 
 export default App;
