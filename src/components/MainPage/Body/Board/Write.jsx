@@ -5,8 +5,9 @@ import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
+import { useDidMountEffect } from "Hooks/useDidMountEffect";
 
 const Write = () => {
   const navigate = useNavigate();
@@ -15,25 +16,25 @@ const Write = () => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  // 뒤로가기 버튼
-  const handleGoBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
-
-  // 제목 입력
-  const handleTitleChange = (e) => {
-    e.preventDefault();
-    setTitle(e.target.value);
-  };
-
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
     e.preventDefault();
     const contentMark = editorRef.current?.getInstance().getMarkdown();
     setContent(contentMark);
-    // await createBoard();
   };
-  const uniqueId = Math.random().toString(36).substr(2, 16);
+
+  // useEffect(() => {
+  //   if (content === "") return;
+  //   else {
+  //     console.log("content", content);
+  //     createBoard();
+  //   }
+  // }, [content]);
+
+  useDidMountEffect(() => {
+    console.log("content", content);
+    createBoard();
+  }, [content]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const createBoard = async () => {
@@ -57,10 +58,18 @@ const Write = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("content", content);
-    createBoard();
-  }, [content]);
+  const uniqueId = Math.random().toString(36).substr(2, 16);
+
+  // 뒤로가기 버튼
+  const handleGoBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
+  // 제목 입력
+  const handleTitleChange = (e) => {
+    e.preventDefault();
+    setTitle(e.target.value);
+  };
 
   return (
     <div>

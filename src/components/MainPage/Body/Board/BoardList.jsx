@@ -22,8 +22,6 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
-    console.log("clicked", id);
-    console.log("clicked", data);
     navigate("/board/:id", {
       state: { id: id, data: data },
     });
