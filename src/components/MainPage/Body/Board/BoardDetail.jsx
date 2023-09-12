@@ -11,11 +11,17 @@ function BoardDetail() {
   const id = location.state.id;
   const data = location.state.data;
 
-  const handleDelelte = async () => {
+  const handleDelete = async () => {
     console.log("delete");
     await deleteDoc(doc(boardDB, "Board", id));
     alert("삭제되었습니다.");
     navigate(-1);
+  };
+
+  const handleEdit = async () => {
+    navigate(`/board/${id}/edit`, {
+      state: { id: id, data: data },
+    });
   };
 
   return (
@@ -30,23 +36,43 @@ function BoardDetail() {
         <UniContents>
           <UniTitle>{data.title}</UniTitle>
           <UniContent>{data.content}</UniContent>
-          <button
-            style={{
-              alignSelf: "flex-end",
-              marginTop: "500px",
-              width: "fit-content",
-              whiteSpace: "nowrap",
-              textAlign: "center",
-            }}
-            onClick={handleDelelte}
-          >
-            삭제
-          </button>
+          <ButtonWrapper>
+            <button
+              style={{
+                marginTop: "400px",
+                width: "fit-content",
+                whiteSpace: "nowrap",
+                textAlign: "center",
+              }}
+              onClick={handleEdit}
+            >
+              수정
+            </button>
+            <button
+              style={{
+                marginTop: "400px",
+                width: "fit-content",
+                whiteSpace: "nowrap",
+                textAlign: "center",
+              }}
+              onClick={handleDelete}
+            >
+              삭제
+            </button>
+          </ButtonWrapper>
         </UniContents>
       </UniBody>
     </div>
   );
 }
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  margin-top: 50px;
+  gap: 10px;
+`;
 
 const UniContent = styled.div`
   font-size: 18px;
