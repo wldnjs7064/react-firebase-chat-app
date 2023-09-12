@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../Header/Header";
 import styled from "styled-components";
-import { Firestore, deleteDoc, doc } from "firebase/firestore";
+import { Firestore, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 
 function BoardDetail() {
@@ -10,6 +10,8 @@ function BoardDetail() {
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
+  const [newTitle, setNewTitle] = useState(data.title);
+  const [newContent, setNewContent] = useState(data.content);
 
   const handleDelete = async () => {
     console.log("delete");
@@ -24,6 +26,16 @@ function BoardDetail() {
     });
   };
 
+  useEffect(() => {
+    async function getNewData() {
+      const newData = await getDoc(doc(boardDB, "Board", id));
+      console.log("newData", newData.data().title);
+      setNewTitle(newData.data().title);
+      setNewContent(newData.data().content);
+    }
+    getNewData();
+  }, []);
+
   return (
     <div
       style={{
@@ -34,8 +46,8 @@ function BoardDetail() {
       <Header />
       <UniBody>
         <UniContents>
-          <UniTitle>{data.title}</UniTitle>
-          <UniContent>{data.content}</UniContent>
+          <UniTitle>{newTitle}</UniTitle>
+          <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button
               style={{
