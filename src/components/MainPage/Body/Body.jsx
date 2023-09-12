@@ -5,7 +5,7 @@ import * as S from "../style";
 import Chat from "./Chat/Chat";
 import styled from "styled-components";
 import BodyHeader from "./BodyHeader/BodyHeader";
-import BoardMain from "./Board/Main";
+import BoardMain from "./Board/BoardMain";
 import BoardList from "./Board/BoardList";
 
 function Body() {

@@ -22,7 +22,7 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
-    navigate("/board/:id", {
+    navigate(`/board/${id}`, {
       state: { id: id, data: data },
     });
   };

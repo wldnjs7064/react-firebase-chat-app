@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Firestore, deleteDoc, doc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 
-function UniBoard() {
+function BoardDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
@@ -90,4 +90,4 @@ const UniBody = styled.div`
   }
 `;
 
-export default UniBoard;
+export default BoardDetail;
