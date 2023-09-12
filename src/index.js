@@ -12,30 +12,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import rootReducer from "./redux/reducers";
 
-// const createStoreWithMiddleware = applyMiddleware(
-//   promiseMiddleware,
-//   ReduxThunk
-// )(createStore);
+const createStoreWithMiddleware = applyMiddleware(
+  promiseMiddleware,
+  ReduxThunk
+)(createStore);
 
 const store = createStore(rootReducer);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider
-<<<<<<< HEAD
-      store={store}
-      // store={createStoreWithMiddleware(
-      //   Reducer,
-      //   window.__REUDX_DEVTOOLS_EXTENSION__ &&
-      //     window.__REUDX_DEVTOOLS_EXTENSION__()
-      // )}
-=======
       store={createStoreWithMiddleware(
         Reducer,
         window.__REDUX_DEVTOOLS_EXTENSION__ &&
           window.__REDUX_DEVTOOLS_EXTENSION__()
       )}
->>>>>>> d1fc7e44ffbd9a9d2b0a6c3d006c4b91dfb27418
     >
       <Router>
         <App />
