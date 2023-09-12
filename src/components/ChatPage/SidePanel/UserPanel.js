@@ -1,11 +1,49 @@
-import React from "react";
+import React, { useRef } from "react";
 import { IoIosChatboxes } from "react-icons/io";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
-// import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import firebase from "../../../firebase";
+import { setPhotoURL } from "../../../redux/actions/user_action";
 
 function UserPanel() {
-  // const user = useSelector(state => state.user.currentUser)
+  const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const inputOpenImageRef = useRef();
+  const handleLogout = () => {
+    firebase.auth().signOut();
+  };
+  const handleOpenImageRef = () => {
+    inputOpenImageRef.current.click();
+  };
+
+  const handleUploadImage = async (event) => {
+    const file = event.target.files[0];
+    const metadata = { contentType: file.type };
+
+    try {
+      let uploadTaskSnapshot = await firebase
+        .storage()
+        .ref()
+        .child(`user_image/${user.uid}`)
+        .put(file, metadata);
+
+      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
+      await firebase.auth().currentUser.updateProfile({
+        photoURL: downloadURL,
+      });
+
+      dispatch(setPhotoURL(downloadURL));
+
+      await firebase
+        .database()
+        .ref("users")
+        .child(user.uid)
+        .update({ image: downloadURL });
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <div>
       <h3 style={{ color: "white" }}>
@@ -13,7 +51,7 @@ function UserPanel() {
       </h3>
       <div style={{ display: "flex", marginBottom: "1rem" }}>
         <Image
-          src="holder.js/171x180"
+          src={user && user.photoURL}
           style={{ width: "30p", height: "30px", marginTop: "3px" }}
           roundedCircle
         />
@@ -22,15 +60,24 @@ function UserPanel() {
             style={{ background: "transparent", border: "0px" }}
             id="dropdown-basic"
           >
-            user name
+            {user && user.displayName}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">프로필 사진 변경</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">로그아웃</Dropdown.Item>
+            <Dropdown.Item onClick={handleOpenImageRef}>
+              프로필 사진 변경
+            </Dropdown.Item>
+            <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>
+      <input
+        onChange={handleUploadImage}
+        accept="image/jpeg, image/png"
+        style={{ display: "none" }}
+        ref={inputOpenImageRef}
+        type="file"
+      />
     </div>
   );
 }
