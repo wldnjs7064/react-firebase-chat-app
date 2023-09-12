@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const navigate = useNavigate();
-
+  console.log(DBData)
   useEffect(() => {
     getContents();
   }, []);

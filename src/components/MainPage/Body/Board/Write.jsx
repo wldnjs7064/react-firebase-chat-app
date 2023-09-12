@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
@@ -26,31 +26,36 @@ const Write = () => {
     setTitle(e.target.value);
   };
 
+  useEffect(() => {
+    console.log("content", content);
+    createBoard();
+  }, [content]);
+
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
     e.preventDefault();
     const contentMark = editorRef.current?.getInstance().getMarkdown();
     setContent(contentMark);
-    console.log("content", content);
-    console.log("title", title);
-    createBoard();
+    // await createBoard();
   };
-
-  const uniqueId = useId();
-  // console.log(uniqueId);
+  const uniqueId = Math.random().toString(36).substr(2, 16);
 
   const createBoard = async () => {
+    console.log("title", title);
+    console.log("content", content);
     if (title === "") {
       alert("제목은 필수 입력사항입니다.");
     } else {
       try {
-        const docRef = await addDoc(collection(boardDB, "Board"), {
+        await addDoc(collection(boardDB, "Board"), {
           title: title,
           content: content,
+          id: uniqueId,
+          date: new Date(),
         });
         // console.log("DocID", docRef.id);
         alert("작성이 완료되었습니다.");
-        navigate(-1);
+        // navigate(-1);
       } catch (error) {
         alert(error);
         console.log(error);
@@ -62,7 +67,7 @@ const Write = () => {
     <div>
       <Header />
       <div>
-        <form onSubmit={onSubmit}>
+        <form>
           {" "}
           <TitleWrapper>
             <p
@@ -86,29 +91,28 @@ const Write = () => {
             <div style={{ padding: "0px 100px" }}>
               <Editor
                 ref={editorRef}
-                height="400px"
-                placeholder="Please Enter Text."
-                previewStyle="tab" // or vertical
-                initialEditType="wysiwyg" // or markdow10n
-                // hideModeSwitch={true} // 하단 숨기기
+                placeholder="내용을 입력해주세요."
+                previewStyle="vertical" // 미리보기 스타일 지정
+                height="300px" // 에디터 창 높이
+                initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                 toolbarItems={[
                   // 툴바 옵션 설정
                   ["heading", "bold", "italic", "strike"],
                   ["hr", "quote"],
                   ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", /* "image", */ "link"],
+                  ["table", "image", "link"],
                   ["code", "codeblock"],
                 ]}
-                theme="dark"
-                //useCommandShortcut={false} // 키보드 입력 컨트롤 방지 ex ctrl z 등
-                usageStatistics={false} // 통계 수집 거부
-              />
+                useCommandShortcut={false}
+              ></Editor>
             </div>
           </>
           {/* <NoSsrEditor content="" /> */}
           <Buttons>
             <Button onClick={handleGoBack}>뒤로가기</Button>
-            <Button type="submit">작성하기</Button>
+            <Button type="submit" onClick={onSubmit}>
+              작성하기
+            </Button>
           </Buttons>
         </form>
       </div>
