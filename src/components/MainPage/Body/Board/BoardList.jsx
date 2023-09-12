@@ -1,20 +1,30 @@
 import { boardDB } from "../../../../firebase.js";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const navigate = useNavigate();
-  console.log(DBData);
+
   useEffect(() => {
     getContents();
   }, []);
 
   const getContents = async () => {
-    const dbData = await getDocs(collection(boardDB, "Board"));
-    setDBData(dbData.docs);
+    // const dbData = await getDocs(collection(boardDB, "Board"));
+    // setDBData(dbData.docs);
+
+    const boardRef = query(
+      collection(boardDB, "Board"),
+      orderBy("date", "desc")
+    );
+    const boardSnapshot = await getDocs(boardRef);
+
+    console.log("boardSnapshot", boardSnapshot);
+    setDBData(boardSnapshot.docs);
+    console.log("dbData", DBData[0].id);
   };
 
   const navigateUniBoard = (data) => {
