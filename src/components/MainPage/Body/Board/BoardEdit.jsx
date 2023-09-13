@@ -1,3 +1,4 @@
+import React from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -5,16 +6,21 @@ import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 import { useDidMountEffect } from "Hooks/useDidMountEffect";
+import { useLocation } from "react-router-dom";
 
-const Write = () => {
+function BoardEdit() {
   const navigate = useNavigate();
   const { register } = useForm();
   const editorRef = useRef();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+
+  const location = useLocation();
+  const docId = location.state.id;
+  const data = location.state.data;
 
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
@@ -23,34 +29,33 @@ const Write = () => {
     setContent(contentMark);
   };
 
-  // useEffect(() => {
-  //   if (content === "") return;
-  //   else {
-  //     console.log("content", content);
-  //     createBoard();
-  //   }
-  // }, [content]);
-
   useDidMountEffect(() => {
-    console.log("content", content);
-    createBoard();
+    if (content === "") return;
+    else {
+      console.log("content", content);
+      handleEdit();
+    }
   }, [content]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const createBoard = async () => {
+  const handleEdit = async () => {
     if (title === "") {
       alert("제목은 필수 입력사항입니다.");
     } else {
       try {
-        await addDoc(collection(boardDB, "Board"), {
+        // boardDB.collection("Board").doc(docId).update({
+        //   title: title,
+        //   content: content,
+        //   id: uniqueId,
+        //   date: new Date(),
+        // });
+
+        await updateDoc(doc(boardDB, "Board", docId), {
           title: title,
           content: content,
-          id: uniqueId,
-          date: new Date(),
         });
-        // console.log("DocID", docRef.id);
-        alert("작성이 완료되었습니다.");
-        // navigate(-1);
+        alert("수정이 완료되었습니다.");
+        navigate(-1);
       } catch (error) {
         alert(error);
         console.log(error);
@@ -91,7 +96,7 @@ const Write = () => {
               type="text"
               id="title"
               name="title"
-              placeholder="제목을 입력해주세요"
+              defaultValue={data.title}
               onChange={handleTitleChange}
             />
           </TitleWrapper>
@@ -100,6 +105,7 @@ const Write = () => {
               <Editor
                 ref={editorRef}
                 placeholder="내용을 입력해주세요."
+                initialValue={data.content}
                 previewStyle="vertical" // 미리보기 스타일 지정
                 height="300px" // 에디터 창 높이
                 initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
@@ -115,18 +121,17 @@ const Write = () => {
               ></Editor>
             </div>
           </>
-          {/* <NoSsrEditor content="" /> */}
           <Buttons>
             <Button onClick={handleGoBack}>뒤로가기</Button>
             <Button type="submit" onClick={onSubmit}>
-              작성하기
+              수정하기
             </Button>
           </Buttons>
         </form>
       </div>
     </div>
   );
-};
+}
 
 const TitleWrapper = styled.div`
   padding: 50px 0;
@@ -161,4 +166,4 @@ const Button = styled.button`
   font-family: pretendard;
 `;
 
-export default Write;
+export default BoardEdit;
