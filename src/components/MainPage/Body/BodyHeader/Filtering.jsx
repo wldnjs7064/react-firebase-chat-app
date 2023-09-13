@@ -1,18 +1,24 @@
 import React from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "styled-components";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { FilterId } from "libs/types/filter";
 function Filtering() {
+  const [selected, setSelected] = React.useState(false);
+  const handleClick = () => {
+    setSelected(!selected);
+  };
   return (
     <div>
       <TagList>
         <Icon>
           <ArrowBackIosNewIcon />
         </Icon>
-        <Tag tag={{ selected: true }}># 전체</Tag>
-        <Tag tag={{ selected: false }}># 자유</Tag>
-        <Tag tag={{ selected: false }}># 질문</Tag>
+        {FilterId.map((tagName, index) => (
+          <Tag key={index} onClick={handleClick} tag={{ selected }}>
+            #{tagName}
+          </Tag>
+        ))}
         <Icon>
           <ArrowForwardIosIcon />
         </Icon>
@@ -62,5 +68,6 @@ export const Tag = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 `;
 export default Filtering;
