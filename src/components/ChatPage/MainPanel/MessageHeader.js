@@ -11,7 +11,7 @@ import Button from "react-bootstrap/Button";
 import { FaLock } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
-function MessageHeader() {
+function MessageHeader({ handleSearchChange }) {
   return (
     <div
       style={{
@@ -37,6 +37,7 @@ function MessageHeader() {
                 <AiOutlineSearch />
               </InputGroup.Text>
               <FormControl
+                onChange={handleSearchChange}
                 placeholder="Search Messages"
                 aria-label="Search"
                 aria-describedby="basic-addon1"
