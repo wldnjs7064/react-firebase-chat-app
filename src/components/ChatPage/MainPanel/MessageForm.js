@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 function MessageForm() {
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const user = useSelector((state) => state.user.currentUser);
-
+  const [percentage, setPercentage] = useState(0);
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,15 @@ function MessageForm() {
     const metadata = { contentType: file.type };
 
     try {
-      await storageRef.child(filePath).put(file, metadata);
+      let uploadTask = storageRef.child(filePath).put(file, metadata);
+      uploadTask.on("state_changed", (UploadTaskSnapshot) => {
+        const percentage = Math.round(
+          (UploadTaskSnapshot.bytesTransferred /
+            UploadTaskSnapshot.totalBytes) *
+            100
+        );
+        setPercentage(percentage);
+      });
     } catch (error) {
       alert(error);
     }
@@ -81,8 +89,14 @@ function MessageForm() {
           />
         </Form.Group>
       </Form>
+      {!(percentage === 0 || percentage === 100) && (
+        <ProgressBar
+          variant="warning"
+          label={`${percentage}%`}
+          now={percentage}
+        />
+      )}
 
-      <ProgressBar variant="warning" label="60%" now={60} />
       <div>
         {errors.map((errorMsg) => (
           <p style={{ color: "red" }} key={errorMsg}>
