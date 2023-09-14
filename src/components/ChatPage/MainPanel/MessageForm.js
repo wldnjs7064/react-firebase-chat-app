@@ -62,17 +62,34 @@ function MessageForm() {
 
     const filePath = `/message/public/${file.name}`;
     const metadata = { contentType: file.type };
+    setLoading(true);
 
     try {
       let uploadTask = storageRef.child(filePath).put(file, metadata);
-      uploadTask.on("state_changed", (UploadTaskSnapshot) => {
-        const percentage = Math.round(
-          (UploadTaskSnapshot.bytesTransferred /
-            UploadTaskSnapshot.totalBytes) *
-            100
-        );
-        setPercentage(percentage);
-      });
+      uploadTask.on(
+        "state_changed",
+        (UploadTaskSnapshot) => {
+          const percentage = Math.round(
+            (UploadTaskSnapshot.bytesTransferred /
+              UploadTaskSnapshot.totalBytes) *
+              100
+          );
+          setPercentage(percentage);
+        },
+        (err) => {
+          console.error(err);
+          setLoading(false);
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            messagesRef
+              .child(chatRoom.id)
+              .push()
+              .set(createMessage(downloadURL));
+            setLoading(false);
+          });
+        }
+      );
     } catch (error) {
       alert(error);
     }
@@ -110,6 +127,7 @@ function MessageForm() {
             onClick={handleSubmit}
             className="message-form-button"
             style={{ width: "100%" }}
+            disabled={loading ? true : false}
           >
             SEND
           </button>
@@ -119,12 +137,14 @@ function MessageForm() {
             onClick={handleOpenImageRef}
             className="message-form-button"
             style={{ width: "100%" }}
+            disabled={loading ? true : false}
           >
             UPLOAD
           </button>
         </Col>
       </Row>
       <input
+        accept="image/jpeg, image/png"
         syle={{ display: "none" }}
         type="file"
         ref={inputOpenImageRef}
