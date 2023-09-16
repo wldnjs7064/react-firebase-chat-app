@@ -4,10 +4,14 @@ import styled from "styled-components";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { FilterId } from "libs/types/filter";
 function Filtering() {
+  const [activeFilterId, setActiveFilterId] = React.useState(false);
   const [selected, setSelected] = React.useState(false);
+
+  // const isActive = id === activeFilterId;
   const handleClick = () => {
     setSelected(!selected);
   };
+
   return (
     <div>
       <TagList>
@@ -15,7 +19,7 @@ function Filtering() {
           <ArrowBackIosNewIcon />
         </Icon>
         {FilterId.map((tagName, index) => (
-          <Tag key={index} onClick={handleClick} tag={{ selected }}>
+          <Tag key={index} id={index} onClick={handleClick} tag={{ selected }}>
             #{tagName}
           </Tag>
         ))}

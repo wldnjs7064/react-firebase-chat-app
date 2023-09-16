@@ -8,6 +8,7 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { addDoc, collection } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 import { useDidMountEffect } from "Hooks/useDidMountEffect";
+import SelectTag from "./SelectTag";
 
 const BoardWrite = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const BoardWrite = () => {
           content: content,
           id: uniqueId,
           date: new Date(),
+          // tag: selectedTag,
         });
         alert("작성이 완료되었습니다.");
         navigate(-1);
@@ -107,9 +109,9 @@ const BoardWrite = () => {
                 ]}
                 useCommandShortcut={false}
               ></Editor>
+              <SelectTag />
             </div>
           </>
-          {/* <NoSsrEditor content="" /> */}
           <Buttons>
             <Button onClick={handleGoBack}>뒤로가기</Button>
             <Button type="submit" onClick={onSubmit}>

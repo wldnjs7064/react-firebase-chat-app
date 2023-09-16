@@ -10,3 +10,6 @@ export const SET_PHOTO_URL = "set_photo_url";
 
 //CHATROOM TYPES
 export const SET_CURRENT_CHAT_ROOM = "set_current_chat_room";
+
+//Filter TYPES
+export const TOGGLE_TAG = "toggle_tag";
