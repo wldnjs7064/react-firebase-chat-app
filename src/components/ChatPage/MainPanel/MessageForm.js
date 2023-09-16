@@ -145,7 +145,7 @@ function MessageForm() {
       </Row>
       <input
         accept="image/jpeg, image/png"
-        syle={{ display: "none" }}
+        style={{ display: "none" }}
         type="file"
         ref={inputOpenImageRef}
         onChange={handleUploadImage}

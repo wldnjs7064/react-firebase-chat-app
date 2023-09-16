@@ -13,7 +13,7 @@ body {
   display: flex;
   font-family: "SpoqaHanSansNeo-Regular";
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 80vh;
   justify-content: center;
 }
 .auth-wrapper input {
