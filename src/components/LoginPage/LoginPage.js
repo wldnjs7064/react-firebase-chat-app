@@ -64,7 +64,7 @@ function LoginPage() {
         )}
         <input type="submit" value="로그인하기" disabled={loading} />
         <div style={{ textAlign: "center", marginTop: 70 }}>
-          <a href="../register">아직 계정이 없으시나요? </a>
+          <a href="/register">아직 계정이 없으시나요? </a>
         </div>
       </form>
     </div>
