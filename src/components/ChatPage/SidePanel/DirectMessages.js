@@ -50,4 +50,4 @@ const mapStateToProps = (state) => {
     user: state.user.currentUser,
   };
 };
-export default connect()(DirectMessages);
+export default connect(mapStateToProps)(DirectMessages);
