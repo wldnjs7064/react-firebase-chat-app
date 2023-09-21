@@ -11,6 +11,7 @@ export class DirectMessages extends Component {
   state = {
     usersRef: firebase.database().ref("users"),
     users: [],
+    activeChatRoom: "",
   };
   componentDidMount() {
     if (this.props.user) {
@@ -46,11 +47,22 @@ export class DirectMessages extends Component {
     };
     this.props.dispatch(setCurrentChatRoom(chatRoomData));
     this.props.dispatch(setPrivateChatRoom(true));
+    this.setActiveCharRoom(user.uid);
+  };
+  setActiveCharRoom = (userId) => {
+    this.setState({ activeChatRoom: userId });
   };
   renderDirectMessages = (users) =>
     users.length > 0 &&
     users.map((user) => (
-      <li key={user.uid} onClick={() => this.changeChatRoom(user)}>
+      <li
+        key={user.uid}
+        style={{
+          backgroundColor:
+            user.uid === this.state.activeChatRoom && "#ffffff45",
+        }}
+        onClick={() => this.changeChatRoom(user)}
+      >
         # {user.name}{" "}
       </li>
     ));
