@@ -1,24 +1,25 @@
-import React from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { set, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Header from "components/MainPage/Header/Header";
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
-import { useDidMountEffect } from "Hooks/useDidMountEffect";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { set, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Header from 'components/MainPage/Header/Header';
+import { Editor } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
+import { useDidMountEffect } from 'Hooks/useDidMountEffect';
+import { useLocation } from 'react-router-dom';
 
 function BoardEdit() {
   const navigate = useNavigate();
   const { register } = useForm();
   const editorRef = useRef();
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
 
   const location = useLocation();
+  console.log('location', location.state.id);
   const docId = location.state.id;
   const data = location.state.data;
 
@@ -30,17 +31,17 @@ function BoardEdit() {
   };
 
   useDidMountEffect(() => {
-    if (content === "") return;
+    if (content === '') return;
     else {
-      console.log("content", content);
+      console.log('content', content);
       handleEdit();
     }
   }, [content]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleEdit = async () => {
-    if (title === "") {
-      alert("제목은 필수 입력사항입니다.");
+    if (title === '') {
+      alert('제목은 필수 입력사항입니다.');
     } else {
       try {
         // boardDB.collection("Board").doc(docId).update({
@@ -50,11 +51,11 @@ function BoardEdit() {
         //   date: new Date(),
         // });
 
-        await updateDoc(doc(boardDB, "Board", docId), {
+        await updateDoc(doc(boardDB, 'Board', docId), {
           title: title,
           content: content,
         });
-        alert("수정이 완료되었습니다.");
+        alert('수정이 완료되었습니다.');
         navigate(-1);
       } catch (error) {
         alert(error);
@@ -81,17 +82,17 @@ function BoardEdit() {
       <Header />
       <div>
         <form>
-          {" "}
+          {' '}
           <TitleWrapper>
             <p
               style={{
-                fontFamily: "pretendard",
-                fontSize: "25px",
+                fontFamily: 'pretendard',
+                fontSize: '25px',
               }}
             ></p>
             <TitleInput
-              {...register("title", {
-                required: "제목은 필수 입력 사항입니다.",
+              {...register('title', {
+                required: '제목은 필수 입력 사항입니다.',
               })}
               type="text"
               id="title"
@@ -101,7 +102,7 @@ function BoardEdit() {
             />
           </TitleWrapper>
           <>
-            <div style={{ padding: "0px 100px" }}>
+            <div style={{ padding: '0px 100px' }}>
               <Editor
                 ref={editorRef}
                 placeholder="내용을 입력해주세요."
@@ -111,11 +112,11 @@ function BoardEdit() {
                 initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                 toolbarItems={[
                   // 툴바 옵션 설정
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "image", "link"],
-                  ["code", "codeblock"],
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'image', 'link'],
+                  ['code', 'codeblock'],
                 ]}
                 useCommandShortcut={false}
               ></Editor>

@@ -1,15 +1,17 @@
-import React from "react";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import styled from "styled-components";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { FilterId } from "libs/types/filter";
-function Filtering() {
-  const [activeFilterId, setActiveFilterId] = React.useState(false);
-  const [selected, setSelected] = React.useState(false);
+import React, { useEffect } from 'react';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import styled from 'styled-components';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTag } from 'redux/actions/toggle_action';
 
-  // const isActive = id === activeFilterId;
-  const handleClick = () => {
-    setSelected(!selected);
+function Filtering() {
+  const dispatch = useDispatch();
+  const usetags = useSelector((state) => state.tag.selectedTag);
+  console.log('usetags', usetags);
+
+  const handleClick = (tags) => {
+    dispatch(selectTag(tags.name));
   };
 
   return (
@@ -18,9 +20,13 @@ function Filtering() {
         <Icon>
           <ArrowBackIosNewIcon />
         </Icon>
-        {FilterId.map((tagName, index) => (
-          <Tag key={index} id={index} onClick={handleClick} tag={{ selected }}>
-            #{tagName}
+        {usetags.map((tag) => (
+          <Tag
+            key={tag.name}
+            selected={tag.selected}
+            onClick={() => handleClick(tag)}
+          >
+            #{tag.name}
           </Tag>
         ))}
         <Icon>
@@ -30,6 +36,7 @@ function Filtering() {
     </div>
   );
 }
+
 export const Icon = styled.div`
   width: 40px;
   height: 40px;
@@ -44,6 +51,7 @@ export const Icon = styled.div`
   color: gray;
   border-color: #cccccc;
 `;
+
 export const TagList = styled.div`
   width: fit-content;
   height: 75px;
@@ -51,10 +59,10 @@ export const TagList = styled.div`
   align-items: center;
   padding-left: 16px;
   gap: 12px;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   ::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    display: none;
   }
 `;
 
@@ -63,15 +71,17 @@ export const Tag = styled.div`
   padding: 0 12px;
   height: 40px;
   border-radius: 20px;
-  border: 1px solid ${(props) => (props.tag.selected ? "#2C5AF1" : "#cccccc")};
-  font-family: "pretendard";
+  border: 1px solid ${(props) => (props.selected ? '#2C5AF1' : '#cccccc')};
+  font-family: 'pretendard';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  color: ${(props) => (props.tag.selected ? "#2C5AF1" : "#999999")};
+  color: ${(props) => (props.selected ? '#2C5AF1' : '#999999')};
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  cursor: pointer;
 `;
+
 export default Filtering;

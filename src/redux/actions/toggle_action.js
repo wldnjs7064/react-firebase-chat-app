@@ -1,8 +1,16 @@
-import { TOGGLE_TAG } from "./types";
+import { SELECT_TAG, IS_SELECTED } from './types';
 
-export function toggleTag(index) {
+// action creators
+export const selectTag = (tagName) => {
   return {
-    type: TOGGLE_TAG,
-    payload: index,
+    type: SELECT_TAG,
+    payload: tagName,
   };
-}
+};
+
+// export const isSelected = (bool) => {
+//   return {
+//     type: IS_SELECTED,
+//     payload: bool,
+//   };
+// };
