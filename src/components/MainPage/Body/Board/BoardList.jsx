@@ -1,24 +1,51 @@
-import { boardDB } from "../../../../firebase.js";
-import React, { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { boardDB } from '../../../../firebase.js';
+import React, { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { set } from 'react-hook-form';
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
+  const [selectTag, setSelectTag] = useState('');
   const navigate = useNavigate();
+  const selector = useSelector((state) => state.tag.selectedTag);
 
   useEffect(() => {
+    setSelectTag('');
+    Object.keys(selector).forEach((tagKey) => {
+      const tag = selector[tagKey];
+      if (tag.selected && tag.name !== selectTag) {
+        console.log('tagName', tag.name);
+        setSelectTag(tag.name);
+      }
+    });
+  }, [selector]);
+
+  useEffect(() => {
+    // Avoid infinite loop by checking if selectTag has changed
     getContents();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectTag]);
 
   const getContents = async () => {
-    const boardRef = query(
-      collection(boardDB, "Board"),
-      orderBy("date", "desc")
-    );
-    const boardSnapshot = await getDocs(boardRef);
-    setDBData(boardSnapshot.docs);
+    if (selectTag === '') {
+      const boardRef = query(
+        collection(boardDB, 'Board'),
+        orderBy('date', 'desc')
+      );
+      const boardSnapshot = await getDocs(boardRef);
+      setDBData(boardSnapshot.docs);
+    } else {
+      const boardRef = query(
+        collection(boardDB, 'Board'),
+        orderBy('date', 'desc'),
+        where('tag', '==', selectTag)
+      );
+      const boardSnapshot = await getDocs(boardRef);
+      setDBData(boardSnapshot.docs);
+    }
   };
 
   const navigateUniBoard = (id, data) => {
@@ -28,7 +55,7 @@ function BoardList() {
   };
 
   return (
-    <ContentList style={{ overflow: "scroll" }}>
+    <ContentList style={{ overflow: 'scroll' }}>
       {DBData.map((doc) => (
         <Contents
           key={doc.id}
@@ -89,7 +116,7 @@ const Contents = styled.div`
   }
   /* 컨텐츠 아래 가운데만 얇게 border 처리하고싶어서 쓴 코드인데 잘 안됨. 수정예정 */
   &::after {
-    content: "";
+    content: '';
     width: 80px;
     height: 2px;
     background-color: rebeccapurple;

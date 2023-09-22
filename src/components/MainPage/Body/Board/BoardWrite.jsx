@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { set, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Header from "components/MainPage/Header/Header";
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { addDoc, collection } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
-import { useDidMountEffect } from "Hooks/useDidMountEffect";
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { set, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Header from 'components/MainPage/Header/Header';
+import { Editor } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { addDoc, collection } from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
+import { useDidMountEffect } from 'Hooks/useDidMountEffect';
+import SelectTag from './Filetering/WriteFilter';
 
 const BoardWrite = () => {
   const navigate = useNavigate();
   const { register } = useForm();
   const editorRef = useRef();
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [tags, setTags] = useState('');
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -24,30 +25,28 @@ const BoardWrite = () => {
   };
 
   useDidMountEffect(() => {
-    if (content === "") return;
+    if (content === '') return;
     else {
-      console.log("content", content);
       createBoard();
     }
   }, [content]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const createBoard = async () => {
-    if (title === "") {
-      alert("제목은 필수 입력사항입니다.");
+    if (title === '') {
+      alert('제목은 필수 입력사항입니다.');
     } else {
       try {
-        await addDoc(collection(boardDB, "Board"), {
+        await addDoc(collection(boardDB, 'Board'), {
           title: title,
           content: content,
           id: uniqueId,
           date: new Date(),
         });
-        alert("작성이 완료되었습니다.");
+        alert('작성이 완료되었습니다.');
         navigate(-1);
       } catch (error) {
         alert(error);
-        console.log(error);
       }
     }
   };
@@ -55,14 +54,20 @@ const BoardWrite = () => {
   const uniqueId = Math.random().toString(36).substr(2, 16);
 
   // 뒤로가기 버튼
-  const handleGoBack = useCallback(() => {
+  const handleGoBack = (e) => {
+    e.preventDefault();
     navigate(-1);
-  }, [navigate]);
+  };
 
   // 제목 입력
   const handleTitleChange = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     setTitle(e.target.value);
+  };
+
+  const onTagClick = (tagLocalName) => {
+    console.log(tagLocalName);
+    setTags(tagLocalName);
   };
 
   return (
@@ -70,17 +75,17 @@ const BoardWrite = () => {
       <Header />
       <div>
         <form>
-          {" "}
+          {' '}
           <TitleWrapper>
             <p
               style={{
-                fontFamily: "pretendard",
-                fontSize: "25px",
+                fontFamily: 'pretendard',
+                fontSize: '25px',
               }}
             ></p>
             <TitleInput
-              {...register("title", {
-                required: "제목은 필수 입력 사항입니다.",
+              {...register('title', {
+                required: '제목은 필수 입력 사항입니다.',
               })}
               type="text"
               id="title"
@@ -90,7 +95,7 @@ const BoardWrite = () => {
             />
           </TitleWrapper>
           <>
-            <div style={{ padding: "0px 100px" }}>
+            <div style={{ padding: '0px 100px' }}>
               <Editor
                 ref={editorRef}
                 placeholder="내용을 입력해주세요."
@@ -99,19 +104,21 @@ const BoardWrite = () => {
                 initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                 toolbarItems={[
                   // 툴바 옵션 설정
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "image", "link"],
-                  ["code", "codeblock"],
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'image', 'link'],
+                  ['code', 'codeblock'],
                 ]}
                 useCommandShortcut={false}
               ></Editor>
+              <SelectTag />
             </div>
           </>
-          {/* <NoSsrEditor content="" /> */}
           <Buttons>
-            <Button onClick={handleGoBack}>뒤로가기</Button>
+            <Button type="button" onClick={handleGoBack}>
+              뒤로가기
+            </Button>
             <Button type="submit" onClick={onSubmit}>
               작성하기
             </Button>
@@ -154,5 +161,25 @@ const Button = styled.button`
   margin-right: 50px;
   font-family: pretendard;
 `;
+const Tags = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 0 100px;
+  gap: 10px;
+`;
 
+const TagButton = styled.button`
+  white-space: nowrap;
+  padding: 0 12px;
+  height: 32px;
+  border-radius: 20px;
+  font-family: 'Apple SD Gothic Neo';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 export default BoardWrite;
