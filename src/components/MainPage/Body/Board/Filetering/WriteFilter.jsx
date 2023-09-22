@@ -2,37 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { hipTag } from 'libs/Constants/tag';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTag } from 'redux/actions/toggle_action';
+import { selectTag, setTag } from 'redux/actions/toggle_action';
 import { FilterId } from 'libs/types/filter';
 
-function SelectTag() {
-  // const dispatch = useDispatch();
-  // const selectedTags = useSelector((state) => state.tag.selectedTags);
-
-  // const [tags, setTags] = useState(
-  //   FilterId.map((tag) => ({
-  //     tag,
-  //     selected: false,
-  //   }))
-  // );
-  // const onTagClick = (tagName) => {
-  //   setTags((prevTags) =>
-  //     prevTags.map((tag) =>
-  //       tag.name === tagName ? { ...tag, selected: !tag.selected } : tag
-  //     )
-  //   );
-  //   dispatch(toggleTag(tagName));
-  // };
-
-  // useEffect(() => {
-  //   // Update tags based on selectedTags from Redux
-  //   setTags((prevTags) =>
-  //     prevTags.map((tag) => ({
-  //       ...tag,
-  //       selected: selectedTags.includes(tag.name),
-  //     }))
-  //   );
-  // }, [selectedTags]);
+function WriteFilter() {
+  const dispatch = useDispatch();
+  const setTags = useSelector((state) => state.setTag.setTag);
+  const onTagClick = (tagName) => {
+    dispatch(setTag(tagName));
+  };
 
   return (
     <div>
@@ -41,10 +19,10 @@ function SelectTag() {
           <TagButton
             type="button"
             key={tag.name}
-            // onClick={() => onTagClick(tag.name)}
-            tag={tag}
+            selected={setTags === tag.name}
+            onClick={() => onTagClick(tag.name)}
           >
-            #{tag.localName}
+            #{tag.name}
           </TagButton>
         ))}
       </Tags>
@@ -65,16 +43,15 @@ const TagButton = styled.button`
   padding: 0 12px;
   height: 32px;
   border-radius: 20px;
-  /* border: 1px solid ${(props) =>
-    props.tag.selected ? '#E44269' : '#cccccc'}; */
+  border: 1px solid ${(props) => (props.selected ? '#E44269' : '#443bb6')};
   font-family: 'Apple SD Gothic Neo';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  /* color: ${(props) => (props.tag.selected ? '#E44269' : '#999999')}; */
+  color: ${(props) => (props.selected ? '#E44269' : '#999999')};
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export default SelectTag;
+export default WriteFilter;
