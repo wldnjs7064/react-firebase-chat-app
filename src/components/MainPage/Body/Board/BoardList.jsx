@@ -12,11 +12,11 @@ function BoardList() {
   const selector = useSelector((state) => state.tag.selectedTag);
   console.log('boardList selector', selector);
 
-  // Avoid infinite loop by checking if selectTag has changed
+  //  Avoid infinite loop by checking if selectTag has changed
   Object.keys(selector).forEach((tagKey) => {
     const tag = selector[tagKey];
     if (tag.selected && tag.name !== selectTag) {
-      setSelectTag(tag.name);
+      setSelectTag(...selectTag, tag.name);
     }
   });
 
@@ -25,14 +25,24 @@ function BoardList() {
   }, [selectTag]);
 
   const getContents = async () => {
-    const boardRef = query(
-      collection(boardDB, 'Board'),
-      orderBy('date', 'desc'),
-      where('tag', '==', selectTag)
-    );
+    if (selectTag === '') {
+      const boardRef = query(
+        collection(boardDB, 'Board'),
+        orderBy('date', 'desc')
+      );
 
-    const boardSnapshot = await getDocs(boardRef);
-    setDBData(boardSnapshot.docs);
+      const boardSnapshot = await getDocs(boardRef);
+      setDBData(boardSnapshot.docs);
+    } else {
+      const boardRef = query(
+        collection(boardDB, 'Board'),
+        orderBy('date', 'desc'),
+        where('tag', '==', selectTag)
+      );
+
+      const boardSnapshot = await getDocs(boardRef);
+      setDBData(boardSnapshot.docs);
+    }
   };
 
   const navigateUniBoard = (id, data) => {
