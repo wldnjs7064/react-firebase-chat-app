@@ -9,7 +9,7 @@ function SidePanel() {
   return (
     <div
       style={{
-        backgroundColor: "#2C5AF1",
+        backgroundColor: "#7a84eb",
         padding: "2rem",
         minHeight: "100vh",
         color: "white",
