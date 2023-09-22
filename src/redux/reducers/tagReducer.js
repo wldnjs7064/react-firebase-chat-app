@@ -34,8 +34,6 @@ const initialState = {
 const tagReducer = (state = initialState, action) => {
   switch (action.type) {
     case SELECT_TAG:
-      // console.log('action.payload: ', action.payload);
-      // console.log('state: ', state);
       return {
         ...state,
         selectedTag: state.selectedTag.map((tag) =>
@@ -44,6 +42,7 @@ const tagReducer = (state = initialState, action) => {
             : tag
         ),
       };
+
     default:
       return state;
   }

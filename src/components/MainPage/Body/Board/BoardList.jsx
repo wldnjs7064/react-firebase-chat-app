@@ -4,24 +4,29 @@ import styled from 'styled-components';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { set } from 'react-hook-form';
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const [selectTag, setSelectTag] = useState('');
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
-  console.log('boardList selector', selector);
-
-  //  Avoid infinite loop by checking if selectTag has changed
-  Object.keys(selector).forEach((tagKey) => {
-    const tag = selector[tagKey];
-    if (tag.selected && tag.name !== selectTag) {
-      setSelectTag(...selectTag, tag.name);
-    }
-  });
 
   useEffect(() => {
+    setSelectTag('');
+    Object.keys(selector).forEach((tagKey) => {
+      const tag = selector[tagKey];
+      if (tag.selected && tag.name !== selectTag) {
+        console.log('tagName', tag.name);
+        setSelectTag(tag.name);
+      }
+    });
+  }, [selector]);
+
+  useEffect(() => {
+    // Avoid infinite loop by checking if selectTag has changed
     getContents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectTag]);
 
   const getContents = async () => {
@@ -30,7 +35,6 @@ function BoardList() {
         collection(boardDB, 'Board'),
         orderBy('date', 'desc')
       );
-
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
     } else {
@@ -39,7 +43,6 @@ function BoardList() {
         orderBy('date', 'desc'),
         where('tag', '==', selectTag)
       );
-
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
     }

@@ -10,5 +10,4 @@ export const SET_CURRENT_CHAT_ROOM = 'set_current_chat_room';
 
 // actions.js
 export const SELECT_TAG = 'SELECT_TAG';
-export const IS_SELECTED = 'IS_SELECTED';
 export const SET_PRIVATE_CHAT_ROOM = 'set_private_chat_room';

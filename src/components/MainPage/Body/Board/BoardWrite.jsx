@@ -27,7 +27,6 @@ const BoardWrite = () => {
   useDidMountEffect(() => {
     if (content === '') return;
     else {
-      console.log('content', content);
       createBoard();
     }
   }, [content]);
@@ -48,7 +47,6 @@ const BoardWrite = () => {
         navigate(-1);
       } catch (error) {
         alert(error);
-        console.log(error);
       }
     }
   };

@@ -8,7 +8,6 @@ import { selectTag } from 'redux/actions/toggle_action';
 function Filtering() {
   const dispatch = useDispatch();
   const usetags = useSelector((state) => state.tag.selectedTag);
-  console.log('usetags', usetags);
 
   const handleClick = (tags) => {
     dispatch(selectTag(tags.name));

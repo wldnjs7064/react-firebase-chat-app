@@ -19,7 +19,6 @@ function BoardEdit() {
   const [title, setTitle] = useState('');
 
   const location = useLocation();
-  console.log('location', location.state.id);
   const docId = location.state.id;
   const data = location.state.data;
 
@@ -33,7 +32,6 @@ function BoardEdit() {
   useDidMountEffect(() => {
     if (content === '') return;
     else {
-      console.log('content', content);
       handleEdit();
     }
   }, [content]);
@@ -59,7 +57,6 @@ function BoardEdit() {
         navigate(-1);
       } catch (error) {
         alert(error);
-        console.log(error);
       }
     }
   };
