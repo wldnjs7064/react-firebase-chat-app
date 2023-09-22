@@ -34,14 +34,11 @@ function RegisterPage() {
         )}?d=identicon`,
       });
 
-      console.log("name : " + createdUser.user.displayName);
-      console.log("PhotoURL : " + createdUser.user.photoURL);
       //firebase DB에 저장해주기
-      await firebase
-        .database()
-        .ref("users")
-        .child(createdUser.user.uid)
-        .set({});
+      await firebase.database().ref("users").child(createdUser.user.uid).set({
+        name: createdUser.user.displayName,
+        image: createdUser.user.photoURL,
+      });
       alert("회원가입이 완료되었습니다.");
       navigate("/login");
       setLoading(false);
