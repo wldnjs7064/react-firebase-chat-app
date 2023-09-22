@@ -9,6 +9,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { boardDB } from '../../../../firebase';
 import { useDidMountEffect } from 'Hooks/useDidMountEffect';
 import SelectTag from './Filetering/WriteFilter';
+import { useSelector } from 'react-redux';
 
 const BoardWrite = () => {
   const navigate = useNavigate();
@@ -16,7 +17,9 @@ const BoardWrite = () => {
   const editorRef = useRef();
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState(false);
+  const setTag = useSelector((state) => state.setTag.setTag);
+
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +45,7 @@ const BoardWrite = () => {
           content: content,
           id: uniqueId,
           date: new Date(),
+          tag: setTag,
         });
         alert('작성이 완료되었습니다.');
         navigate(-1);
