@@ -139,6 +139,16 @@ export class ChatRooms extends Component {
     this.props.dispatch(setPrivateChatRoom(false));
     this.setState({ activeChatRoomId: room.id });
   };
+
+  getNotificationCount = (room) => {
+    let count = 0;
+    this.state.notifications.forEach((notification) => {
+      if (notification.id === room.id) {
+        count = notification.count;
+      }
+    });
+    if (count > 0) return count;
+  };
   renderChatRooms = (chatRooms) =>
     chatRooms.length > 0 &&
     chatRooms.map((room) => (
@@ -152,7 +162,7 @@ export class ChatRooms extends Component {
       >
         # {room.name}
         <Badge style={{ float: "right", marginTop: "4px" }} variant="danger">
-          1
+          {this.getNotificationCount(room)}
         </Badge>
       </li>
     ));
