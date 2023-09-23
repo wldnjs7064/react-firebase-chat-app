@@ -17,10 +17,11 @@ export class ChatRooms extends Component {
     name: "",
     description: "",
     chatRoomsRef: firebase.database().ref("chatRooms"),
+    messagesRef: firebase.database().ref("messages"),
     chatRooms: [],
     firstLoad: true,
     activeChatRoomId: "",
-    notification: [],
+    notifications: [],
   };
 
   componentDidMount() {
@@ -39,6 +40,7 @@ export class ChatRooms extends Component {
     }
     this.setState({ firstLoad: false });
   };
+
   AddChatRoomsListener = () => {
     let chatRoomsArray = [];
 
@@ -47,9 +49,53 @@ export class ChatRooms extends Component {
       this.setState({ chatRooms: chatRoomsArray }, () =>
         this.setFirstChatRoom()
       );
+      this.addNotificationListener(DataSnapshot.key);
     });
   };
 
+  addNotificationListener = (chatRoomId) => {
+    this.state.messagesRef.child(chatRoomId).on("value", (DataSnapshot) => {
+      if (this.props.chatRoom) {
+        this.handleNotification(
+          chatRoomId,
+          this.props.chatRoom.id,
+          this.state.notifications,
+          DataSnapshot
+        );
+      }
+    });
+  };
+
+  handleNotification = (
+    chatRoomId,
+    currentChatRoomId,
+    notifications,
+    DataSnapshot
+  ) => {
+    let index = notifications.findIndex(
+      (notification) => notification.id === chatRoomId
+    );
+    let lastTotal = 0;
+
+    if (index === -1) {
+      notifications.push({
+        id: chatRoomId,
+        total: DataSnapshot.numChildren(),
+        lastKnownTotal: DataSnapshot.numChildren(),
+        count: 0,
+      });
+    } else {
+      if (chatRoomId !== currentChatRoomId) {
+        lastTotal = notifications[index].lastKnownTotal;
+
+        if (DataSnapshot.numChildren() - lastTotal > 0) {
+          notifications[index].count = DataSnapshot.numChildren() - lastTotal;
+        }
+      }
+      notifications[index].total = DataSnapshot.numChildren();
+    }
+    this.setState({ notifications });
+  };
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
@@ -181,6 +227,7 @@ export class ChatRooms extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.currentUser,
+    chatRoom: state.chatRoom.currentChatRoom,
   };
 };
 
