@@ -80,19 +80,19 @@ export class ChatRooms extends Component {
     if (index === -1) {
       notifications.push({
         id: chatRoomId,
-        total: DataSnapshot.numChildren(),
-        lastKnownTotal: DataSnapshot.numChildren(),
+        total: DataSnapshot.size,
+        lastKnownTotal: DataSnapshot.size,
         count: 0,
       });
     } else {
       if (chatRoomId !== currentChatRoomId) {
         lastTotal = notifications[index].lastKnownTotal;
 
-        if (DataSnapshot.numChildren() - lastTotal > 0) {
-          notifications[index].count = DataSnapshot.numChildren() - lastTotal;
+        if (DataSnapshot.size - lastTotal > 0) {
+          notifications[index].count = DataSnapshot.size - lastTotal;
         }
       }
-      notifications[index].total = DataSnapshot.numChildren();
+      notifications[index].total = DataSnapshot.size;
     }
     this.setState({ notifications });
   };
