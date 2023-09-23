@@ -11,6 +11,7 @@ import {
   setPrivateChatRoom,
 } from "../../../redux/actions/chatRoom_action";
 import Badge from "react-bootstrap/Badge";
+
 export class ChatRooms extends Component {
   state = {
     show: false,
