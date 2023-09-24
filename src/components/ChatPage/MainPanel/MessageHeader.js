@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,7 +9,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-import { MdFavorite } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 function MessageHeader({ handleSearchChange }) {
@@ -17,6 +17,7 @@ function MessageHeader({ handleSearchChange }) {
   const isPrivateChatRoom = useSelector(
     (state) => state.chatRoom.isPrivateChatRoom
   );
+  const [isFavorited, setisFavorited] = useState(false);
 
   return (
     <div
@@ -39,7 +40,15 @@ function MessageHeader({ handleSearchChange }) {
             )}
             <h2>
               {chatRoom && chatRoom.name}
-              <MdFavorite />
+              {!isPrivateChatRoom && (
+                <span style={{ cursor: "pointer" }} onClick>
+                  {isFavorited ? (
+                    <MdFavorite style={{ marginBottom: "10px" }} />
+                  ) : (
+                    <MdFavoriteBorder style={{ marginBottom: "10px" }} />
+                  )}
+                </span>
+              )}
             </h2>
           </Col>
           <Col>
