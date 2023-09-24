@@ -22,6 +22,7 @@ function MessageHeader({ handleSearchChange }) {
   const usersRef = firebase.database().ref("users");
   const user = useSelector((state) => state.user.currentUser);
   const [isFavorited, setisFavorited] = useState(false);
+  const userPosts = useSelector((state) => state.chatRoom.userPosts);
   useEffect(() => {
     if (chatRoom && user) {
       addFavoriteListener(chatRoom.id, user.uid);
@@ -66,11 +67,31 @@ function MessageHeader({ handleSearchChange }) {
       setisFavorited((prev) => !prev);
     }
   };
+  const renderUserPosts = (userPosts) =>
+    Object.entries(userPosts)
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([key, val], i) => (
+        <div key={i} style={{ display: "flex" }}>
+          <img
+            style={{ borderRadius: 25 }}
+            width={48}
+            height={48}
+            className="mr-3"
+            src={val.image}
+            alt={val.name}
+          />
+          <div>
+            <h6>{key}</h6>
+            <p>{val.count} 개</p>
+          </div>
+        </div>
+      ));
+
   return (
     <div
       style={{
         width: "100%",
-        height: "170px",
+        height: "190px",
         border: ".2rem solid #ececec",
         borderRadius: "4px",
         padding: "1rem",
@@ -80,12 +101,12 @@ function MessageHeader({ handleSearchChange }) {
       <Container>
         <Row>
           <Col>
-            {isPrivateChatRoom ? (
-              <FaLock style={{ marginBottom: "10px" }} />
-            ) : (
-              <FaLockOpen style={{ marginBottom: "10px" }} />
-            )}
             <h2>
+              {isPrivateChatRoom ? (
+                <FaLock style={{ marginBottom: "10px" }} />
+              ) : (
+                <FaLockOpen style={{ marginBottom: "10px" }} />
+              )}
               {chatRoom && chatRoom.name}
               {!isPrivateChatRoom && (
                 <span style={{ cursor: "pointer" }} onClick={handleFavorite}>
@@ -112,16 +133,18 @@ function MessageHeader({ handleSearchChange }) {
             </InputGroup>
           </Col>
         </Row>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <p>
-            <Image
-              src={chatRoom && chatRoom.createdBy.image}
-              roundedCircle
-              style={{ width: "30px", height: "30px" }}
-            />{" "}
-            {chatRoom && chatRoom.createdBy.name}
-          </p>
-        </div>
+        {!isPrivateChatRoom && (
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <p>
+              <Image
+                src={chatRoom && chatRoom.createdBy.image}
+                roundedCircle
+                style={{ width: "30px", height: "30px" }}
+              />{" "}
+              {chatRoom && chatRoom.createdBy.name}
+            </p>
+          </div>
+        )}
         <Row>
           <Col>
             <Accordion>
@@ -136,9 +159,11 @@ function MessageHeader({ handleSearchChange }) {
           <Col>
             <Accordion>
               <Accordion.Item eventKey="0">
-                <Accordion.Header>Click me!</Accordion.Header>
+                <Accordion.Header>Chat Count</Accordion.Header>
                 <Accordion.Collapse eventKey="0">
-                  <Card.Body>Hello! I'm the body</Card.Body>
+                  <Card.Body>
+                    {userPosts && renderUserPosts(userPosts)}
+                  </Card.Body>
                 </Accordion.Collapse>
               </Accordion.Item>
             </Accordion>

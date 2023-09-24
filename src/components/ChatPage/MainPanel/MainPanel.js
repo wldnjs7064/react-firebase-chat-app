@@ -55,6 +55,7 @@ export class MainPanel extends Component {
         this.userPostsCount(messagesArray);
       });
   };
+
   userPostsCount = (messages) => {
     let userPosts = messages.reduce((acc, message) => {
       if (message.user.name in acc) {
@@ -69,6 +70,7 @@ export class MainPanel extends Component {
     }, {});
     this.props.dispatch(setUserPosts(userPosts));
   };
+
   renderMessages = (messages) =>
     messages.length > 0 &&
     messages.map((message) => (
