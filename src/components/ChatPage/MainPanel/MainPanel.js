@@ -14,13 +14,42 @@ export class MainPanel extends Component {
     searchTerm: "",
     searchResults: [],
     searchLoading: false,
+    typingRef: firebase.database().ref("typing"),
+    typingUsers: [],
   };
   componentDidMount() {
     const { chatRoom } = this.props;
     if (chatRoom) {
       this.addMessagesListeners(chatRoom.id);
+      this.addTypingListeners(chatRoom.id);
     }
   }
+
+  addTypingListeners = (chatRoomId) => {
+    let typingUsers = [];
+    this.state.typingRef.child(chatRoomId).on("child_added", (DataSnapshot) => {
+      if (DataSnapshot.key !== this.props.user.uid) {
+        typingUsers = typingUsers.concat({
+          id: DataSnapshot.key,
+          name: DataSnapshot.val(),
+        });
+        this.setState({ typingUsers });
+      }
+    });
+    this.state.typingRef
+      .child(chatRoomId)
+      .on("child_removed", (DataSnapshot) => {
+        const index = typingUsers.findIndex(
+          (user) => user.id === DataSnapshot.key
+        );
+        if (index !== -1) {
+          typingUsers = typingUsers.fillter(
+            (user) => user.id !== DataSnapshot.key
+          );
+          this.setState({ typingUsers });
+        }
+      });
+  };
   handleSearchMessages = () => {
     const chatRoomMessages = [...this.state.messages];
     const regex = new RegExp(this.state.searchTerm, "gi");
