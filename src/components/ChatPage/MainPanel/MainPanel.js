@@ -16,6 +16,7 @@ export class MainPanel extends Component {
     searchLoading: false,
     typingRef: firebase.database().ref("typing"),
     typingUsers: [],
+    listenerLists: [],
   };
   componentDidMount() {
     const { chatRoom } = this.props;
@@ -24,6 +25,17 @@ export class MainPanel extends Component {
       this.addTypingListeners(chatRoom.id);
     }
   }
+
+  componentWillUnmount() {
+    this.state.messagesRef.off();
+    this.removeListeners(this.state.listenerLists);
+  }
+
+  removeListeners = (listeners) => {
+    listeners.forEach((listener) => {
+      listener.ref.child(listener.id).off(listener.event);
+    });
+  };
 
   addTypingListeners = (chatRoomId) => {
     let typingUsers = [];
@@ -36,6 +48,7 @@ export class MainPanel extends Component {
         this.setState({ typingUsers });
       }
     });
+    this.addToListenerLists(chatRoomId, this.state.typingRef, "child_added");
     this.state.typingRef
       .child(chatRoomId)
       .on("child_removed", (DataSnapshot) => {
@@ -49,6 +62,21 @@ export class MainPanel extends Component {
           this.setState({ typingUsers });
         }
       });
+    this.addToListenerLists(chatRoomId, this.state.typingRef, "child_removed");
+  };
+
+  addToListenerLists = (id, ref, event) => {
+    const index = this.state.listenerLists.findIndex((listener) => {
+      return (
+        listener.id === id && listener.ref === ref && listener.event === event
+      );
+    });
+    if (index === -1) {
+      const newListener = { id, ref, event };
+      this.setState({
+        listenerLists: this.state.listenerLists.concat(newListener),
+      });
+    }
   };
   handleSearchMessages = () => {
     const chatRoomMessages = [...this.state.messages];
