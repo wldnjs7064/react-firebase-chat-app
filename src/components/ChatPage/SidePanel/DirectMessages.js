@@ -33,7 +33,7 @@ export class DirectMessages extends Component {
     });
   };
   getChatRoomId = (userId) => {
-    const currentUserId = this.props.uid;
+    const currentUserId = this.props.user.uid;
 
     return userId > currentUserId
       ? `${userId}/${currentUserId}`
