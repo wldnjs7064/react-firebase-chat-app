@@ -13,6 +13,7 @@ function MessageForm() {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const messagesRef = firebase.database().ref("messages");
+  const typingRef = firebase.database().ref("typing");
   const inputOpenImageRef = useRef();
   const storageRef = firebase.storage().ref();
   const handleChange = (event) => {
@@ -46,6 +47,7 @@ function MessageForm() {
 
     try {
       await messagesRef.child(chatRoom.id).push().set(createMessage());
+      typingRef.child(chatRoom.id).child(user.uid).remove();
       setLoading(false);
       setContent("");
       setErrors([]);
@@ -104,11 +106,20 @@ function MessageForm() {
       alert(error);
     }
   };
+
+  const handleKeyDown = () => {
+    if (content) {
+      typingRef.child(chatRoom.id).child(user.uid).set(user.displayName);
+    } else {
+      typingRef.child(chatRoom.id).child(user.uid).remove();
+    }
+  };
   return (
     <div>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="exampleForm.ControlTextarea1">
           <Form.Control
+            onKeyDown={handleKeyDown}
             value={content}
             onChange={handleChange}
             as="textarea"
