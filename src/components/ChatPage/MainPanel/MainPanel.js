@@ -43,7 +43,7 @@ export class MainPanel extends Component {
           (user) => user.id === DataSnapshot.key
         );
         if (index !== -1) {
-          typingUsers = typingUsers.fillter(
+          typingUsers = typingUsers.filter(
             (user) => user.id !== DataSnapshot.key
           );
           this.setState({ typingUsers });
@@ -109,8 +109,14 @@ export class MainPanel extends Component {
         user={this.props.user}
       />
     ));
+
+  renderTypingUsers = (typingUsers) =>
+    typingUsers.length > 0 &&
+    typingUsers.map((user) => (
+      <span>{user.name}님이 채팅을 입력하고 있습니다.</span>
+    ));
   render() {
-    const { messages, searchTerm, searchResults } = this.state;
+    const { messages, searchTerm, searchResults, typingUsers } = this.state;
     return (
       <div style={{ padding: "2rem 2rem 0 2rem" }}>
         <MessageHeader handleSearchChange={this.handleSearchChange} />
@@ -129,6 +135,7 @@ export class MainPanel extends Component {
           {searchTerm
             ? this.renderMessages(searchResults)
             : this.renderMessages(messages)}
+          {this.renderTypingUsers(typingUsers)}
         </div>
         <MessageForm />
       </div>
