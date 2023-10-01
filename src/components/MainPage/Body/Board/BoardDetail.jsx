@@ -38,7 +38,6 @@ function BoardDetail() {
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
     console.log('like', newLike);
-    // dispatch({ type: 'WRITE', id: id, like: newLike });
     try {
       await updateDoc(doc(boardDB, 'Board', id), {
         like: newLike,
@@ -70,19 +69,30 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
+
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
-            {newLike}
             <button
               style={{
                 marginTop: '400px',
                 width: 'fit-content',
                 whiteSpace: 'nowrap',
                 textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '10px',
               }}
               onClick={handleLike}
             >
               좋아요
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span>{newLike}</span>
+              </div>
             </button>
             <button
               style={{
