@@ -11,6 +11,9 @@ import {
 } from 'firebase/firestore';
 import { boardDB } from '../../../../firebase';
 import { useDidMountEffect } from 'Hooks/useDidMountEffect';
+import { set } from 'react-hook-form';
+import CommentWrite from './Comment/CommentWrite';
+import Comment from './Comment/Comment';
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ function BoardDetail() {
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
   const [newViews, setNewViews] = useState(0);
+
   const handleDelete = async () => {
     console.log('delete');
     await deleteDoc(doc(boardDB, 'Board', id));
@@ -37,6 +41,14 @@ function BoardDetail() {
 
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
+    try {
+      await updateDoc(doc(boardDB, 'Board', id), {
+        like: newLike,
+      });
+      alert('좋아요를 눌렀습니다.');
+    } catch (error) {
+      alert(error);
+    }
     console.log('like', newLike);
   };
 
@@ -48,18 +60,18 @@ function BoardDetail() {
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
     }
-    async function updateLike() {
-      setNewViews((prev) => prev + 1);
-      console.log('newViews', newViews);
-      try {
-        await updateDoc(doc(boardDB, 'Board', id), {
-          views: newViews,
-        });
-      } catch (error) {
-        alert(error);
-      }
-    }
-    updateLike();
+    // async function updateViews() {
+    //   setNewViews((prev) => prev + 1);
+    //   console.log('newViews', newViews);
+    //   try {
+    //     await updateDoc(doc(boardDB, 'Board', id), {
+    //       views: newViews,
+    //     });
+    //   } catch (error) {
+    //     alert(error);
+    //   }
+    // }
+    // updateViews();
     getNewData();
   }, []);
 
@@ -122,6 +134,8 @@ function BoardDetail() {
               삭제
             </button>
           </ButtonWrapper>
+          <CommentWrite id={id} />
+          <Comment />
         </UniContents>
       </UniBody>
     </div>

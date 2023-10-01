@@ -6,5 +6,6 @@ export function write(data) {
     title: data.title,
     content: data.content,
     like: data.like,
+    views: data.views,
   };
 }

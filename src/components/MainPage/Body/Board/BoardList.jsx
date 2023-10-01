@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { set } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { write } from 'redux/actions/write_action.js';
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
@@ -12,6 +12,7 @@ function BoardList() {
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
   const [views, setViews] = useState(0);
+  const dispatch = useDispatch();
   useEffect(() => {
     setSelectTag('');
     Object.keys(selector).forEach((tagKey) => {
@@ -49,7 +50,7 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
-    setViews((prev) => prev + 1);
+    dispatch(write({ id: id, data: data, views: views }));
     navigate(`/board/${id}`, {
       state: { id: id, data: data, views: views },
     });
