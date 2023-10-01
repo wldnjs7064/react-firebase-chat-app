@@ -10,10 +10,9 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { boardDB } from '../../../../firebase';
-import { useDispatch } from 'react-redux';
+import { useDidMountEffect } from 'Hooks/useDidMountEffect';
 
 function BoardDetail() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
@@ -21,6 +20,7 @@ function BoardDetail() {
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
+  const [views, setViews] = useState(0);
 
   const handleDelete = async () => {
     console.log('delete');
@@ -38,15 +38,19 @@ function BoardDetail() {
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
     console.log('like', newLike);
-    try {
-      await updateDoc(doc(boardDB, 'Board', id), {
-        like: newLike,
-      });
-      alert('좋아요를 눌렀습니다.');
-    } catch (error) {
-      alert(error);
-    }
   };
+  useDidMountEffect(() => {
+    async function updateLike() {
+      try {
+        await updateDoc(doc(boardDB, 'Board', id), {
+          like: newLike,
+        });
+      } catch (error) {
+        alert(error);
+      }
+    }
+    updateLike();
+  }, [newLike]);
 
   useEffect(() => {
     async function getNewData() {
@@ -54,7 +58,9 @@ function BoardDetail() {
       console.log('newData', newData.data().title);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
+      setNewLike(newData.data().like);
     }
+    setViews((prev) => prev + 1);
     getNewData();
   }, []);
 
@@ -69,7 +75,7 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
-
+          <div>조회수 : {views}</div>
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button
