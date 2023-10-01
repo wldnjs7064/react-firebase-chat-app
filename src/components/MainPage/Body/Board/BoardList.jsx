@@ -11,7 +11,7 @@ function BoardList() {
   const [selectTag, setSelectTag] = useState('');
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
-
+  const [views, setViews] = useState(0);
   useEffect(() => {
     setSelectTag('');
     Object.keys(selector).forEach((tagKey) => {
@@ -49,8 +49,9 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
+    setViews((prev) => prev + 1);
     navigate(`/board/${id}`, {
-      state: { id: id, data: data },
+      state: { id: id, data: data, views: views },
     });
   };
 

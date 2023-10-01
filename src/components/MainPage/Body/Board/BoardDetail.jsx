@@ -17,11 +17,11 @@ function BoardDetail() {
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
+  const views = location.state.views;
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
-  const [views, setViews] = useState(0);
-
+  const [newViews, setNewViews] = useState(0);
   const handleDelete = async () => {
     console.log('delete');
     await deleteDoc(doc(boardDB, 'Board', id));
@@ -39,18 +39,6 @@ function BoardDetail() {
     setNewLike((prev) => prev + 1);
     console.log('like', newLike);
   };
-  useDidMountEffect(() => {
-    async function updateLike() {
-      try {
-        await updateDoc(doc(boardDB, 'Board', id), {
-          like: newLike,
-        });
-      } catch (error) {
-        alert(error);
-      }
-    }
-    updateLike();
-  }, [newLike]);
 
   useEffect(() => {
     async function getNewData() {
@@ -60,7 +48,18 @@ function BoardDetail() {
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
     }
-    setViews((prev) => prev + 1);
+    async function updateLike() {
+      setNewViews((prev) => prev + 1);
+      console.log('newViews', newViews);
+      try {
+        await updateDoc(doc(boardDB, 'Board', id), {
+          views: newViews,
+        });
+      } catch (error) {
+        alert(error);
+      }
+    }
+    updateLike();
     getNewData();
   }, []);
 
@@ -75,7 +74,7 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
-          <div>조회수 : {views}</div>
+          <div>조회수 : {newViews}</div>
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button
