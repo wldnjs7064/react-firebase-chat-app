@@ -42,13 +42,6 @@ function BoardEdit() {
       alert('제목은 필수 입력사항입니다.');
     } else {
       try {
-        // boardDB.collection("Board").doc(docId).update({
-        //   title: title,
-        //   content: content,
-        //   id: uniqueId,
-        //   date: new Date(),
-        // });
-
         await updateDoc(doc(boardDB, 'Board', docId), {
           title: title,
           content: content,
@@ -60,8 +53,6 @@ function BoardEdit() {
       }
     }
   };
-
-  const uniqueId = Math.random().toString(36).substr(2, 16);
 
   // 뒤로가기 버튼
   const handleGoBack = useCallback(() => {

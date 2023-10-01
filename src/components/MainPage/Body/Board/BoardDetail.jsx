@@ -1,22 +1,31 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../../Header/Header";
-import styled from "styled-components";
-import { Firestore, deleteDoc, doc, getDoc } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../Header/Header';
+import styled from 'styled-components';
+import {
+  Firestore,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
+import { useDispatch } from 'react-redux';
 
 function BoardDetail() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
+  const [newLike, setNewLike] = useState(data.like);
 
   const handleDelete = async () => {
-    console.log("delete");
-    await deleteDoc(doc(boardDB, "Board", id));
-    alert("삭제되었습니다.");
+    console.log('delete');
+    await deleteDoc(doc(boardDB, 'Board', id));
+    alert('삭제되었습니다.');
     navigate(-1);
   };
 
@@ -26,10 +35,23 @@ function BoardDetail() {
     });
   };
 
+  const handleLike = async () => {
+    setNewLike((prev) => prev + 1);
+    console.log('like', newLike);
+    try {
+      await updateDoc(doc(boardDB, 'Board', id), {
+        like: newLike,
+      });
+      alert('좋아요를 눌렀습니다.');
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   useEffect(() => {
     async function getNewData() {
-      const newData = await getDoc(doc(boardDB, "Board", id));
-      console.log("newData", newData.data().title);
+      const newData = await getDoc(doc(boardDB, 'Board', id));
+      console.log('newData', newData.data().title);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
     }
@@ -39,22 +61,45 @@ function BoardDetail() {
   return (
     <div
       style={{
-        height: "100vh",
-        backgroundColor: "#fafafae1",
+        height: '100vh',
+        backgroundColor: '#fafafae1',
       }}
     >
       <Header />
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
+
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button
               style={{
-                marginTop: "400px",
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '10px',
+              }}
+              onClick={handleLike}
+            >
+              좋아요
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span>{newLike}</span>
+              </div>
+            </button>
+            <button
+              style={{
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleEdit}
             >
@@ -62,10 +107,10 @@ function BoardDetail() {
             </button>
             <button
               style={{
-                marginTop: "400px",
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleDelete}
             >
