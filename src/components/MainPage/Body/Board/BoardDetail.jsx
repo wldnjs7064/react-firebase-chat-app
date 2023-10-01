@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../../Header/Header";
-import styled from "styled-components";
-import { Firestore, deleteDoc, doc, getDoc } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../Header/Header';
+import styled from 'styled-components';
+import { Firestore, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -14,9 +14,9 @@ function BoardDetail() {
   const [newContent, setNewContent] = useState(data.content);
 
   const handleDelete = async () => {
-    console.log("delete");
-    await deleteDoc(doc(boardDB, "Board", id));
-    alert("삭제되었습니다.");
+    console.log('delete');
+    await deleteDoc(doc(boardDB, 'Board', id));
+    alert('삭제되었습니다.');
     navigate(-1);
   };
 
@@ -26,10 +26,14 @@ function BoardDetail() {
     });
   };
 
+  const handleLike = async () => {
+    await deleteDoc(doc(boardDB, 'Board', id));
+  };
+
   useEffect(() => {
     async function getNewData() {
-      const newData = await getDoc(doc(boardDB, "Board", id));
-      console.log("newData", newData.data().title);
+      const newData = await getDoc(doc(boardDB, 'Board', id));
+      console.log('newData', newData.data().title);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
     }
@@ -39,8 +43,8 @@ function BoardDetail() {
   return (
     <div
       style={{
-        height: "100vh",
-        backgroundColor: "#fafafae1",
+        height: '100vh',
+        backgroundColor: '#fafafae1',
       }}
     >
       <Header />
@@ -51,10 +55,21 @@ function BoardDetail() {
           <ButtonWrapper>
             <button
               style={{
-                marginTop: "400px",
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+              }}
+              onClick={handleLike}
+            >
+              좋아요
+            </button>
+            <button
+              style={{
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleEdit}
             >
@@ -62,10 +77,10 @@ function BoardDetail() {
             </button>
             <button
               style={{
-                marginTop: "400px",
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                marginTop: '400px',
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleDelete}
             >
