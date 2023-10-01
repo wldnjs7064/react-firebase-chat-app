@@ -46,6 +46,7 @@ const BoardWrite = () => {
           id: uniqueId,
           date: new Date(),
           tag: setTag,
+          like: 0,
         });
         alert('작성이 완료되었습니다.');
         navigate(-1);

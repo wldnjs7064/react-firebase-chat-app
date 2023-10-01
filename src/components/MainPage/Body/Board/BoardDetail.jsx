@@ -2,16 +2,25 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../Header/Header';
 import styled from 'styled-components';
-import { Firestore, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import {
+  Firestore,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { boardDB } from '../../../../firebase';
+import { useDispatch } from 'react-redux';
 
 function BoardDetail() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
+  const [newLike, setNewLike] = useState(data.like);
 
   const handleDelete = async () => {
     console.log('delete');
@@ -27,7 +36,17 @@ function BoardDetail() {
   };
 
   const handleLike = async () => {
-    await deleteDoc(doc(boardDB, 'Board', id));
+    setNewLike((prev) => prev + 1);
+    console.log('like', newLike);
+    // dispatch({ type: 'WRITE', id: id, like: newLike });
+    try {
+      await updateDoc(doc(boardDB, 'Board', id), {
+        like: newLike,
+      });
+      alert('좋아요를 눌렀습니다.');
+    } catch (error) {
+      alert(error);
+    }
   };
 
   useEffect(() => {
@@ -53,6 +72,7 @@ function BoardDetail() {
           <UniTitle>{newTitle}</UniTitle>
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
+            {newLike}
             <button
               style={{
                 marginTop: '400px',
