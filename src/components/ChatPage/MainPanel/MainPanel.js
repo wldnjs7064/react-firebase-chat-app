@@ -5,8 +5,10 @@ import { connect } from "react-redux";
 import MessageForm from "./MessageForm";
 import firebase from "../../../firebase";
 import { setUserPosts } from "redux/actions/chatRoom_action";
+import Skeleton from "../../Skeleton";
 
 export class MainPanel extends Component {
+  messageEndRef = React.createRef();
   state = {
     messages: [],
     messagesRef: firebase.database().ref("messages"),
@@ -23,6 +25,11 @@ export class MainPanel extends Component {
     if (chatRoom) {
       this.addMessagesListeners(chatRoom.id);
       this.addTypingListeners(chatRoom.id);
+    }
+  }
+  componentDidUpdate() {
+    if (this.messageEndRef) {
+      this.messageEndRef.scrollIntoView({ behavior: "smooth" });
     }
   }
 
@@ -143,8 +150,22 @@ export class MainPanel extends Component {
     typingUsers.map((user) => (
       <span>{user.name}님이 채팅을 입력하고 있습니다.</span>
     ));
+  renderMessageSkeleton = (loading) =>
+    loading && (
+      <>
+        {[...Array(10)].map((v, i) => (
+          <Skeleton key={i} />
+        ))}
+      </>
+    );
   render() {
-    const { messages, searchTerm, searchResults, typingUsers } = this.state;
+    const {
+      messages,
+      searchTerm,
+      searchResults,
+      typingUsers,
+      messagesLoading,
+    } = this.state;
     return (
       <div style={{ padding: "2rem 2rem 0 2rem" }}>
         <MessageHeader handleSearchChange={this.handleSearchChange} />
@@ -160,10 +181,12 @@ export class MainPanel extends Component {
             overflowY: "auto",
           }}
         >
+          {this.renderMessageSkeleton(messagesLoading)}
           {searchTerm
             ? this.renderMessages(searchResults)
             : this.renderMessages(messages)}
           {this.renderTypingUsers(typingUsers)}
+          <div ref={(node) => (this.messageEndRef = node)} />
         </div>
         <MessageForm />
       </div>
