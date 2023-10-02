@@ -5,22 +5,24 @@ import React, { useEffect, useState } from 'react';
 function Comment({id}) {
   const [comment, setComment] = useState('');
   const [isComment, setIsComment] = useState(false);
-  console.log('commentId', id);
+  const uid = id;
+
   const getComment = async () => {
-    const commentRef = query(collection(boardDB, 'Comment'), orderBy('date'));
+    const commentRef = query(collection(boardDB, 'Comment'), orderBy('date'), where('id', '==', uid));
     const commentSnapshot = await getDocs(commentRef);
-    if(commentSnapshot.docs.length !== 0){ setIsComment(true);
     console.log('commentSnapshot.docs', commentSnapshot.docs);
-    setComment(commentSnapshot.docs);
-  }else {
-    setIsComment(false);
-  }
+    if(commentSnapshot.docs.length === 0){
+      setIsComment(false);
+    }else{
+      setIsComment(true);
+      setComment(commentSnapshot.docs);
+    }
   };
   useEffect(() => {
     getComment();
   }, []);
 
-//댓글 등록 이후 댓글 목록을 다시 불러오는 함수필요
+//댓글 등록 이후 댓글 목록을 다시 불러오는 함수 필요
 
   return (
     <div>

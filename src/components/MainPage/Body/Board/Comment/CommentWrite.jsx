@@ -24,7 +24,8 @@ function CommentWrite({ id }) {
         });
         alert('댓글이 등록되었습니다.');
         setComment('');
-        
+        window.location.reload();
+
       } catch (error) {
         alert(error);
       }
