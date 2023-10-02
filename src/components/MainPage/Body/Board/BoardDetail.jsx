@@ -60,18 +60,6 @@ function BoardDetail() {
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
     }
-    // async function updateViews() {
-    //   setNewViews((prev) => prev + 1);
-    //   console.log('newViews', newViews);
-    //   try {
-    //     await updateDoc(doc(boardDB, 'Board', id), {
-    //       views: newViews,
-    //     });
-    //   } catch (error) {
-    //     alert(error);
-    //   }
-    // }
-    // updateViews();
     getNewData();
   }, []);
 
@@ -135,7 +123,7 @@ function BoardDetail() {
             </button>
           </ButtonWrapper>
           <CommentWrite id={id} />
-          <Comment />
+          <Comment id={id} />
         </UniContents>
       </UniBody>
     </div>
