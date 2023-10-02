@@ -16,6 +16,8 @@ function Comment() {
     getComment();
   }, []);
 
+//댓글 등록 이후 댓글 목록을 다시 불러오는 함수필요
+
   return (
     <div>
       {comment.map((comment) => (
