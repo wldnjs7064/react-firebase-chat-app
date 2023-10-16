@@ -10,16 +10,16 @@ function LoginPage() {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const auth = getAuth();
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const auth = getAuth();
       await signInWithEmailAndPassword(auth, data.email, data.password);
       alert("로그인이 완료되었습니다.");
-      navigate("/chat");
+      // navigate("/chat");
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);

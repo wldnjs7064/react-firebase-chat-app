@@ -44,8 +44,7 @@ function RegisterPage() {
       });
 
       //firebase DB에 저장해주기
-      const database = getDatabase();
-      set(child(ref(database, `users`), createdUser.user.uid), {
+      set(ref(getDatabase(), `users/${createdUser.user.uid}`), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });

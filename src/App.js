@@ -1,9 +1,4 @@
-import {
-  Routes,
-  Route,
-  useNavigate,
-  BrowserRouter as Router,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import "./App.css";
 import MainPage from "./components/MainPage/MainPage";
@@ -29,7 +24,6 @@ function App(props) {
         // 로그인 시에 채팅페이지로 이동
         navigate("/chat");
         dispatch(setUser(user));
-        const uid = user.uid;
       } else {
         // 로그인되지 않은 경우 "/login" 페이지로 이동
         navigate("/login");
