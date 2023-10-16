@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import firebase from "../../firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Logo from "../../assets/svg/ColoredLogo.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -16,10 +16,8 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(data.email, data.password);
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       alert("로그인이 완료되었습니다.");
       navigate("/chat");
       setLoading(false);

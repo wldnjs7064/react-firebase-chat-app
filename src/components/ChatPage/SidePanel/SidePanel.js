@@ -3,7 +3,6 @@ import UserPanel from "./UserPanel";
 import Favorited from "./Favorited";
 import ChatRooms from "./ChatRooms";
 import DirectMessages from "./DirectMessages";
-import Chat from "components/MainPage/Body/Chat/Chat";
 
 function SidePanel() {
   return (
