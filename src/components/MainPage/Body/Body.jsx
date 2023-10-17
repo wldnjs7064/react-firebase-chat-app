@@ -1,17 +1,17 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ForwardArrow, ProfileIcon } from "../../../assets";
-import * as S from "../style";
-import Chat from "./Chat/Chat";
-import styled from "styled-components";
-import BodyHeader from "./BodyHeader/BodyHeader";
-import BoardMain from "./Board/BoardMain";
-import BoardList from "./Board/BoardList";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ForwardArrow, ProfileIcon } from '../../../assets';
+import * as S from '../style';
+import Chat from './Chat/Chat';
+import styled from 'styled-components';
+import BodyHeader from './BodyHeader/BodyHeader';
+import BoardMain from './Board/BoardMain';
+import BoardList from './Board/BoardList';
 
 function Body() {
   const navigate = useNavigate();
   const navigateLogin = () => {
-    navigate("/login");
+    navigate('/login');
   };
   return (
     <S.Body>
@@ -26,7 +26,6 @@ function Body() {
       <RightWrapper>
         <BodyHeader />
         <BoardMain />
-        {/* <BoardList /> */}
       </RightWrapper>
     </S.Body>
   );
