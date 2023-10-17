@@ -3,61 +3,126 @@ import { IoIosChatboxes } from "react-icons/io";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
 import { useDispatch, useSelector } from "react-redux";
-import firebase from "../../../firebase";
 import { setPhotoURL } from "../../../redux/actions/user_action";
+import { getDatabase, ref, child, update } from "firebase/database";
+import { getAuth, signOut, updateProfile } from "firebase/auth";
+import {
+  getStorage,
+  ref as strRef,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 function UserPanel() {
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
   const inputOpenImageRef = useRef();
+
   const handleLogout = () => {
-    firebase.auth().signOut();
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   };
+
   const handleOpenImageRef = () => {
     inputOpenImageRef.current.click();
   };
 
   const handleUploadImage = async (event) => {
     const file = event.target.files[0];
+    const auth = getAuth();
+    const user = auth.currentUser;
+
     const metadata = { contentType: file.type };
-
+    const storage = getStorage();
+    // https://firebase.google.com/docs/storage/web/upload-files#full_example
     try {
-      let uploadTaskSnapshot = await firebase
-        .storage()
-        .ref()
-        .child(`user_image/${user.uid}`)
-        .put(file, metadata);
+      //스토리지에 파일 저장하기
+      let uploadTask = uploadBytesResumable(
+        strRef(storage, `user_image/${user.uid}`),
+        file,
+        metadata
+      );
 
-      let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL();
-      await firebase.auth().currentUser.updateProfile({
-        photoURL: downloadURL,
-      });
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+            case "storage/canceled":
+              // User canceled the upload
+              break;
 
-      dispatch(setPhotoURL(downloadURL));
+            // ...
 
-      await firebase
-        .database()
-        .ref("users")
-        .child(user.uid)
-        .update({ image: downloadURL });
+            case "storage/unknown":
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
+        },
+        () => {
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // 프로필 이미지 수정
+            updateProfile(user, {
+              photoURL: downloadURL,
+            });
+
+            dispatch(setPhotoURL(downloadURL));
+
+            //데이터베이스 유저 이미지 수정
+            update(ref(getDatabase(), `users/${user.uid}`), {
+              image: downloadURL,
+            });
+          });
+        }
+      );
+      // console.log('uploadTaskSnapshot', uploadTaskSnapshot)
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
+
   return (
     <div>
+      {/* Logo */}
       <h3 style={{ color: "white" }}>
-        <IoIosChatboxes /> 채팅방
+        <IoIosChatboxes /> Chat App
       </h3>
+
       <div style={{ display: "flex", marginBottom: "1rem" }}>
         <Image
           src={user && user.photoURL}
           style={{ width: "30p", height: "30px", marginTop: "3px" }}
           roundedCircle
         />
+
         <Dropdown>
           <Dropdown.Toggle
-            style={{ background: "transparent", border: "0px" }}
+            style={{ background: "transparent", boder: "0px" }}
             id="dropdown-basic"
           >
             {user && user.displayName}
@@ -71,6 +136,7 @@ function UserPanel() {
           </Dropdown.Menu>
         </Dropdown>
       </div>
+
       <input
         onChange={handleUploadImage}
         accept="image/jpeg, image/png"

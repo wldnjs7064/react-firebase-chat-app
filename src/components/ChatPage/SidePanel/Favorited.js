@@ -1,18 +1,27 @@
-import { FaRegSmileBeam } from "react-icons/fa";
 import React, { Component } from "react";
-import firebase from "../../../firebase";
+import { FaRegSmileBeam } from "react-icons/fa";
 import { connect } from "react-redux";
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
-} from "redux/actions/chatRoom_action";
+} from "../../../redux/actions/chatRoom_action";
+
+import {
+  child,
+  getDatabase,
+  ref,
+  onChildAdded,
+  onChildRemoved,
+  off,
+} from "firebase/database";
 
 export class Favorited extends Component {
   state = {
-    favoritedChatRoom: [],
-    usersRef: firebase.database().ref("users"),
+    favoritedChatRooms: [],
     activeChatRoomId: "",
+    userRef: ref(getDatabase(), "users"),
   };
+
   componentDidMount() {
     if (this.props.user) {
       this.addListeners(this.props.user.uid);
@@ -24,41 +33,34 @@ export class Favorited extends Component {
       this.removeListener(this.props.user.uid);
     }
   }
+
   removeListener = (userId) => {
-    this.state.usersRef.child(`${userId}/favorited`).off();
+    const { userRef } = this.state;
+    off(child(userRef, `${userId}/favoried`));
   };
+
   addListeners = (userId) => {
-    const { usersRef } = this.state;
-    usersRef
-      .child(userId)
-      .child("favorited")
-      .on("child_added", (DataSnapshot) => {
-        const favoritedChatRoom = {
-          id: DataSnapshot.key,
-          ...DataSnapshot.val(),
-        };
-        this.setState({
-          favoritedChatRoom: [
-            ...this.state.favoritedChatRoom,
-            favoritedChatRoom,
-          ],
-        });
+    const { userRef } = this.state;
+
+    onChildAdded(child(userRef, `${userId}/favorited`), (DataSnapshot) => {
+      const favoritedChatRoom = { id: DataSnapshot.key, ...DataSnapshot.val() };
+      this.setState({
+        favoritedChatRooms: [
+          ...this.state.favoritedChatRooms,
+          favoritedChatRoom,
+        ],
       });
-    usersRef
-      .child(userId)
-      .child("favorited")
-      .on("child_removed", (DataSnapshot) => {
-        const chatRoomToRemove = {
-          id: DataSnapshot.key,
-          ...DataSnapshot.val(),
-        };
-        const filteredChatRooms = this.state.favoritedChatRoom.filter(
-          (chatRoom) => {
-            return chatRoom.id !== chatRoomToRemove.id;
-          }
-        );
-        this.setState({ favoritedChatRoom: filteredChatRooms });
-      });
+    });
+
+    onChildRemoved(child(userRef, `${userId}/favorited`), (DataSnapshot) => {
+      const chatRoomToRemove = { id: DataSnapshot.key, ...DataSnapshot.val() };
+      const filteredChatRooms = this.state.favoritedChatRooms.filter(
+        (chatRoom) => {
+          return chatRoom.id !== chatRoomToRemove.id;
+        }
+      );
+      this.setState({ favoritedChatRooms: filteredChatRooms });
+    });
   };
 
   changeChatRoom = (room) => {
@@ -67,9 +69,9 @@ export class Favorited extends Component {
     this.setState({ activeChatRoomId: room.id });
   };
 
-  renderFavoritedChatRooms = (favoritedChatRoom) =>
-    favoritedChatRoom.length > 0 &&
-    favoritedChatRoom.map((chatRoom) => (
+  renderFavoritedChatRooms = (favoritedChatRooms) =>
+    favoritedChatRooms.length > 0 &&
+    favoritedChatRooms.map((chatRoom) => (
       <li
         key={chatRoom.id}
         onClick={() => this.changeChatRoom(chatRoom)}
@@ -83,15 +85,15 @@ export class Favorited extends Component {
     ));
 
   render() {
-    const { favoritedChatRoom } = this.state;
+    const { favoritedChatRooms } = this.state;
     return (
       <div>
         <span style={{ display: "flex", alignItems: "center" }}>
           <FaRegSmileBeam style={{ marginRight: "3px" }} />
-          FVORITED (1)
+          FAVORITED ({favoritedChatRooms.length})
         </span>
         <ul style={{ listStyleType: "none", padding: "0" }}>
-          {this.renderFavoritedChatRooms(favoritedChatRoom)}
+          {this.renderFavoritedChatRooms(favoritedChatRooms)}
         </ul>
       </div>
     );
@@ -103,4 +105,5 @@ const mapStateToProps = (state) => {
     user: state.user.currentUser,
   };
 };
+
 export default connect(mapStateToProps)(Favorited);
