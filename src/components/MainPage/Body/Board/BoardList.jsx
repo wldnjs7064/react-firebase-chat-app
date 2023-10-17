@@ -57,7 +57,7 @@ function BoardList() {
   };
 
   return (
-    <ContentList style={{ overflow: 'scroll' }}>
+    <ContentList style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
       {DBData.map((doc) => (
         <Contents
           key={doc.id}
@@ -83,7 +83,7 @@ const ContentList = styled.div`
   border-radius: 1px;
   width: 905px;
   height: 100%;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   overflow-y: scroll;
   overflow-x: hidden;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
@@ -105,7 +105,7 @@ const Content = styled.p`
 `;
 
 const Contents = styled.div`
-  /* width: 100%; */
+  width: 925px;
   /* text-align: center; */
   border-bottom: solid;
   border-width: thin;

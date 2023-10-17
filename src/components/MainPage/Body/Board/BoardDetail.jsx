@@ -22,7 +22,7 @@ function BoardDetail() {
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
-  const [newViews, setNewViews] = useState(0);
+  const [newViews, setNewViews] = useState(data.views);
 
   const handleDelete = async () => {
     console.log('delete');
@@ -54,10 +54,11 @@ function BoardDetail() {
   useEffect(() => {
     async function getNewData() {
       const newData = await getDoc(doc(boardDB, 'Board', id));
-      console.log('newData', newData.data().title);
+      console.log('newData views', newData.data().views);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
+      setNewViews(newData.data().views);
     }
     getNewData();
   }, []);
@@ -171,6 +172,7 @@ const UniBody = styled.div`
   width: 100%;
   margin: 0 auto;
   align-items: center;
+  overflow-x: hidden;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
   ::-webkit-scrollbar {
