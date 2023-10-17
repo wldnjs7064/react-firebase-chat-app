@@ -87,24 +87,31 @@ const BoardWrite = () => {
             />
           </TitleWrapper>
           <EditorTagWrapper>
-            <Editor
-              ref={editorRef}
-              placeholder="내용을 입력해주세요."
-              previewStyle="vertical" // 미리보기 스타일 지정
-              height="450px" // 에디터 창 높이
-              initialEditType="WYSIWYG"
-              toolbarItems={[
-                // 툴바 옵션 설정
-                ['heading', 'bold', 'italic', 'strike'],
-                ['hr', 'quote'],
-                ['ul', 'ol', 'task', 'indent', 'outdent'],
-                ['table', 'image', 'link'],
-                ['code', 'codeblock'],
-              ]}
-              initialValue={' '}
-              style={{ backgroundColor: 'white' }}
-              useCommandShortcut={false}
-            />
+            <div
+              style={{
+                height: '450px',
+                width: '1185px',
+                backgroundColor: ' white',
+              }}
+            >
+              <Editor
+                ref={editorRef}
+                placeholder="내용을 입력해주세요."
+                previewStyle="vertical" // 미리보기 스타일 지정
+                height="450px" // 에디터 창 높이
+                toolbarItems={[
+                  // 툴바 옵션 설정
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'image', 'link'],
+                  ['code', 'codeblock'],
+                ]}
+                initialValue={' '}
+                style={{ backgroundColor: 'black' }}
+                useCommandShortcut={false}
+              />
+            </div>
             <SelectTag />
             <Buttons>
               <Button type="button" onClick={handleGoBack}>
