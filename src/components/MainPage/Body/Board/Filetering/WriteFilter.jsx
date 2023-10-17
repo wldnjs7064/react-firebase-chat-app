@@ -13,20 +13,18 @@ function WriteFilter() {
   };
 
   return (
-    <div>
-      <Tags>
-        {FilterId.map((tag) => (
-          <TagButton
-            type="button"
-            key={tag.name}
-            selected={setTags === tag.name}
-            onClick={() => onTagClick(tag.name)}
-          >
-            #{tag.name}
-          </TagButton>
-        ))}
-      </Tags>
-    </div>
+    <Tags>
+      {FilterId.map((tag) => (
+        <TagButton
+          type="button"
+          key={tag.name}
+          selected={setTags === tag.name}
+          onClick={() => onTagClick(tag.name)}
+        >
+          #{tag.name}
+        </TagButton>
+      ))}
+    </Tags>
   );
 }
 
@@ -34,7 +32,6 @@ const Tags = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 100px;
   gap: 10px;
 `;
 
@@ -43,12 +40,12 @@ const TagButton = styled.button`
   padding: 0 12px;
   height: 32px;
   border-radius: 20px;
-  border: 1px solid ${(props) => (props.selected ? '#E44269' : '#443bb6')};
+  border: 1px solid ${(props) => (props.selected ? '#443bb6' : 'white')};
   font-family: 'Apple SD Gothic Neo';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  color: ${(props) => (props.selected ? '#E44269' : '#999999')};
+  color: ${(props) => (props.selected ? '#443bb6' : 'black')};
   display: flex;
   justify-content: center;
   align-items: center;
