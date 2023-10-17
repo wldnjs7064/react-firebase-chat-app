@@ -4,11 +4,12 @@ const InitializeWriteState = {
   title: '',
   content: '',
   like: 0,
+  views: 0,
 };
 
-export const writeAction = (title, content, like) => ({
+export const writeAction = (title, content, like, views) => ({
   type: WRITE,
-  payload: { title, content, like },
+  payload: { title, content, like, views },
 });
 
 const write = (state = InitializeWriteState, action) => {
@@ -18,6 +19,7 @@ const write = (state = InitializeWriteState, action) => {
         title: action.payload.title,
         content: action.payload.content,
         like: action.payload.like,
+        views: action.payload.views,
       };
     default:
       return state;

@@ -15,7 +15,6 @@
     "@toast-ui/editor-plugin-color-syntax": "^3.1.0",
     "@toast-ui/react-editor": "^3.2.3",
     "bootstrap": "^5.2.3",
-    "dotenv": "^16.3.1",
     "firebase": "^9.22.0",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
@@ -62,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
   }
 }

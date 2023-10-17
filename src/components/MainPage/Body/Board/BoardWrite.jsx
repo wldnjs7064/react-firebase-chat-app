@@ -10,6 +10,7 @@ import { boardDB } from '../../../../firebase';
 import { useDidMountEffect } from 'Hooks/useDidMountEffect';
 import SelectTag from './Filetering/WriteFilter';
 import { useSelector } from 'react-redux';
+import CommentWrite from './Comment/CommentWrite';
 
 const BoardWrite = () => {
   const navigate = useNavigate();

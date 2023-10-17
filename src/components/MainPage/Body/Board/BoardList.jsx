@@ -3,15 +3,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { set } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { write } from 'redux/actions/write_action.js';
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
   const [selectTag, setSelectTag] = useState('');
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
-
+  const [views, setViews] = useState(0);
+  const dispatch = useDispatch();
   useEffect(() => {
     setSelectTag('');
     Object.keys(selector).forEach((tagKey) => {
@@ -49,13 +50,14 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
+    dispatch(write({ id: id, data: data, views: views }));
     navigate(`/board/${id}`, {
-      state: { id: id, data: data },
+      state: { id: id, data: data, views: views },
     });
   };
 
   return (
-    <ContentList style={{ overflow: 'scroll' }}>
+    <ContentList style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
       {DBData.map((doc) => (
         <Contents
           key={doc.id}
@@ -81,7 +83,7 @@ const ContentList = styled.div`
   border-radius: 1px;
   width: 905px;
   height: 100%;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   overflow-y: scroll;
   overflow-x: hidden;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
@@ -103,7 +105,7 @@ const Content = styled.p`
 `;
 
 const Contents = styled.div`
-  /* width: 100%; */
+  width: 925px;
   /* text-align: center; */
   border-bottom: solid;
   border-width: thin;

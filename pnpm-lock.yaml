@@ -44,9 +44,6 @@ importers:
       bootstrap:
         specifier: ^5.2.3
         version: 5.3.2(@popperjs/core@2.11.8)
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.3.1
       firebase:
         specifier: ^9.22.0
         version: 9.23.0
@@ -110,6 +107,10 @@ importers:
       web-vitals:
         specifier: ^2.1.4
         version: 2.1.4
+    devDependencies:
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
 
 packages:
 
@@ -5559,7 +5560,7 @@ packages:
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
     engines: {node: '>=12'}
-    dev: false
+    dev: true
 
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
