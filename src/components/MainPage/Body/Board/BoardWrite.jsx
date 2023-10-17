@@ -70,16 +70,10 @@ const BoardWrite = () => {
     setTitle(e.target.value);
   };
 
-  const onTagClick = (tagLocalName) => {
-    console.log(tagLocalName);
-    setTags(tagLocalName);
-  };
-
   return (
     <div>
       <Header />
-      <div>
-        <form>
+      <div style={{width: '100vw'}}>
           {' '}
           <TitleWrapper>
             <p
@@ -128,7 +122,6 @@ const BoardWrite = () => {
               작성하기
             </Button>
           </Buttons>
-        </form>
       </div>
     </div>
   );
