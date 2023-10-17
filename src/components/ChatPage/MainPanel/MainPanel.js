@@ -1,45 +1,65 @@
 import React, { Component } from "react";
 import MessageHeader from "./MessageHeader";
 import Message from "./Message";
-import { connect } from "react-redux";
 import MessageForm from "./MessageForm";
-import firebase from "../../../firebase";
-import { setUserPosts } from "redux/actions/chatRoom_action";
+import { connect } from "react-redux";
+import { setUserPosts } from "../../../redux/actions/chatRoom_action";
+import Skeleton from "../../Skeleton";
+import {
+  getDatabase,
+  ref,
+  onChildAdded,
+  onChildRemoved,
+  child,
+  off,
+} from "firebase/database";
 
 export class MainPanel extends Component {
+  messageEndRef = React.createRef();
+
   state = {
     messages: [],
-    messagesRef: firebase.database().ref("messages"),
+    messagesRef: ref(getDatabase(), "messages"),
     messagesLoading: true,
     searchTerm: "",
     searchResults: [],
     searchLoading: false,
-    typingRef: firebase.database().ref("typing"),
+    typingRef: ref(getDatabase(), "typing"),
     typingUsers: [],
     listenerLists: [],
   };
+
   componentDidMount() {
     const { chatRoom } = this.props;
+
     if (chatRoom) {
       this.addMessagesListeners(chatRoom.id);
       this.addTypingListeners(chatRoom.id);
     }
   }
 
+  componentDidUpdate() {
+    if (this.messageEndRef) {
+      this.messageEndRef.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   componentWillUnmount() {
-    this.state.messagesRef.off();
+    off(this.state.messagesRef);
     this.removeListeners(this.state.listenerLists);
   }
 
   removeListeners = (listeners) => {
-    listeners.forEach((listener) => {
-      listener.ref.child(listener.id).off(listener.event);
+    listeners.forEach((listner) => {
+      off(ref(getDatabase(), `messages/${listner.id}`), listner.event);
     });
   };
 
   addTypingListeners = (chatRoomId) => {
     let typingUsers = [];
-    this.state.typingRef.child(chatRoomId).on("child_added", (DataSnapshot) => {
+    let { typingRef } = this.state;
+
+    onChildAdded(child(typingRef, chatRoomId), (DataSnapshot) => {
       if (DataSnapshot.key !== this.props.user.uid) {
         typingUsers = typingUsers.concat({
           id: DataSnapshot.key,
@@ -48,20 +68,21 @@ export class MainPanel extends Component {
         this.setState({ typingUsers });
       }
     });
+
     this.addToListenerLists(chatRoomId, this.state.typingRef, "child_added");
-    this.state.typingRef
-      .child(chatRoomId)
-      .on("child_removed", (DataSnapshot) => {
-        const index = typingUsers.findIndex(
-          (user) => user.id === DataSnapshot.key
+
+    onChildRemoved(child(typingRef, chatRoomId), (DataSnapshot) => {
+      const index = typingUsers.findIndex(
+        (user) => user.id === DataSnapshot.key
+      );
+      if (index !== -1) {
+        typingUsers = typingUsers.filter(
+          (user) => user.id !== DataSnapshot.key
         );
-        if (index !== -1) {
-          typingUsers = typingUsers.filter(
-            (user) => user.id !== DataSnapshot.key
-          );
-          this.setState({ typingUsers });
-        }
-      });
+        this.setState({ typingUsers });
+      }
+    });
+
     this.addToListenerLists(chatRoomId, this.state.typingRef, "child_removed");
   };
 
@@ -71,6 +92,7 @@ export class MainPanel extends Component {
         listener.id === id && listener.ref === ref && listener.event === event
       );
     });
+
     if (index === -1) {
       const newListener = { id, ref, event };
       this.setState({
@@ -78,6 +100,7 @@ export class MainPanel extends Component {
       });
     }
   };
+
   handleSearchMessages = () => {
     const chatRoomMessages = [...this.state.messages];
     const regex = new RegExp(this.state.searchTerm, "gi");
@@ -92,6 +115,7 @@ export class MainPanel extends Component {
     }, []);
     this.setState({ searchResults });
   };
+
   handleSearchChange = (event) => {
     this.setState(
       {
@@ -104,13 +128,17 @@ export class MainPanel extends Component {
 
   addMessagesListeners = (chatRoomId) => {
     let messagesArray = [];
-    this.state.messagesRef
-      .child(chatRoomId)
-      .on("child_added", (DataSnapshot) => {
-        messagesArray.push(DataSnapshot.val());
-        this.setState({ messages: messagesArray, messagesLoading: false });
-        this.userPostsCount(messagesArray);
+
+    let { messagesRef } = this.state;
+
+    onChildAdded(child(messagesRef, chatRoomId), (DataSnapshot) => {
+      messagesArray.push(DataSnapshot.val());
+      this.setState({
+        messages: messagesArray,
+        messagesLoading: false,
       });
+      this.userPostsCount(messagesArray);
+    });
   };
 
   userPostsCount = (messages) => {
@@ -138,13 +166,32 @@ export class MainPanel extends Component {
       />
     ));
 
-  renderTypingUsers = (typingUsers) =>
-    typingUsers.length > 0 &&
-    typingUsers.map((user) => (
-      <span>{user.name}님이 채팅을 입력하고 있습니다.</span>
-    ));
+  renderTypingUsers = (typingUsers) => {
+    return (
+      typingUsers.length > 0 &&
+      typingUsers.map((user) => (
+        <span>{user.name.userUid}님이 채팅을 입력하고 있습니다...</span>
+      ))
+    );
+  };
+
+  renderMessageSkeleton = (loading) =>
+    loading && (
+      <>
+        {[...Array(10)].map((v, i) => (
+          <Skeleton key={i} />
+        ))}
+      </>
+    );
+
   render() {
-    const { messages, searchTerm, searchResults, typingUsers } = this.state;
+    const {
+      messages,
+      searchTerm,
+      searchResults,
+      typingUsers,
+      messagesLoading,
+    } = this.state;
     return (
       <div style={{ padding: "2rem 2rem 0 2rem" }}>
         <MessageHeader handleSearchChange={this.handleSearchChange} />
@@ -160,11 +207,16 @@ export class MainPanel extends Component {
             overflowY: "auto",
           }}
         >
+          {this.renderMessageSkeleton(messagesLoading)}
+
           {searchTerm
             ? this.renderMessages(searchResults)
             : this.renderMessages(messages)}
+
           {this.renderTypingUsers(typingUsers)}
+          <div ref={(node) => (this.messageEndRef = node)} />
         </div>
+
         <MessageForm />
       </div>
     );

@@ -10,10 +10,8 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { boardDB } from '../../../../firebase';
-import { useDidMountEffect } from 'Hooks/useDidMountEffect';
-import { set } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import CommentWrite from './Comment/CommentWrite';
-import Comment from './Comment/Comment';
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -41,6 +39,7 @@ function BoardDetail() {
 
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
+    console.log('like', newLike);
     try {
       await updateDoc(doc(boardDB, 'Board', id), {
         like: newLike,
@@ -123,7 +122,6 @@ function BoardDetail() {
             </button>
           </ButtonWrapper>
           <CommentWrite id={id} />
-          <Comment id={id} />
         </UniContents>
       </UniBody>
     </div>

@@ -12,16 +12,23 @@ import { FaLock, FaLockOpen } from "react-icons/fa";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import firebase from "../../../firebase";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  child,
+  update,
+  remove,
+} from "firebase/database";
 
 function MessageHeader({ handleSearchChange }) {
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const isPrivateChatRoom = useSelector(
     (state) => state.chatRoom.isPrivateChatRoom
   );
-  const usersRef = firebase.database().ref("users");
+  const usersRef = ref(getDatabase(), "users");
   const user = useSelector((state) => state.user.currentUser);
-  const [isFavorited, setisFavorited] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
   const userPosts = useSelector((state) => state.chatRoom.userPosts);
   useEffect(() => {
     if (chatRoom && user) {
@@ -30,31 +37,21 @@ function MessageHeader({ handleSearchChange }) {
   }, []);
 
   const addFavoriteListener = (chatRoomId, userId) => {
-    usersRef
-      .child(userId)
-      .child("favorited")
-      .once("value")
-      .then((data) => {
-        if (data.val() !== null) {
-          const chatRoomIds = Object.keys(data.val());
-          const isAlreadyFavorited = chatRoomIds.includes(chatRoomId);
-          setisFavorited(isAlreadyFavorited);
-        }
-      });
+    onValue(child(usersRef, `${userId}/favorited`), (data) => {
+      if (data.val() !== null) {
+        const chatRoomIds = Object.keys(data.val());
+        const isAlreadyFavorited = chatRoomIds.includes(chatRoomId);
+        setIsFavorited(isAlreadyFavorited);
+      }
+    });
   };
   const handleFavorite = () => {
     if (isFavorited) {
-      usersRef
-        .child(`${user.uid}/favorited`)
-        .child(chatRoom.id)
-        .remove((err) => {
-          if (err !== null) {
-            console.error(err);
-          }
-        });
-      setisFavorited((prev) => !prev);
+      setIsFavorited((prev) => !prev);
+      remove(child(usersRef, `${user.uid}/favorited/${chatRoom.id}`));
     } else {
-      usersRef.child(`${user.uid}/favorited`).update({
+      setIsFavorited((prev) => !prev);
+      update(child(usersRef, `${user.uid}/favorited`), {
         [chatRoom.id]: {
           name: chatRoom.name,
           description: chatRoom.description,
@@ -64,9 +61,9 @@ function MessageHeader({ handleSearchChange }) {
           },
         },
       });
-      setisFavorited((prev) => !prev);
     }
   };
+
   const renderUserPosts = (userPosts) =>
     Object.entries(userPosts)
       .sort((a, b) => b[1].count - a[1].count)

@@ -3,8 +3,15 @@ import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import firebase from "../../../firebase";
+import { getDatabase, ref, set, remove, push, child } from "firebase/database";
 import { useSelector } from "react-redux";
+import {
+  getStorage,
+  ref as strRef,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+
 function MessageForm() {
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const user = useSelector((state) => state.user.currentUser);
@@ -12,30 +19,32 @@ function MessageForm() {
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const messagesRef = firebase.database().ref("messages");
-  const typingRef = firebase.database().ref("typing");
+  const messagesRef = ref(getDatabase(), "messages");
+  const typingRef = ref(getDatabase(), "typing");
   const inputOpenImageRef = useRef();
-  const storageRef = firebase.storage().ref();
+  // const storageRef = strRef(getStorage());
   const handleChange = (event) => {
     setContent(event.target.value);
   };
   const isPrivateChatRoom = useSelector(
     (state) => state.chatRoom.isPrivateChatRoom
   );
-  const createMessage = (fileURL = null) => {
+  const createMessage = (fileUrl = null) => {
     const message = {
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      timestamp: new Date(),
       user: {
         id: user.uid,
         name: user.displayName,
         image: user.photoURL,
       },
     };
-    if (fileURL !== null) {
-      message["image"] = fileURL;
+
+    if (fileUrl !== null) {
+      message["image"] = fileUrl;
     } else {
       message["content"] = content;
     }
+
     return message;
   };
   const handleSubmit = async () => {
@@ -44,10 +53,10 @@ function MessageForm() {
       return;
     }
     setLoading(true);
-
+    //firebase에 메시지를 저장하는 부분
     try {
-      await messagesRef.child(chatRoom.id).push().set(createMessage());
-      typingRef.child(chatRoom.id).child(user.uid).remove();
+      await set(push(child(messagesRef, chatRoom.id)), createMessage());
+      await remove(child(typingRef, `${chatRoom.id}/${user.uid}`));
       setLoading(false);
       setContent("");
       setErrors([]);
@@ -69,41 +78,69 @@ function MessageForm() {
       return `/message/public`;
     }
   };
-  const handleUploadImage = async (event) => {
+  const handleUploadImage = (event) => {
     const file = event.target.files[0];
+    const storage = getStorage();
 
     const filePath = `${getPath()}/${file.name}`;
+    console.log("filePath", filePath);
     const metadata = { contentType: file.type };
     setLoading(true);
-
     try {
-      let uploadTask = storageRef.child(filePath).put(file, metadata);
+      // https://firebase.google.com/docs/storage/web/upload-files#full_example
+      // Upload file and metadata to the object 'images/mountains.jpg'
+      const storageRef = strRef(storage, filePath);
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      // Listen for state changes, errors, and completion of the upload.
       uploadTask.on(
         "state_changed",
-        (UploadTaskSnapshot) => {
-          const percentage = Math.round(
-            (UploadTaskSnapshot.bytesTransferred /
-              UploadTaskSnapshot.totalBytes) *
-              100
-          );
-          setPercentage(percentage);
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
         },
-        (err) => {
-          console.error(err);
-          setLoading(false);
+        (error) => {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+
+            // ...
+
+            case "storage/unknown":
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
         },
         () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            messagesRef
-              .child(chatRoom.id)
-              .push()
-              .set(createMessage(downloadURL));
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // console.log('File available at', downloadURL);
+            set(
+              push(child(messagesRef, chatRoom.id)),
+              createMessage(downloadURL)
+            );
             setLoading(false);
           });
         }
       );
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
 
@@ -113,11 +150,14 @@ function MessageForm() {
     }
 
     if (content) {
-      typingRef.child(chatRoom.id).child(user.uid).set(user.displayName);
+      set(ref(getDatabase(), `typing/${chatRoom.id}/${user.uid}`), {
+        userUid: user.displayName,
+      });
     } else {
-      typingRef.child(chatRoom.id).child(user.uid).remove();
+      remove(ref(getDatabase(), `typing/${chatRoom.id}/${user.uid}`));
     }
   };
+
   return (
     <div>
       <Form onSubmit={handleSubmit}>

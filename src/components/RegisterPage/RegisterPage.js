@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import firebase from "../../firebase";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import md5 from "md5";
 import Logo from "../../assets/svg/ColoredLogo.svg";
 import { useNavigate } from "react-router-dom";
+import { getDatabase, ref, child, set } from "firebase/database";
 
 function RegisterPage() {
   const {
@@ -23,11 +28,15 @@ function RegisterPage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      let createdUser = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(data.email, data.password);
+      const auth = getAuth();
 
-      await createdUser.user.updateProfile({
+      let createdUser = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      await updateProfile(auth.currentUser, {
         displayName: data.name,
         photoURL: `http://gravatar.com/avatar/${md5(
           createdUser.user.email
@@ -35,7 +44,7 @@ function RegisterPage() {
       });
 
       //firebase DB에 저장해주기
-      await firebase.database().ref("users").child(createdUser.user.uid).set({
+      set(ref(getDatabase(), `users/${createdUser.user.uid}`), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });

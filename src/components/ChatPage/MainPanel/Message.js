@@ -21,7 +21,7 @@ function Message({ message, user }) {
         height={48}
         className="mr-3"
         src={message.user.image}
-        alt={message.user.image}
+        alt={message.user.name}
       />
       <div
         style={{
