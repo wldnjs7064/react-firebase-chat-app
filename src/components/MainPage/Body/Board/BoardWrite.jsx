@@ -17,7 +17,6 @@ const BoardWrite = () => {
   const editorRef = useRef();
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
-  const [tags, setTags] = useState(false);
   const setTag = useSelector((state) => state.setTag.setTag);
 
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
@@ -82,7 +81,6 @@ const BoardWrite = () => {
               })}
               type="text"
               id="title"
-              width="100px"
               name="title"
               placeholder="제목을 입력해주세요"
               onChange={handleTitleChange}
@@ -93,7 +91,7 @@ const BoardWrite = () => {
               ref={editorRef}
               placeholder="내용을 입력해주세요."
               previewStyle="vertical" // 미리보기 스타일 지정
-              height="300px" // 에디터 창 높이
+              height="450px" // 에디터 창 높이
               // initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
               toolbarItems={[
                 // 툴바 옵션 설정
@@ -137,7 +135,7 @@ const EditorTagWrapper = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  padding: 60px 0;
+  padding: 100px 0 30px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
