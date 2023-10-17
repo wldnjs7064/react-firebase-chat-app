@@ -13,20 +13,18 @@ function WriteFilter() {
   };
 
   return (
-    <div>
-      <Tags>
-        {FilterId.map((tag) => (
-          <TagButton
-            type="button"
-            key={tag.name}
-            selected={setTags === tag.name}
-            onClick={() => onTagClick(tag.name)}
-          >
-            #{tag.name}
-          </TagButton>
-        ))}
-      </Tags>
-    </div>
+    <Tags>
+      {FilterId.map((tag) => (
+        <TagButton
+          type="button"
+          key={tag.name}
+          selected={setTags === tag.name}
+          onClick={() => onTagClick(tag.name)}
+        >
+          #{tag.name}
+        </TagButton>
+      ))}
+    </Tags>
   );
 }
 
@@ -34,7 +32,6 @@ const Tags = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 100px;
   gap: 10px;
 `;
 

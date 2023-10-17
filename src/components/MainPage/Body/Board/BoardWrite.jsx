@@ -73,62 +73,71 @@ const BoardWrite = () => {
   return (
     <div>
       <Header />
-      <div style={{width: '100vw'}}>
-          {' '}
+      <Body>
+        <TitleEditorWrapper>
           <TitleWrapper>
-            <p
-              style={{
-                fontFamily: 'pretendard',
-                fontSize: '25px',
-              }}
-            ></p>
             <TitleInput
               {...register('title', {
                 required: '제목은 필수 입력 사항입니다.',
               })}
               type="text"
               id="title"
+              width="100px"
               name="title"
               placeholder="제목을 입력해주세요"
               onChange={handleTitleChange}
             />
           </TitleWrapper>
-          <>
-            <div style={{ padding: '0px 100px' }}>
-              <Editor
-                ref={editorRef}
-                placeholder="내용을 입력해주세요."
-                previewStyle="vertical" // 미리보기 스타일 지정
-                height="300px" // 에디터 창 높이
-                initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
-                toolbarItems={[
-                  // 툴바 옵션 설정
-                  ['heading', 'bold', 'italic', 'strike'],
-                  ['hr', 'quote'],
-                  ['ul', 'ol', 'task', 'indent', 'outdent'],
-                  ['table', 'image', 'link'],
-                  ['code', 'codeblock'],
-                ]}
-                useCommandShortcut={false}
-              ></Editor>
-              <SelectTag />
-            </div>
-          </>
-          <Buttons>
-            <Button type="button" onClick={handleGoBack}>
-              뒤로가기
-            </Button>
-            <Button type="submit" onClick={onSubmit}>
-              작성하기
-            </Button>
-          </Buttons>
-      </div>
+          <EditorTagWrapper>
+            <Editor
+              ref={editorRef}
+              placeholder="내용을 입력해주세요."
+              previewStyle="vertical" // 미리보기 스타일 지정
+              height="300px" // 에디터 창 높이
+              // initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
+              toolbarItems={[
+                // 툴바 옵션 설정
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock'],
+              ]}
+              useCommandShortcut={false}
+            ></Editor>
+            <SelectTag />
+            <Buttons>
+              <Button type="button" onClick={handleGoBack}>
+                뒤로가기
+              </Button>
+              <Button type="submit" onClick={onSubmit}>
+                작성하기
+              </Button>
+            </Buttons>
+          </EditorTagWrapper>
+        </TitleEditorWrapper>
+      </Body>
     </div>
   );
 };
+const Body = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const TitleEditorWrapper = styled.div`
+  width: 1185px;
+  display: flex;
+  flex-direction: column;
+`;
+const EditorTagWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const TitleWrapper = styled.div`
-  padding: 50px 0;
+  padding: 60px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -137,13 +146,12 @@ const TitleWrapper = styled.div`
 const TitleInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 85%;
+  width: 1185px;
 `;
 const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 100px;
 `;
 const Button = styled.button`
   width: 100px;
@@ -163,7 +171,6 @@ const Tags = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 100px;
   gap: 10px;
 `;
 
