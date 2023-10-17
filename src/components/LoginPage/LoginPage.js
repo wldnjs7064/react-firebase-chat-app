@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import Logo from "../../assets/svg/ColoredLogo.svg";
 import { useNavigate } from "react-router-dom";
 import btnGoogle from "../../assets/btn_google.png";
@@ -16,6 +21,7 @@ function LoginPage() {
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const onSubmit = async (data) => {
     try {
       setLoading(true);
@@ -32,6 +38,17 @@ function LoginPage() {
     }
   };
 
+  function handleGoogleLogin() {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        setUserData(data.user);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <div className="auth-wrapper">
       <img src={Logo} alt="Logo" />
@@ -84,6 +101,7 @@ function LoginPage() {
           src={btnGoogle}
           alt="Google Login"
           style={{ display: "block", margin: "0 auto", marginTop: "20px" }}
+          onClick={handleGoogleLogin}
         />
         <img
           src={Google}
