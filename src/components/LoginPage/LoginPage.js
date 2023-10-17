@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import firebase from "../../firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Logo from "../../assets/svg/ColoredLogo.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -10,18 +10,16 @@ function LoginPage() {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const auth = getAuth();
   const [errorFromSubmit, setErrorFromSubmit] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(data.email, data.password);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       alert("로그인이 완료되었습니다.");
-      navigate("/chat");
+      // navigate("/chat");
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);

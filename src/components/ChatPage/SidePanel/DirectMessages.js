@@ -1,29 +1,31 @@
 import React, { Component } from "react";
 import { FaRegSmile } from "react-icons/fa";
-import firebase from "../../../firebase";
 import { connect } from "react-redux";
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
-} from "redux/actions/chatRoom_action";
+} from "../../../redux/actions/chatRoom_action";
+import { getDatabase, ref, onChildAdded } from "firebase/database";
 
 export class DirectMessages extends Component {
   state = {
-    usersRef: firebase.database().ref("users"),
+    usersRef: ref(getDatabase(), "users"),
     users: [],
     activeChatRoom: "",
   };
+
   componentDidMount() {
     if (this.props.user) {
       this.addUsersListeners(this.props.user.uid);
     }
   }
+
   addUsersListeners = (currentUserId) => {
     const { usersRef } = this.state;
     let usersArray = [];
-    usersRef.on("child_added", (DataSnapshot) => {
+
+    onChildAdded(usersRef, (DataSnapshot) => {
       if (currentUserId !== DataSnapshot.key) {
-        // console.log("Datasnapshot.val()", DataSnapshot.val());
         let user = DataSnapshot.val();
         user["uid"] = DataSnapshot.key;
         user["status"] = "offline";
@@ -32,6 +34,7 @@ export class DirectMessages extends Component {
       }
     });
   };
+
   getChatRoomId = (userId) => {
     const currentUserId = this.props.user.uid;
 
@@ -39,19 +42,23 @@ export class DirectMessages extends Component {
       ? `${userId}/${currentUserId}`
       : `${currentUserId}/${userId}`;
   };
+
   changeChatRoom = (user) => {
     const chatRoomId = this.getChatRoomId(user.uid);
     const chatRoomData = {
       id: chatRoomId,
       name: user.name,
     };
+
     this.props.dispatch(setCurrentChatRoom(chatRoomData));
     this.props.dispatch(setPrivateChatRoom(true));
-    this.setActiveCharRoom(user.uid);
+    this.setActiveChatRoom(user.uid);
   };
-  setActiveCharRoom = (userId) => {
+
+  setActiveChatRoom = (userId) => {
     this.setState({ activeChatRoom: userId });
   };
+
   renderDirectMessages = (users) =>
     users.length > 0 &&
     users.map((user) => (
@@ -63,15 +70,17 @@ export class DirectMessages extends Component {
         }}
         onClick={() => this.changeChatRoom(user)}
       >
-        # {user.name}{" "}
+        # {user.name}
       </li>
     ));
+
   render() {
     const { users } = this.state;
     return (
       <div>
         <span style={{ display: "flex", alignItems: "center" }}>
-          <FaRegSmile style={{ marginRight: 3 }} /> DIRECT MESSAGES(1)
+          <FaRegSmile style={{ marginRight: 3 }} /> DIRECT MESSAGES(
+          {users.length})
         </span>
 
         <ul style={{ listStyleType: "none", padding: 0 }}>
@@ -87,4 +96,5 @@ const mapStateToProps = (state) => {
     user: state.user.currentUser,
   };
 };
+
 export default connect(mapStateToProps)(DirectMessages);

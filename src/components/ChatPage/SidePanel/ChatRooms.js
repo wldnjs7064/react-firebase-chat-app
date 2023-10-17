@@ -40,9 +40,6 @@ export class ChatRooms extends Component {
 
   componentWillUnmount() {
     off(this.state.chatRoomsRef);
-    this.state.chatRooms.forEach((chatRoom) => {
-      off(this.state.messagesRef.child(chatRoom.id));
-    });
   }
 
   setFirstChatRoom = () => {
@@ -102,7 +99,6 @@ export class ChatRooms extends Component {
     } else {
       if (chatRoomId !== currentChatRoomId) {
         lastTotal = notifications[index].lastKnownTotal;
-
         if (DataSnapshot.size - lastTotal > 0) {
           notifications[index].count = DataSnapshot.size - lastTotal;
         }
@@ -156,20 +152,6 @@ export class ChatRooms extends Component {
     this.props.dispatch(setCurrentChatRoom(room));
     this.props.dispatch(setPrivateChatRoom(false));
     this.setState({ activeChatRoomId: room.id });
-    this.clearNotifications();
-  };
-  clearNotifications = () => {
-    let index = this.state.notifications.findIndex(
-      (notification) => notification.id === this.props.chatRoom.id
-    );
-
-    if (index !== -1) {
-      let updatedNotifications = [...this.state.notifications];
-      updatedNotifications[index].lastKnownTotal =
-        this.state.notifications[index].total;
-      updatedNotifications[index].count = 0;
-      this.setState({ notifications: updatedNotifications });
-    }
   };
 
   getNotificationCount = (room) => {
@@ -195,7 +177,7 @@ export class ChatRooms extends Component {
         onClick={() => this.changeChatRoom(room)}
       >
         # {room.name}
-        <Badge style={{ float: "right" }} variant="danger">
+        <Badge style={{ float: "right", marginTop: "4px" }} variant="danger">
           {this.getNotificationCount(room)}
         </Badge>
       </li>
