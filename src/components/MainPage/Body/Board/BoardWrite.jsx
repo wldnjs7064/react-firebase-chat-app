@@ -70,7 +70,7 @@ const BoardWrite = () => {
   };
 
   return (
-    <div>
+    <div style={{ height: '100vh', backgroundColor: '#fafafae1' }}>
       <Header />
       <Body>
         <TitleEditorWrapper>
@@ -92,6 +92,7 @@ const BoardWrite = () => {
               placeholder="내용을 입력해주세요."
               previewStyle="vertical" // 미리보기 스타일 지정
               height="450px" // 에디터 창 높이
+              initialEditType="WYSIWYG"
               toolbarItems={[
                 // 툴바 옵션 설정
                 ['heading', 'bold', 'italic', 'strike'],
@@ -101,6 +102,7 @@ const BoardWrite = () => {
                 ['code', 'codeblock'],
               ]}
               initialValue={' '}
+              style={{ backgroundColor: 'white' }}
               useCommandShortcut={false}
             />
             <SelectTag />
