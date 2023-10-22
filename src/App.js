@@ -17,36 +17,37 @@ function App(props) {
   let dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
 
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // 로그인 시에 채팅페이지로 이동
-        navigate("/chat");
-        dispatch(setUser(user));
-      } else {
-        // 로그인되지 않은 경우 "/login" 페이지로 이동
-        navigate("/login");
-        dispatch(clearUser());
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       // 로그인 시에 채팅페이지로 이동
+  //       navigate("/chat");
+  //       dispatch(setUser(user));
+  //     } else {
+  //       // 로그인되지 않은 경우 "/login" 페이지로 이동
+  //       navigate("/login");
+  //       dispatch(clearUser());
+  //     }
+  //   });
+  // }, []);
 
-  if (isLoading) {
-    return <div>로딩중입니다.</div>;
-  } else {
-    return (
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/write" element={<BoardWrite />} />
-        <Route path="/board/:idx" element={<BoardDetail />} />
-        <Route path="/board/:idx/edit" element={<BoardEdit />} />
-      </Routes>
-    );
-  }
+  // if (isLoading) {
+  //   return <div>로딩중입니다.</div>;
+  // } else {
+
+  return (
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/write" element={<BoardWrite />} />
+      <Route path="/board/:idx" element={<BoardDetail />} />
+      <Route path="/board/:idx/edit" element={<BoardEdit />} />
+    </Routes>
+  );
 }
+// }
 
 export default App;
