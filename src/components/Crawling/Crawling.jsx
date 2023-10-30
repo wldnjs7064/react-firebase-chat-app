@@ -14,6 +14,27 @@ export default function Crawling() {
   setTages.forEach((tag) => {
     if (tag.selected) selectedTag = tag.name;
   });
+
+  switch (selectedTag) {
+    case "FE":
+      selectedTag = "프론트엔드";
+      break;
+    case "BE":
+      selectedTag = "백엔드";
+      break;
+    case "AI":
+      selectedTag = "AI";
+      break;
+    case "GAME":
+      selectedTag = "게임개발";
+      break;
+    case "PM":
+      selectedTag = "기획자";
+      break;
+
+    default:
+      selectedTag = "개발";
+  }
   const getHtml = async (keyword) => {
     try {
       return await axios.get(
@@ -58,7 +79,7 @@ export default function Crawling() {
   };
 
   useEffect(() => {
-    getJob("프론트엔드");
+    getJob(selectedTag);
   }, []);
 
   const truncate = (str, n) => {
@@ -75,7 +96,7 @@ export default function Crawling() {
                 <Title style={{ fontSize: "13px" }}>{job.company}</Title>
                 <Content>
                   <div style={{ fontWeight: "700", fontSize: "16px" }}>
-                    {truncate(job.jobTitle, 80)}
+                    {truncate(job.jobTitle, 90)}
                   </div>
                   <Detail>
                     <div>{job.education}</div>
@@ -83,7 +104,15 @@ export default function Crawling() {
                     <div>{job.region}</div>
                     <div>{job.dueDate}</div>
                   </Detail>
-                  <div> {truncate(job.etc, 80)}</div>
+                  <div
+                    style={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {job.etc}
+                  </div>
                 </Content>
               </JobInfo>
             );
@@ -111,6 +140,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 970px;
+  padding: 0 10px;
 `;
 const JobInfoes = styled.div`
   width: 1170px;
