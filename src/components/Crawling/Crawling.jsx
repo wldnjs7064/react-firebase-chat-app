@@ -38,7 +38,9 @@ export default function Crawling() {
   const getHtml = async (keyword) => {
     try {
       return await axios.get(
-        `https://www.jobkorea.co.kr/Search/?stext=${encodeURI(keyword)}`
+        `https://www.jobkorea.co.kr/Search/?stext=${encodeURI(
+          keyword
+        )}&tabType=recruit&Page_No=1`
       );
     } catch (error) {
       console.error(error);
@@ -76,6 +78,7 @@ export default function Crawling() {
   const getJob = async (keyword) => {
     const html = await getHtml(keyword);
     const jobs = await parsing(html);
+    console.log(jobs);
   };
 
   useEffect(() => {
