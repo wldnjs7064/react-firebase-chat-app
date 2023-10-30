@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import BoardList from './BoardList';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import BoardList from "./BoardList";
 
 function BoardMain() {
   return (
@@ -13,12 +13,10 @@ function BoardMain() {
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: white;
   border-top: solid;
-  border-bottom: solid;
   border-width: thin;
   border-color: #cccccc;
-  border-radius: 1px;
   height: 635px;
+  background-color: white;
 `;
 export default BoardMain;

@@ -1,24 +1,24 @@
-import { boardDB } from '../../../../firebase.js';
-import React, { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { write } from 'redux/actions/write_action.js';
+import { boardDB } from "../../../../firebase.js";
+import React, { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { write } from "redux/actions/write_action.js";
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
-  const [selectTag, setSelectTag] = useState('');
+  const [selectTag, setSelectTag] = useState("");
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
   const [views, setViews] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    setSelectTag('');
+    setSelectTag("");
     Object.keys(selector).forEach((tagKey) => {
       const tag = selector[tagKey];
       if (tag.selected && tag.name !== selectTag) {
-        console.log('tagName', tag.name);
+        console.log("tagName", tag.name);
         setSelectTag(tag.name);
       }
     });
@@ -31,18 +31,18 @@ function BoardList() {
   }, [selectTag]);
 
   const getContents = async () => {
-    if (selectTag === '') {
+    if (selectTag === "") {
       const boardRef = query(
-        collection(boardDB, 'Board'),
-        orderBy('date', 'desc')
+        collection(boardDB, "Board"),
+        orderBy("date", "desc")
       );
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
     } else {
       const boardRef = query(
-        collection(boardDB, 'Board'),
-        orderBy('date', 'desc'),
-        where('tag', '==', selectTag)
+        collection(boardDB, "Board"),
+        orderBy("date", "desc"),
+        where("tag", "==", selectTag)
       );
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
@@ -57,7 +57,7 @@ function BoardList() {
   };
 
   return (
-    <ContentList style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
+    <ContentList style={{ overflowY: "scroll", overflowX: "hidden" }}>
       {DBData.map((doc) => (
         <Contents
           key={doc.id}
@@ -76,14 +76,9 @@ function BoardList() {
 const ContentList = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: white;
-  border-bottom: solid;
-  border-width: thin;
-  border-color: #cccccc;
-  border-radius: 1px;
   width: 905px;
   height: 100%;
-  /* margin-left: 20px; */
+  background-color: white;
   overflow-y: scroll;
   overflow-x: hidden;
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
@@ -118,7 +113,7 @@ const Contents = styled.div`
   }
   /* 컨텐츠 아래 가운데만 얇게 border 처리하고싶어서 쓴 코드인데 잘 안됨. 수정예정 */
   &::after {
-    content: '';
+    content: "";
     width: 80px;
     height: 2px;
     background-color: rebeccapurple;
