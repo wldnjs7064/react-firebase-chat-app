@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "./redux/actions/user_action";
 import BoardDetail from "components/MainPage/Body/Board/BoardDetail";
 import BoardEdit from "components/MainPage/Body/Board/BoardEdit";
-
+import Crawling from "components/Crawling/Crawling";
 function App(props) {
   const navigate = useNavigate();
   let dispatch = useDispatch();
@@ -45,6 +45,7 @@ function App(props) {
       <Route path="/write" element={<BoardWrite />} />
       <Route path="/board/:idx" element={<BoardDetail />} />
       <Route path="/board/:idx/edit" element={<BoardEdit />} />
+      <Route path="/recruit" element={<Crawling />} />
     </Routes>
   );
 }

@@ -11,6 +11,9 @@ function Header() {
   const navigateLogin = () => {
     navigate("/login");
   };
+  const navigateRecruit = () => {
+    navigate("/recruit");
+  };
   return (
     <S.Wrapper>
       {/* <Header> */}
@@ -19,7 +22,7 @@ function Header() {
       </S.Icon>
       <S.Categories>
         <S.Category>커뮤니티</S.Category>
-        <S.Category>멘토멘티</S.Category>
+        <S.Category onClick={navigateRecruit}>모집공고</S.Category>
       </S.Categories>
       <S.SigninButton onClick={navigateLogin}>로그인 | 회원가입</S.SigninButton>
       {/* </Header> */}
