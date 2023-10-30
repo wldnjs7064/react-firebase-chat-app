@@ -14,7 +14,7 @@ function Body() {
     navigate("/login");
   };
   const goToRecruit = () => {
-    navigate("/recruit");
+    navigate("/crawling");
   };
 
   const setTages = useSelector((state) => state.tag.selectedTag);
