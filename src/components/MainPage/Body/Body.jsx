@@ -35,12 +35,10 @@ function Body() {
       <RightWrapper>
         <BodyHeader />
         <BoardMain />
-        {selectedTag ? (
+        {selectedTag && (
           <ApplyInfoBtn onClick={goToRecruit}>
             선택한 {selectedTag} 공고 보러가기
           </ApplyInfoBtn>
-        ) : (
-          <ApplyInfoBtn onClick={goToRecruit}>모든 공고 보러가기</ApplyInfoBtn>
         )}
       </RightWrapper>
     </S.Body>
