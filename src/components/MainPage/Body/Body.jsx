@@ -6,8 +6,7 @@ import Chat from "./Chat/Chat";
 import styled from "styled-components";
 import BodyHeader from "./BodyHeader/BodyHeader";
 import BoardMain from "./Board/BoardMain";
-import BoardList from "./Board/BoardList";
-import { Apple } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 function Body() {
   const navigate = useNavigate();
@@ -17,6 +16,12 @@ function Body() {
   const goToRecruit = () => {
     navigate("/recruit");
   };
+
+  const setTages = useSelector((state) => state.tag.selectedTag);
+  let selectedTag = "";
+  setTages.forEach((tag) => {
+    if (tag.selected) selectedTag = tag.name;
+  });
   return (
     <S.Body>
       <WrapperLoginChat>
@@ -30,7 +35,13 @@ function Body() {
       <RightWrapper>
         <BodyHeader />
         <BoardMain />
-        <ApplyInfoBtn onClick={goToRecruit}>관련 공고 보러가기</ApplyInfoBtn>
+        {selectedTag ? (
+          <ApplyInfoBtn onClick={goToRecruit}>
+            선택한 {selectedTag} 공고 보러가기
+          </ApplyInfoBtn>
+        ) : (
+          <ApplyInfoBtn onClick={goToRecruit}>모든 공고 보러가기</ApplyInfoBtn>
+        )}
       </RightWrapper>
     </S.Body>
   );
