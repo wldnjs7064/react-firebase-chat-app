@@ -10,6 +10,11 @@ function Filtering() {
   const usetags = useSelector((state) => state.tag.selectedTag);
 
   const handleClick = (tags) => {
+    usetags.forEach((tag) => {
+      if (tag.selected) {
+        dispatch(selectTag(tag.name));
+      }
+    });
     dispatch(selectTag(tags.name));
   };
 
