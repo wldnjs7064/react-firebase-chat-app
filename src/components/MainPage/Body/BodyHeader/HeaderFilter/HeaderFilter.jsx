@@ -45,7 +45,6 @@ function Filtering() {
           #{tag.name}
         </Tag>
       ))}
-
       <Icon>
         <ArrowForwardIosIcon />
       </Icon>
