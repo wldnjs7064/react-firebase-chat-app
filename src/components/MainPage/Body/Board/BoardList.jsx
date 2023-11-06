@@ -12,12 +12,12 @@ function BoardList() {
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
   const dispatch = useDispatch();
+
   useEffect(() => {
     setSelectTag("");
     Object.keys(selector).forEach((tagKey) => {
       const tag = selector[tagKey];
       if (tag.selected && tag.name !== selectTag) {
-        console.log("tagName", tag.name);
         setSelectTag(tag.name);
       }
     });
