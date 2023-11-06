@@ -28,7 +28,9 @@ function Comment({ id }) {
   return (
     <div>
       {isComment &&
-        comment.map((comment) => <div>{comment.data().comment}</div>)}
+        comment.map((comment) => (
+          <div style={{ marginLeft: "10px" }}>{comment.data().comment}</div>
+        ))}
     </div>
   );
 }

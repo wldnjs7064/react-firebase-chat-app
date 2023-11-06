@@ -7,6 +7,8 @@ import { boardDB } from "../../../../firebase";
 import CommentWrite from "./Comment/CommentWrite";
 import Comment from "./Comment/Comment";
 import MDEditor from "@uiw/react-md-editor";
+import toast from "react-hot-toast";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -30,15 +32,51 @@ function BoardDetail() {
     });
   };
 
-  const handleLike = async () => {
-    setNewLike((prev) => prev + 1);
-    alert("좋아요를 눌렀습니다.");
+  // const handleLike = async () => {
+  //   setNewLike((prev) => prev + 1);
+  //   alert("좋아요를 눌렀습니다.");
+  //   // 데이터베이스 업데이트
+  //   try {
+  //     await updateDoc(doc(boardDB, "Board", id), {
+  //       like: newLike + 1,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
 
+  // const handleLike = async () => {
+  //   const updatedLike = newLike + 1;
+  //   setNewLike(updatedLike);
+  //   alert("좋아요를 눌렀습니다.");
+  //   try {
+  //     await updateDoc(doc(boardDB, "Board", id), {
+  //       like: updatedLike,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
+
+  const handleLike = async () => {
+    const updatedLike = newLike + 1;
+    setNewLike(updatedLike);
+    // alert("좋아요를 눌렀습니다.");
     // 데이터베이스 업데이트
     try {
-      await updateDoc(doc(boardDB, "Board", id), {
-        like: newLike + 1,
-      });
+      await toast.promise(
+        updateDoc(doc(boardDB, "Board", id), {
+          like: updatedLike,
+        }),
+        {
+          loading: "좋아요를 누르는 중...",
+          success: "좋아요를 눌렀습니다.",
+          error: "좋아요를 누르는데 실패했습니다.",
+        }
+      );
+      // 데이터베이스에서 문서 다시 가져오기
+      const docSnapshot = await getDoc(doc(boardDB, "Board", id));
+      console.log("Updated like count: ", docSnapshot.data().like);
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -47,13 +85,12 @@ function BoardDetail() {
   useEffect(() => {
     async function getNewData() {
       const newData = await getDoc(doc(boardDB, "Board", id));
-      console.log("newData views", newData.data().views);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
     }
     getNewData();
-  }, [data]);
+  }, [id]);
 
   useEffect(() => {
     async function updateLike() {
@@ -129,7 +166,12 @@ function BoardDetail() {
           <div
             className="markdownDiv"
             data-color-mode="light"
-            style={{ padding: 15, marginTop: 20 }}
+            style={{
+              padding: 15,
+              marginTop: 20,
+              height: "100%",
+              overflow: "scroll",
+            }}
           >
             <MDEditor.Markdown source={newContent} />
           </div>
@@ -156,7 +198,7 @@ const UniContents = styled.div`
   display: flex;
   flex-direction: column;
   width: 905px;
-  height: 100%;
+  height: 80%;
   background-color: white;
   border-radius: 2%;
   border: solid;
