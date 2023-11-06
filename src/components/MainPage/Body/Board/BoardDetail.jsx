@@ -6,6 +6,9 @@ import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 import CommentWrite from "./Comment/CommentWrite";
 import Comment from "./Comment/Comment";
+import MDEditor from "@uiw/react-md-editor";
+import toast from "react-hot-toast";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -29,15 +32,51 @@ function BoardDetail() {
     });
   };
 
-  const handleLike = async () => {
-    setNewLike((prev) => prev + 1);
-    alert("좋아요를 눌렀습니다.");
+  // const handleLike = async () => {
+  //   setNewLike((prev) => prev + 1);
+  //   alert("좋아요를 눌렀습니다.");
+  //   // 데이터베이스 업데이트
+  //   try {
+  //     await updateDoc(doc(boardDB, "Board", id), {
+  //       like: newLike + 1,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
 
+  // const handleLike = async () => {
+  //   const updatedLike = newLike + 1;
+  //   setNewLike(updatedLike);
+  //   alert("좋아요를 눌렀습니다.");
+  //   try {
+  //     await updateDoc(doc(boardDB, "Board", id), {
+  //       like: updatedLike,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
+
+  const handleLike = async () => {
+    const updatedLike = newLike + 1;
+    setNewLike(updatedLike);
+    // alert("좋아요를 눌렀습니다.");
     // 데이터베이스 업데이트
     try {
-      await updateDoc(doc(boardDB, "Board", id), {
-        like: newLike + 1,
-      });
+      await toast.promise(
+        updateDoc(doc(boardDB, "Board", id), {
+          like: updatedLike,
+        }),
+        {
+          loading: "좋아요를 누르는 중...",
+          success: "좋아요를 눌렀습니다.",
+          error: "좋아요를 누르는데 실패했습니다.",
+        }
+      );
+      // 데이터베이스에서 문서 다시 가져오기
+      const docSnapshot = await getDoc(doc(boardDB, "Board", id));
+      console.log("Updated like count: ", docSnapshot.data().like);
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -46,13 +85,12 @@ function BoardDetail() {
   useEffect(() => {
     async function getNewData() {
       const newData = await getDoc(doc(boardDB, "Board", id));
-      console.log("newData views", newData.data().views);
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
     }
     getNewData();
-  }, [data]);
+  }, [id]);
 
   useEffect(() => {
     async function updateLike() {
@@ -80,12 +118,10 @@ function BoardDetail() {
       <Header />
       <UniBody>
         <UniContents>
-          <UniTitle>{newTitle}</UniTitle>
-          <UniContent>{newContent}</UniContent>
+          <UniTitle>{newTitle} </UniTitle>
           <ButtonWrapper>
-            <button
+            <StyledButton
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -100,14 +136,14 @@ function BoardDetail() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
+                  whiteSpace: "nowrap",
                 }}
               >
                 <span>{newLike}</span>
               </div>
-            </button>
-            <button
+            </StyledButton>
+            <StyledButton
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -115,10 +151,9 @@ function BoardDetail() {
               onClick={handleEdit}
             >
               수정
-            </button>
-            <button
+            </StyledButton>
+            <StyledButton
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -126,11 +161,25 @@ function BoardDetail() {
               onClick={handleDelete}
             >
               삭제
-            </button>
+            </StyledButton>
           </ButtonWrapper>
+          <div
+            className="markdownDiv"
+            data-color-mode="light"
+            style={{
+              padding: 15,
+              marginTop: 20,
+              height: "100%",
+              overflow: "scroll",
+            }}
+          >
+            <MDEditor.Markdown source={newContent} />
+          </div>
+        </UniContents>
+        <div style={{ width: "905px", paddingTop: "25px" }}>
           <CommentWrite id={id} />
           <Comment id={id} />
-        </UniContents>
+        </div>
       </UniBody>
     </div>
   );
@@ -138,22 +187,18 @@ function BoardDetail() {
 
 const ButtonWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
+  width: 100%;
+  justify-content: flex-end;
   flex-direction: row;
-  margin-top: 50px;
   gap: 10px;
-`;
-
-const UniContent = styled.div`
-  font-size: 18px;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const UniContents = styled.div`
   display: flex;
   flex-direction: column;
   width: 905px;
-  height: 100%;
+  height: 80%;
   background-color: white;
   border-radius: 2%;
   border: solid;
@@ -175,7 +220,7 @@ const UniBody = styled.div`
   flex-direction: column;
   padding-top: 50px;
   background-color: #fafafae1;
-  height: 80%;
+  height: 80vh;
   width: 100%;
   margin: 0 auto;
   align-items: center;
@@ -187,4 +232,16 @@ const UniBody = styled.div`
   }
 `;
 
+const StyledButton = styled.button`
+  width: 100px;
+  height: 35px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: pretendard;
+  color: black;
+  border: none;
+  border: 1px solid #e9ecef;
+`;
 export default BoardDetail;

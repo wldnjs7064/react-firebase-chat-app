@@ -5,6 +5,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { write } from "redux/actions/write_action.js";
+import MDEditor from "@uiw/react-md-editor";
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
@@ -65,7 +66,20 @@ function BoardList() {
           }}
         >
           <Title>{doc.data().title}</Title>
-          <Content>{doc.data().content}</Content>
+          <div
+            className="markdownDiv"
+            data-color-mode="light"
+            style={{
+              padding: 15,
+              width: "100%",
+              height: "50px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <MDEditor.Markdown source={doc.data().content} />
+          </div>
         </Contents>
       ))}
     </ContentList>
