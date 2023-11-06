@@ -85,15 +85,13 @@ function BoardDetail() {
           <div
             className="markdownDiv"
             data-color-mode="light"
-            style={{ padding: 15 }}
+            style={{ padding: 15, marginTop: 20 }}
           >
             <MDEditor.Markdown source={newContent} />
           </div>
-
           <ButtonWrapper>
             <button
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -115,7 +113,6 @@ function BoardDetail() {
             </button>
             <button
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -126,7 +123,6 @@ function BoardDetail() {
             </button>
             <button
               style={{
-                marginTop: "400px",
                 width: "fit-content",
                 whiteSpace: "nowrap",
                 textAlign: "center",
@@ -148,13 +144,7 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  margin-top: 50px;
   gap: 10px;
-`;
-
-const UniContent = styled.div`
-  font-size: 18px;
-  margin-top: 20px;
 `;
 
 const UniContents = styled.div`
