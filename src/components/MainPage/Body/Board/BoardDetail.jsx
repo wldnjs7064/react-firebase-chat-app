@@ -33,7 +33,7 @@ function BoardDetail() {
   };
 
   const handleEdit = async () => {
-    navigate(`/board/${id}/edit`, {
+    navigate(`edit`, {
       state: { id: id, data: data },
     });
   };

@@ -1,68 +1,59 @@
-import React from 'react';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { set, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Header from 'components/MainPage/Header/Header';
-import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
-import { boardDB } from '../../../../firebase';
-import { useDidMountEffect } from 'Hooks/useDidMountEffect';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import { useRef } from "react";
+import { set, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Header from "components/MainPage/Header/Header";
+import { Editor } from "@toast-ui/react-editor";
+import { doc, updateDoc } from "firebase/firestore";
+import { boardDB } from "../../../../firebase";
+import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
 function BoardEdit() {
-  const navigate = useNavigate();
-  const { register } = useForm();
+  const { register, getValues, setValue } = useForm();
   const editorRef = useRef();
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
 
+  const navigate = useNavigate();
   const location = useLocation();
   const docId = location.state.id;
   const data = location.state.data;
 
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
   const onSubmit = async (e) => {
+    const { title } = getValues();
     e.preventDefault();
     const contentMark = editorRef.current?.getInstance().getMarkdown();
-    setContent(contentMark);
-  };
-
-  useDidMountEffect(() => {
-    if (content === '') return;
-    else {
-      handleEdit();
-    }
-  }, [content]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleEdit = async () => {
-    if (title === '') {
-      alert('제목은 필수 입력사항입니다.');
-    } else {
-      try {
-        await updateDoc(doc(boardDB, 'Board', docId), {
+    if (!title) alert("제목은 필수 입력사항입니다.");
+    try {
+      await toast.promise(
+        updateDoc(doc(boardDB, "Board", docId), {
           title: title,
-          content: content,
-        });
-        alert('수정이 완료되었습니다.');
-        navigate(-1);
-      } catch (error) {
-        alert(error);
-      }
+          content: contentMark,
+        }),
+        {
+          loading: "수정중...",
+          success: "수정이 완료되었습니다.",
+          error: "수정에 실패했습니다.",
+        }
+      );
+      navigate(-1);
+    } catch (error) {
+      alert(error);
     }
   };
 
   // 뒤로가기 버튼
-  const handleGoBack = useCallback(() => {
+  const handleGoBack = (e) => {
+    e.preventDefault();
     navigate(-1);
-  }, [navigate]);
+  };
 
   // 제목 입력
   const handleTitleChange = (e) => {
     e.preventDefault();
-    setTitle(e.target.value);
+    setValue("title", e.target.value);
   };
 
   return (
@@ -70,17 +61,16 @@ function BoardEdit() {
       <Header />
       <div>
         <form>
-          {' '}
           <TitleWrapper>
             <p
               style={{
-                fontFamily: 'pretendard',
-                fontSize: '25px',
+                fontFamily: "pretendard",
+                fontSize: "25px",
               }}
             ></p>
             <TitleInput
-              {...register('title', {
-                required: '제목은 필수 입력 사항입니다.',
+              {...register("title", {
+                required: "제목은 필수 입력 사항입니다.",
               })}
               type="text"
               id="title"
@@ -90,7 +80,7 @@ function BoardEdit() {
             />
           </TitleWrapper>
           <>
-            <div style={{ padding: '0px 100px' }}>
+            <div style={{ padding: "0px 100px" }}>
               <Editor
                 ref={editorRef}
                 placeholder="내용을 입력해주세요."
@@ -100,11 +90,11 @@ function BoardEdit() {
                 initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                 toolbarItems={[
                   // 툴바 옵션 설정
-                  ['heading', 'bold', 'italic', 'strike'],
-                  ['hr', 'quote'],
-                  ['ul', 'ol', 'task', 'indent', 'outdent'],
-                  ['table', 'image', 'link'],
-                  ['code', 'codeblock'],
+                  ["heading", "bold", "italic", "strike"],
+                  ["hr", "quote"],
+                  ["ul", "ol", "task", "indent", "outdent"],
+                  ["table", "image", "link"],
+                  ["code", "codeblock"],
                 ]}
                 useCommandShortcut={false}
               ></Editor>
