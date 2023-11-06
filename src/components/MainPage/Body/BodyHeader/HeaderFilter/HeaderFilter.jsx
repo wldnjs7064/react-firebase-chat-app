@@ -13,6 +13,7 @@ function Filtering() {
     usetags.forEach((tag) => {
       if (tag.selected) {
         dispatch(selectTag(tag.name));
+        console.log(tag.name);
       }
     });
     dispatch(selectTag(tags.name));
@@ -32,6 +33,7 @@ function Filtering() {
           #{tag.name}
         </Tag>
       ))}
+
       <Icon>
         <ArrowForwardIosIcon />
       </Icon>
