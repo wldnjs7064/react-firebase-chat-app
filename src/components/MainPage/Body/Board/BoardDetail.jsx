@@ -38,7 +38,26 @@ function BoardDetail() {
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
     alert("좋아요를 눌렀습니다.");
+
+    // 데이터베이스 업데이트
+    try {
+      await updateDoc(doc(boardDB, "Board", id), {
+        like: newLike + 1,
+      });
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
+  useEffect(() => {
+    async function getNewData() {
+      const newData = await getDoc(doc(boardDB, "Board", id));
+      console.log("newData views", newData.data().views);
+      setNewTitle(newData.data().title);
+      setNewContent(newData.data().content);
+      setNewLike(newData.data().like);
+    }
+    getNewData();
+  }, [data]);
 
   useEffect(() => {
     async function updateLike() {
@@ -54,16 +73,7 @@ function BoardDetail() {
     if (newLike > 0) {
       updateLike();
     }
-
-    async function getNewData() {
-      const newData = await getDoc(doc(boardDB, "Board", id));
-      console.log("newData views", newData.data().views);
-      setNewTitle(newData.data().title);
-      setNewContent(newData.data().content);
-      setNewLike(newData.data().like);
-    }
-    getNewData();
-  }, [newLike]);
+  }, [id, newLike]);
 
   return (
     <div
@@ -124,6 +134,7 @@ function BoardDetail() {
             </button>
           </ButtonWrapper>
           <CommentWrite id={id} />
+          <Comment id={id} />
         </UniContents>
       </UniBody>
     </div>
