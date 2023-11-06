@@ -20,18 +20,18 @@ function App(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
   const currentUser = useSelector((state) => state.user.currentUser);
 
-  console.log("cur", currentUser);
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        dispatch(setUser(user));
-        navigate("/mainpage");
-      } else {
-        dispatch(clearUser());
-      }
-    });
-  }, [dispatch]);
+  // console.log("cur", currentUser);
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       dispatch(setUser(user));
+  //       navigate("/mainpage");
+  //     } else {
+  //       dispatch(clearUser());
+  //     }
+  //   });
+  // }, [dispatch]);
 
   return (
     <Routes>
