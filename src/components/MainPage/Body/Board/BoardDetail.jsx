@@ -10,7 +10,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
-import { useDispatch } from "react-redux";
 import CommentWrite from "./Comment/CommentWrite";
 import Comment from "./Comment/Comment";
 
@@ -19,11 +18,9 @@ function BoardDetail() {
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
-  const views = location.state.views;
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
-  const [newViews, setNewViews] = useState(data.views);
 
   const handleDelete = async () => {
     console.log("delete");
@@ -64,7 +61,6 @@ function BoardDetail() {
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
-      setNewViews(newData.data().views);
     }
     getNewData();
   }, [newLike]);
@@ -80,7 +76,6 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
-          <div>조회수 : {newViews}</div>
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button

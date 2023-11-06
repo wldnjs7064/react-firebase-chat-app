@@ -1,15 +1,16 @@
-import { WRITE } from '../actions/types';
+import { WRITE } from "../actions/types";
 
 const InitializeWriteState = {
-  title: '',
-  content: '',
+  title: "",
+  content: "",
   like: 0,
   views: 0,
 };
 
-export const writeAction = (title, content, like, views) => ({
+export const writeAction = (title, content, like) => ({
   type: WRITE,
-  payload: { title, content, like, views },
+
+  payload: { title, content, like },
 });
 
 const write = (state = InitializeWriteState, action) => {
@@ -19,7 +20,6 @@ const write = (state = InitializeWriteState, action) => {
         title: action.payload.title,
         content: action.payload.content,
         like: action.payload.like,
-        views: action.payload.views,
       };
     default:
       return state;
