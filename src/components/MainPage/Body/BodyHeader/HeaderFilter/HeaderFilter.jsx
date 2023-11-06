@@ -20,14 +20,15 @@ function Filtering() {
       }
     });
   }, [selector]);
+
   console.log(selectedTag);
 
   const handleClick = (tags) => {
-    usetags.forEach((tag) => {
-      if (tag.selected) {
-        dispatch(selectTag(tag.name));
-      }
-    });
+    // usetags.forEach((tag) => {
+    //   if (tag.selected) {
+    //     dispatch(selectTag(tag.name));
+    //   }
+    // });
     dispatch(selectTag(tags.name));
   };
 
