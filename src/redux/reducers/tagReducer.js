@@ -31,6 +31,25 @@ const initialState = {
   ],
 };
 
+// const tagReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case SELECT_TAG:
+//       return {
+//         // ...state,
+//         selectedTag: state.selectedTag.map((tag) =>
+//           tag.name === action.payload
+//             ? { ...tag, selected: !tag.selected }
+//             : tag
+//         ),
+//       };
+
+//     default:
+//       return state;
+//   }
+// };
+
+// export default tagReducer;
+
 const tagReducer = (state = initialState, action) => {
   switch (action.type) {
     case SELECT_TAG:
@@ -39,7 +58,7 @@ const tagReducer = (state = initialState, action) => {
         selectedTag: state.selectedTag.map((tag) =>
           tag.name === action.payload
             ? { ...tag, selected: !tag.selected }
-            : tag
+            : { ...tag, selected: false }
         ),
       };
 

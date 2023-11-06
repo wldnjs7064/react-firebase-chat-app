@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "styled-components";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -8,8 +8,26 @@ import { selectTag } from "redux/actions/toggle_action";
 function Filtering() {
   const dispatch = useDispatch();
   const usetags = useSelector((state) => state.tag.selectedTag);
+  const [selectedTag, setSelectedTag] = useState("");
+  const selector = useSelector((state) => state.tag.selectedTag);
+
+  useEffect(() => {
+    setSelectedTag("");
+    Object.keys(selector).forEach((tagKey) => {
+      const tag = selector[tagKey];
+      if (tag.selected && tag.name !== selectedTag) {
+        setSelectedTag(tag.name);
+      }
+    });
+  }, [selector]);
+  console.log(selectedTag);
 
   const handleClick = (tags) => {
+    usetags.forEach((tag) => {
+      if (tag.selected) {
+        dispatch(selectTag(tag.name));
+      }
+    });
     dispatch(selectTag(tags.name));
   };
 
@@ -21,7 +39,7 @@ function Filtering() {
       {usetags.map((tag) => (
         <Tag
           key={tag.name}
-          selected={tag.selected}
+          selected={tag.name === selectedTag}
           onClick={() => handleClick(tag)}
         >
           #{tag.name}
