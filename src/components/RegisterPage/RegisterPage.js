@@ -8,7 +8,7 @@ import {
 import md5 from "md5";
 import Logo from "../../assets/svg/ColoredLogo.svg";
 import { useNavigate } from "react-router-dom";
-import { getDatabase, ref, child, set } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 
 function RegisterPage() {
   const {

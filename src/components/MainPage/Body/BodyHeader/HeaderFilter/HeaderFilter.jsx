@@ -21,8 +21,6 @@ function Filtering() {
     });
   }, [selector]);
 
-  console.log(selectedTag);
-
   const handleClick = (tags) => {
     dispatch(selectTag(tags.name));
   };

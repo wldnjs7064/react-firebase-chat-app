@@ -1,5 +1,5 @@
 import { boardDB } from "../../../../firebase.js";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";

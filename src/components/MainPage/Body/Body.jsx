@@ -21,7 +21,6 @@ function Body() {
 
   let selectedTag = "";
   setTages.forEach((tag) => {
-    console.log(tag);
     if (tag.selected) selectedTag = tag.name;
   });
 

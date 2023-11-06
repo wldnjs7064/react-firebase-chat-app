@@ -1,6 +1,6 @@
 import React from "react";
 import { useRef } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";

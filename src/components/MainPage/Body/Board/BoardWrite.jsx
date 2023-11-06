@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "components/MainPage/Header/Header";
@@ -10,7 +10,6 @@ import { boardDB } from "../../../../firebase";
 import { useDidMountEffect } from "Hooks/useDidMountEffect";
 import SelectTag from "./Filetering/WriteFilter";
 import { useSelector } from "react-redux";
-import CommentWrite from "./Comment/CommentWrite";
 
 const BoardWrite = () => {
   const navigate = useNavigate();
@@ -168,7 +167,6 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* justify-content: space-between; */
   margin-right: 50px;
   font-family: pretendard;
 `;

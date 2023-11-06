@@ -14,7 +14,6 @@ function Comment({ id }) {
       where("id", "==", uid)
     );
     const commentSnapshot = await getDocs(commentRef);
-    console.log("commentSnapshot.docs", commentSnapshot.docs);
     if (commentSnapshot.docs.length === 0) {
       setIsComment(false);
     } else {

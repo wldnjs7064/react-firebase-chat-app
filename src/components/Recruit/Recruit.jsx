@@ -1,5 +1,4 @@
 import Header from "components/MainPage/Header/Header";
-import { useSelector } from "react-redux";
 import * as S from "../MainPage/style";
 import styled from "styled-components";
 
