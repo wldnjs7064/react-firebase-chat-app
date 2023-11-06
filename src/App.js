@@ -13,44 +13,56 @@ import BoardDetail from "components/MainPage/Body/Board/BoardDetail";
 import BoardEdit from "components/MainPage/Body/Board/BoardEdit";
 import Crawling from "components/Crawling/Crawling";
 import Recruit from "components/Recruit/Recruit";
+
 function App(props) {
   const navigate = useNavigate();
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       // 로그인 시에 채팅페이지로 이동
-  //       navigate("/chat");
-  //       dispatch(setUser(user));
-  //     } else {
-  //       // 로그인되지 않은 경우 "/login" 페이지로 이동
-  //       navigate("/login");
-  //       dispatch(clearUser());
-  //     }
-  //   });
-  // }, []);
-
-  // if (isLoading) {
-  //   return <div>로딩중입니다.</div>;
-  // } else {
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser(user));
+        navigate("/chat");
+      } else {
+        dispatch(clearUser());
+      }
+    });
+  }, [dispatch]);
 
   return (
     <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/" element={currentUser ? <MainPage /> : <LoginPage />} />
+      <Route
+        path="/chat"
+        element={currentUser ? <ChatPage /> : <LoginPage />}
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/write" element={<BoardWrite />} />
-      <Route path="/board/:idx" element={<BoardDetail />} />
-      <Route path="/board/:idx/edit" element={<BoardEdit />} />
-      <Route path="/crawling" element={<Crawling />} />
-      <Route path="/recruit" element={<Recruit />} />
+      <Route
+        path="/write"
+        element={currentUser ? <BoardWrite /> : <LoginPage />}
+      />
+      <Route
+        path="/board/:idx"
+        element={currentUser ? <BoardDetail /> : <LoginPage />}
+      />
+      <Route
+        path="/board/:idx/edit"
+        element={currentUser ? <BoardEdit /> : <LoginPage />}
+      />
+      <Route
+        path="/crawling"
+        element={currentUser ? <Crawling /> : <LoginPage />}
+      />
+      <Route
+        path="/recruit"
+        element={currentUser ? <Recruit /> : <LoginPage />}
+      />
     </Routes>
   );
 }
-// }
 
 export default App;
