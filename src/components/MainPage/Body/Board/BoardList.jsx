@@ -11,7 +11,6 @@ function BoardList() {
   const [selectTag, setSelectTag] = useState("");
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
-  const [views, setViews] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,9 +49,9 @@ function BoardList() {
   };
 
   const navigateUniBoard = (id, data) => {
-    dispatch(write({ id: id, data: data, views: views }));
+    dispatch(write({ id: id, data: data }));
     navigate(`/board/${id}`, {
-      state: { id: id, data: data, views: views },
+      state: { id: id, data: data },
     });
   };
 
@@ -101,7 +100,6 @@ const Content = styled.p`
 
 const Contents = styled.div`
   width: 925px;
-  /* text-align: center; */
   border-bottom: solid;
   border-width: thin;
   border-color: #cccccc;
@@ -111,13 +109,11 @@ const Contents = styled.div`
   ::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라 브라우저 */
   }
-  /* 컨텐츠 아래 가운데만 얇게 border 처리하고싶어서 쓴 코드인데 잘 안됨. 수정예정 */
   &::after {
     content: "";
     width: 80px;
     height: 2px;
     background-color: rebeccapurple;
-    /* position: absolute; */
     left: 0;
     bottom: -25px;
   }

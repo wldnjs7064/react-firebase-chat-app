@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { set, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Header from 'components/MainPage/Header/Header';
-import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { addDoc, collection } from 'firebase/firestore';
-import { boardDB } from '../../../../firebase';
-import { useDidMountEffect } from 'Hooks/useDidMountEffect';
-import SelectTag from './Filetering/WriteFilter';
-import { useSelector } from 'react-redux';
-import CommentWrite from './Comment/CommentWrite';
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { set, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Header from "components/MainPage/Header/Header";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { addDoc, collection } from "firebase/firestore";
+import { boardDB } from "../../../../firebase";
+import { useDidMountEffect } from "Hooks/useDidMountEffect";
+import SelectTag from "./Filetering/WriteFilter";
+import { useSelector } from "react-redux";
+import CommentWrite from "./Comment/CommentWrite";
 
 const BoardWrite = () => {
   const navigate = useNavigate();
   const { register } = useForm();
   const editorRef = useRef();
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
   const setTag = useSelector((state) => state.setTag.setTag);
 
   // 작성하기 버튼을 누르면 editor의 내용을 content에 저장
@@ -28,7 +28,7 @@ const BoardWrite = () => {
   };
 
   useDidMountEffect(() => {
-    if (content === '') return;
+    if (content === "") return;
     else {
       createBoard();
     }
@@ -36,11 +36,11 @@ const BoardWrite = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const createBoard = async () => {
-    if (title === '') {
-      alert('제목은 필수 입력사항입니다.');
+    if (title === "") {
+      alert("제목은 필수 입력사항입니다.");
     } else {
       try {
-        await addDoc(collection(boardDB, 'Board'), {
+        await addDoc(collection(boardDB, "Board"), {
           title: title,
           content: content,
           id: uniqueId,
@@ -48,7 +48,7 @@ const BoardWrite = () => {
           tag: setTag,
           like: 0,
         });
-        alert('작성이 완료되었습니다.');
+        alert("작성이 완료되었습니다.");
         navigate(-1);
       } catch (error) {
         alert(error);
@@ -71,14 +71,14 @@ const BoardWrite = () => {
   };
 
   return (
-    <div style={{ height: '100vh', backgroundColor: '#fafafae1' }}>
+    <div style={{ height: "100vh", backgroundColor: "#fafafae1" }}>
       <Header />
       <Body>
         <TitleEditorWrapper>
           <TitleWrapper>
             <TitleInput
-              {...register('title', {
-                required: '제목은 필수 입력 사항입니다.',
+              {...register("title", {
+                required: "제목은 필수 입력 사항입니다.",
               })}
               type="text"
               id="title"
@@ -90,9 +90,9 @@ const BoardWrite = () => {
           <EditorTagWrapper>
             <div
               style={{
-                height: '450px',
-                width: '1185px',
-                backgroundColor: ' white',
+                height: "450px",
+                width: "1185px",
+                backgroundColor: " white",
               }}
             >
               <Editor
@@ -102,14 +102,14 @@ const BoardWrite = () => {
                 height="450px" // 에디터 창 높이
                 toolbarItems={[
                   // 툴바 옵션 설정
-                  ['heading', 'bold', 'italic', 'strike'],
-                  ['hr', 'quote'],
-                  ['ul', 'ol', 'task', 'indent', 'outdent'],
-                  ['table', 'image', 'link'],
-                  ['code', 'codeblock'],
+                  ["heading", "bold", "italic", "strike"],
+                  ["hr", "quote"],
+                  ["ul", "ol", "task", "indent", "outdent"],
+                  ["table", "image", "link"],
+                  ["code", "codeblock"],
                 ]}
-                initialValue={' '}
-                style={{ backgroundColor: 'black' }}
+                initialValue={" "}
+                style={{ backgroundColor: "black" }}
                 useCommandShortcut={false}
               />
             </div>
@@ -175,24 +175,5 @@ const Button = styled.button`
   margin-right: 50px;
   font-family: pretendard;
 `;
-const Tags = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  gap: 10px;
-`;
 
-const TagButton = styled.button`
-  white-space: nowrap;
-  padding: 0 12px;
-  height: 32px;
-  border-radius: 20px;
-  font-family: 'Apple SD Gothic Neo';
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 export default BoardWrite;

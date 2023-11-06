@@ -1,4 +1,4 @@
-import { WRITE } from './types';
+import { WRITE } from "./types";
 
 export function write(data) {
   return {
@@ -6,6 +6,5 @@ export function write(data) {
     title: data.title,
     content: data.content,
     like: data.like,
-    views: data.views,
   };
 }

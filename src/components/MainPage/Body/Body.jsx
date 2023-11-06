@@ -18,10 +18,13 @@ function Body() {
   };
 
   const setTages = useSelector((state) => state.tag.selectedTag);
+
   let selectedTag = "";
   setTages.forEach((tag) => {
+    console.log(tag);
     if (tag.selected) selectedTag = tag.name;
   });
+
   return (
     <S.Body>
       <WrapperLoginChat>
