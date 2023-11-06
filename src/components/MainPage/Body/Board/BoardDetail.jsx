@@ -81,16 +81,9 @@ function BoardDetail() {
       <Header />
       <UniBody>
         <UniContents>
-          <UniTitle>{newTitle}</UniTitle>
-          <div
-            className="markdownDiv"
-            data-color-mode="light"
-            style={{ padding: 15, marginTop: 20 }}
-          >
-            <MDEditor.Markdown source={newContent} />
-          </div>
+          <UniTitle>{newTitle} </UniTitle>
           <ButtonWrapper>
-            <button
+            <StyledButton
               style={{
                 width: "fit-content",
                 whiteSpace: "nowrap",
@@ -106,12 +99,13 @@ function BoardDetail() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
+                  whiteSpace: "nowrap",
                 }}
               >
                 <span>{newLike}</span>
               </div>
-            </button>
-            <button
+            </StyledButton>
+            <StyledButton
               style={{
                 width: "fit-content",
                 whiteSpace: "nowrap",
@@ -120,8 +114,8 @@ function BoardDetail() {
               onClick={handleEdit}
             >
               수정
-            </button>
-            <button
+            </StyledButton>
+            <StyledButton
               style={{
                 width: "fit-content",
                 whiteSpace: "nowrap",
@@ -130,11 +124,20 @@ function BoardDetail() {
               onClick={handleDelete}
             >
               삭제
-            </button>
+            </StyledButton>
           </ButtonWrapper>
+          <div
+            className="markdownDiv"
+            data-color-mode="light"
+            style={{ padding: 15, marginTop: 20 }}
+          >
+            <MDEditor.Markdown source={newContent} />
+          </div>
+        </UniContents>
+        <div style={{ width: "905px", paddingTop: "25px" }}>
           <CommentWrite id={id} />
           <Comment id={id} />
-        </UniContents>
+        </div>
       </UniBody>
     </div>
   );
@@ -142,9 +145,11 @@ function BoardDetail() {
 
 const ButtonWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
+  width: 100%;
+  justify-content: flex-end;
   flex-direction: row;
   gap: 10px;
+  margin-top: 10px;
 `;
 
 const UniContents = styled.div`
@@ -173,7 +178,7 @@ const UniBody = styled.div`
   flex-direction: column;
   padding-top: 50px;
   background-color: #fafafae1;
-  height: 80%;
+  height: 80vh;
   width: 100%;
   margin: 0 auto;
   align-items: center;
@@ -185,4 +190,16 @@ const UniBody = styled.div`
   }
 `;
 
+const StyledButton = styled.button`
+  width: 100px;
+  height: 35px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: pretendard;
+  color: black;
+  border: none;
+  border: 1px solid #e9ecef;
+`;
 export default BoardDetail;
