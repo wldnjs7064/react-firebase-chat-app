@@ -20,12 +20,13 @@ function App(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
   const currentUser = useSelector((state) => state.user.currentUser);
 
+  console.log("cur", currentUser);
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(setUser(user));
-        navigate("/chat");
+        navigate("/mainpage");
       } else {
         dispatch(clearUser());
       }
@@ -34,7 +35,10 @@ function App(props) {
 
   return (
     <Routes>
-      <Route path="/" element={currentUser ? <MainPage /> : <LoginPage />} />
+      <Route
+        path="/mainpage"
+        element={currentUser ? <MainPage /> : <LoginPage />}
+      />
       <Route
         path="/chat"
         element={currentUser ? <ChatPage /> : <LoginPage />}
