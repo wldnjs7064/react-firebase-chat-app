@@ -10,7 +10,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
-import { useDispatch } from "react-redux";
 import CommentWrite from "./Comment/CommentWrite";
 import Comment from "./Comment/Comment";
 
@@ -19,11 +18,9 @@ function BoardDetail() {
   const location = useLocation();
   const id = location.state.id;
   const data = location.state.data;
-  const views = location.state.views;
   const [newTitle, setNewTitle] = useState(data.title);
   const [newContent, setNewContent] = useState(data.content);
   const [newLike, setNewLike] = useState(data.like);
-  const [newViews, setNewViews] = useState(data.views);
 
   const handleDelete = async () => {
     console.log("delete");
@@ -40,18 +37,17 @@ function BoardDetail() {
 
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
-    console.log("like", newLike);
+    alert("좋아요를 눌렀습니다.");
+
+    // 데이터베이스 업데이트
     try {
       await updateDoc(doc(boardDB, "Board", id), {
-        like: newLike,
+        like: newLike + 1,
       });
-      alert("좋아요를 눌렀습니다.");
     } catch (error) {
-      alert(error);
+      console.error("Error updating document: ", error);
     }
-    console.log("like", newLike);
   };
-
   useEffect(() => {
     async function getNewData() {
       const newData = await getDoc(doc(boardDB, "Board", id));
@@ -59,10 +55,25 @@ function BoardDetail() {
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
-      setNewViews(newData.data().views);
     }
     getNewData();
-  }, []);
+  }, [data]);
+
+  useEffect(() => {
+    async function updateLike() {
+      console.log("like", newLike);
+      try {
+        await updateDoc(doc(boardDB, "Board", id), {
+          like: newLike,
+        });
+      } catch (error) {
+        alert(error);
+      }
+    }
+    if (newLike > 0) {
+      updateLike();
+    }
+  }, [id, newLike]);
 
   return (
     <div
@@ -75,7 +86,6 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
-          <div>조회수 : {newViews}</div>
           <UniContent>{newContent}</UniContent>
           <ButtonWrapper>
             <button
@@ -124,6 +134,7 @@ function BoardDetail() {
             </button>
           </ButtonWrapper>
           <CommentWrite id={id} />
+          <Comment id={id} />
         </UniContents>
       </UniBody>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
 import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ function BoardEdit() {
   const editorRef = useRef();
 
   const navigate = useNavigate();
+
   const location = useLocation();
   const docId = location.state.id;
   const data = location.state.data;
@@ -57,37 +58,34 @@ function BoardEdit() {
   };
 
   return (
-    <div>
+    <div style={{ height: "100vh", backgroundColor: "#fafafae1" }}>
       <Header />
-      <div>
-        <form>
+      <Body>
+        <TitleEditorWrapper>
           <TitleWrapper>
-            <p
-              style={{
-                fontFamily: "pretendard",
-                fontSize: "25px",
-              }}
-            ></p>
             <TitleInput
               {...register("title", {
                 required: "제목은 필수 입력 사항입니다.",
               })}
               type="text"
               id="title"
-              name="title"
               defaultValue={data.title}
               onChange={handleTitleChange}
             />
           </TitleWrapper>
-          <>
-            <div style={{ padding: "0px 100px" }}>
+          <EditorTagWrapper>
+            <div
+              style={{
+                height: "450px",
+                width: "1185px",
+                backgroundColor: " white",
+              }}
+            >
               <Editor
                 ref={editorRef}
                 placeholder="내용을 입력해주세요."
-                initialValue={data.content}
                 previewStyle="vertical" // 미리보기 스타일 지정
-                height="300px" // 에디터 창 높이
-                initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
+                height="450px" // 에디터 창 높이
                 toolbarItems={[
                   // 툴바 옵션 설정
                   ["heading", "bold", "italic", "strike"],
@@ -95,25 +93,50 @@ function BoardEdit() {
                   ["ul", "ol", "task", "indent", "outdent"],
                   ["table", "image", "link"],
                   ["code", "codeblock"],
+                  ["heading", "bold", "italic", "strike"],
+                  ["hr", "quote"],
+                  ["ul", "ol", "task", "indent", "outdent"],
+                  ["table", "image", "link"],
+                  ["code", "codeblock"],
                 ]}
+                style={{ backgroundColor: "black" }}
                 useCommandShortcut={false}
-              ></Editor>
+                initialValue={data.content}
+              />
             </div>
-          </>
-          <Buttons>
-            <Button onClick={handleGoBack}>뒤로가기</Button>
-            <Button type="submit" onClick={onSubmit}>
-              수정하기
-            </Button>
-          </Buttons>
-        </form>
-      </div>
+            <Buttons>
+              <Button type="button" onClick={handleGoBack}>
+                뒤로가기
+              </Button>
+              <Button type="submit" onClick={onSubmit}>
+                작성하기
+              </Button>
+            </Buttons>
+          </EditorTagWrapper>
+        </TitleEditorWrapper>
+      </Body>
     </div>
   );
 }
 
+const Body = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const TitleEditorWrapper = styled.div`
+  width: 1185px;
+  display: flex;
+  flex-direction: column;
+`;
+const EditorTagWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const TitleWrapper = styled.div`
-  padding: 50px 0;
+  padding: 100px 0 30px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -122,13 +145,12 @@ const TitleWrapper = styled.div`
 const TitleInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 85%;
+  width: 1185px;
 `;
 const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 100px;
 `;
 const Button = styled.button`
   width: 100px;
