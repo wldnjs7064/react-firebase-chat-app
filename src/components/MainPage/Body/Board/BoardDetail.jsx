@@ -40,19 +40,24 @@ function BoardDetail() {
 
   const handleLike = async () => {
     setNewLike((prev) => prev + 1);
-    console.log("like", newLike);
-    try {
-      await updateDoc(doc(boardDB, "Board", id), {
-        like: newLike,
-      });
-      alert("좋아요를 눌렀습니다.");
-    } catch (error) {
-      alert(error);
-    }
-    console.log("like", newLike);
+    alert("좋아요를 눌렀습니다.");
   };
 
   useEffect(() => {
+    async function updateLike() {
+      console.log("like", newLike);
+      try {
+        await updateDoc(doc(boardDB, "Board", id), {
+          like: newLike,
+        });
+      } catch (error) {
+        alert(error);
+      }
+    }
+    if (newLike > 0) {
+      updateLike();
+    }
+
     async function getNewData() {
       const newData = await getDoc(doc(boardDB, "Board", id));
       console.log("newData views", newData.data().views);
@@ -62,7 +67,7 @@ function BoardDetail() {
       setNewViews(newData.data().views);
     }
     getNewData();
-  }, []);
+  }, [newLike]);
 
   return (
     <div
