@@ -6,6 +6,7 @@ import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { boardDB } from "../../../../firebase";
 import CommentWrite from "./Comment/CommentWrite";
 import Comment from "./Comment/Comment";
+import MDEditor from "@uiw/react-md-editor";
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -81,7 +82,14 @@ function BoardDetail() {
       <UniBody>
         <UniContents>
           <UniTitle>{newTitle}</UniTitle>
-          <UniContent>{newContent}</UniContent>
+          <div
+            className="markdownDiv"
+            data-color-mode="light"
+            style={{ padding: 15 }}
+          >
+            <MDEditor.Markdown source={newContent} />
+          </div>
+
           <ButtonWrapper>
             <button
               style={{
