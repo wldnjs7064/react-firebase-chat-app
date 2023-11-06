@@ -9,6 +9,7 @@ import Comment from "./Comment/Comment";
 import MDEditor from "@uiw/react-md-editor";
 import toast from "react-hot-toast";
 import "@toast-ui/editor/dist/toastui-editor.css";
+import { set } from "lodash";
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -32,37 +33,9 @@ function BoardDetail() {
     });
   };
 
-  // const handleLike = async () => {
-  //   setNewLike((prev) => prev + 1);
-  //   alert("좋아요를 눌렀습니다.");
-  //   // 데이터베이스 업데이트
-  //   try {
-  //     await updateDoc(doc(boardDB, "Board", id), {
-  //       like: newLike + 1,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating document: ", error);
-  //   }
-  // };
-
-  // const handleLike = async () => {
-  //   const updatedLike = newLike + 1;
-  //   setNewLike(updatedLike);
-  //   alert("좋아요를 눌렀습니다.");
-  //   try {
-  //     await updateDoc(doc(boardDB, "Board", id), {
-  //       like: updatedLike,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating document: ", error);
-  //   }
-  // };
-
   const handleLike = async () => {
     const updatedLike = newLike + 1;
     setNewLike(updatedLike);
-    // alert("좋아요를 눌렀습니다.");
-    // 데이터베이스 업데이트
     try {
       await toast.promise(
         updateDoc(doc(boardDB, "Board", id), {
@@ -76,6 +49,7 @@ function BoardDetail() {
       );
       // 데이터베이스에서 문서 다시 가져오기
       const docSnapshot = await getDoc(doc(boardDB, "Board", id));
+      setNewLike(docSnapshot.data().like);
       console.log("Updated like count: ", docSnapshot.data().like);
     } catch (error) {
       console.error("Error updating document: ", error);
@@ -91,22 +65,6 @@ function BoardDetail() {
     }
     getNewData();
   }, [id]);
-
-  useEffect(() => {
-    async function updateLike() {
-      console.log("like", newLike);
-      try {
-        await updateDoc(doc(boardDB, "Board", id), {
-          like: newLike,
-        });
-      } catch (error) {
-        alert(error);
-      }
-    }
-    if (newLike > 0) {
-      updateLike();
-    }
-  }, [id, newLike]);
 
   return (
     <div
