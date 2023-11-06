@@ -65,15 +65,5 @@ const Question = styled.button`
   background-color: white;
   color: #404040;
 `;
-// const Button = styled.button`
-//   border-radius: 10px;
-//   height: 45px;
-//   &:hover {
-//     cursor: pointer;
-//     background-color: aliceblue;
-//   }
-//   background-color: white;
-//   border-color: gray;
-// `;
 
 export default BodyHeader;

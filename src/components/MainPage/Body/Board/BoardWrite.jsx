@@ -58,15 +58,12 @@ const BoardWrite = () => {
 
   const uniqueId = Math.random().toString(36).substr(2, 16);
 
-  // 뒤로가기 버튼
   const handleGoBack = (e) => {
     e.preventDefault();
     navigate(-1);
   };
 
-  // 제목 입력
   const handleTitleChange = (e) => {
-    // e.preventDefault();
     setTitle(e.target.value);
   };
 

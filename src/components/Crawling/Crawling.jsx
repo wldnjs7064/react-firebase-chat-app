@@ -78,7 +78,6 @@ export default function Crawling() {
   const getJob = async (keyword) => {
     const html = await getHtml(keyword);
     const jobs = await parsing(html);
-    console.log(jobs);
   };
 
   useEffect(() => {
