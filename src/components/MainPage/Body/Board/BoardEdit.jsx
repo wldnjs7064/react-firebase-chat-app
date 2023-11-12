@@ -1,15 +1,15 @@
-import React from "react";
-import { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Header from "components/MainPage/Header/Header";
-import { Editor } from "@toast-ui/react-editor";
-import { doc, updateDoc } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
-import { useLocation } from "react-router-dom";
-import toast from "react-hot-toast";
-import "@toast-ui/editor/dist/toastui-editor.css";
+import React from 'react';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Header from 'components/MainPage/Header/Header';
+import { Editor } from '@toast-ui/react-editor';
+import { doc, updateDoc } from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
+import { useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import '@toast-ui/editor/dist/toastui-editor.css';
 
 function BoardEdit() {
   const { register, getValues, setValue } = useForm();
@@ -25,18 +25,18 @@ function BoardEdit() {
     const { title } = getValues();
     e.preventDefault();
     const contentMark = editorRef.current?.getInstance().getMarkdown();
-    if (!title) alert("제목은 필수 입력사항입니다.");
+    if (!title) alert('제목은 필수 입력사항입니다.');
     try {
       await toast.promise(
-        updateDoc(doc(boardDB, "Board", docId), {
+        updateDoc(doc(boardDB, 'Board', docId), {
           title: title,
           content: contentMark,
         }),
         {
-          loading: "수정중...",
-          success: "수정이 완료되었습니다.",
-          error: "수정에 실패했습니다.",
-        }
+          loading: '수정중...',
+          success: '수정이 완료되었습니다.',
+          error: '수정에 실패했습니다.',
+        },
       );
       navigate(-1);
     } catch (error) {
@@ -53,18 +53,18 @@ function BoardEdit() {
   // 제목 입력
   const handleTitleChange = (e) => {
     e.preventDefault();
-    setValue("title", e.target.value);
+    setValue('title', e.target.value);
   };
 
   return (
-    <div style={{ height: "100vh", backgroundColor: "#fafafae1" }}>
+    <div style={{ height: '100vh', backgroundColor: '#fafafae1' }}>
       <Header />
       <Body>
         <TitleEditorWrapper>
           <TitleWrapper>
             <TitleInput
-              {...register("title", {
-                required: "제목은 필수 입력 사항입니다.",
+              {...register('title', {
+                required: '제목은 필수 입력 사항입니다.',
               })}
               type="text"
               id="title"
@@ -75,9 +75,9 @@ function BoardEdit() {
           <EditorTagWrapper>
             <div
               style={{
-                height: "450px",
-                width: "1185px",
-                backgroundColor: " white",
+                height: '450px',
+                width: '1185px',
+                backgroundColor: ' white',
               }}
             >
               <Editor
@@ -87,18 +87,18 @@ function BoardEdit() {
                 height="450px" // 에디터 창 높이
                 toolbarItems={[
                   // 툴바 옵션 설정
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "image", "link"],
-                  ["code", "codeblock"],
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "image", "link"],
-                  ["code", "codeblock"],
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'image', 'link'],
+                  ['code', 'codeblock'],
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'image', 'link'],
+                  ['code', 'codeblock'],
                 ]}
-                style={{ backgroundColor: "black" }}
+                style={{ backgroundColor: 'black' }}
                 useCommandShortcut={false}
                 initialValue={data.content}
               />

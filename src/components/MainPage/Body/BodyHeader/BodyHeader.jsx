@@ -1,13 +1,13 @@
-import { PencilIcon, QuestionProfileIcon } from "assets";
-import React from "react";
-import styled from "styled-components";
-import Filtering from "./HeaderFilter/HeaderFilter";
-import { useNavigate } from "react-router-dom";
+import { PencilIcon, QuestionProfileIcon } from 'assets';
+import React from 'react';
+import styled from 'styled-components';
+import Filtering from './HeaderFilter/HeaderFilter';
+import { useNavigate } from 'react-router-dom';
 
 function BodyHeader() {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/write");
+    navigate('/write');
   };
   return (
     <>

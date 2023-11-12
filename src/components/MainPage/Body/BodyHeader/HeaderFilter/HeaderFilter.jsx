@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import styled from "styled-components";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTag } from "redux/actions/toggle_action";
+import React, { useEffect, useState } from 'react';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import styled from 'styled-components';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTag } from 'redux/actions/toggle_action';
 
 function Filtering() {
   const dispatch = useDispatch();
   const usetags = useSelector((state) => state.tag.selectedTag);
-  const [selectedTag, setSelectedTag] = useState("");
+  const [selectedTag, setSelectedTag] = useState('');
   const selector = useSelector((state) => state.tag.selectedTag);
 
   useEffect(() => {
-    setSelectedTag("");
+    setSelectedTag('');
     Object.keys(selector).forEach((tagKey) => {
       const tag = selector[tagKey];
       if (tag.selected && tag.name !== selectedTag) {
@@ -31,11 +31,7 @@ function Filtering() {
         <ArrowBackIosNewIcon />
       </Icon>
       {usetags.map((tag) => (
-        <Tag
-          key={tag.name}
-          selected={tag.name === selectedTag}
-          onClick={() => handleClick(tag)}
-        >
+        <Tag key={tag.name} selected={tag.name === selectedTag} onClick={() => handleClick(tag)}>
           #{tag.name}
         </Tag>
       ))}
@@ -81,12 +77,12 @@ export const Tag = styled.div`
   padding: 0 12px;
   height: 40px;
   border-radius: 20px;
-  border: 1px solid ${(props) => (props.selected ? "#2C5AF1" : "#cccccc")};
-  font-family: "pretendard";
+  border: 1px solid ${(props) => (props.selected ? '#2C5AF1' : '#cccccc')};
+  font-family: 'pretendard';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  color: ${(props) => (props.selected ? "#2C5AF1" : "#999999")};
+  color: ${(props) => (props.selected ? '#2C5AF1' : '#999999')};
   display: flex;
   justify-content: center;
   align-items: center;

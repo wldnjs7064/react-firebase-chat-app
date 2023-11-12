@@ -1,33 +1,31 @@
-import Header from "components/MainPage/Header/Header";
-import * as S from "../MainPage/style";
-import styled from "styled-components";
-import toast from "react-hot-toast";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import qs from "qs";
+import Header from 'components/MainPage/Header/Header';
+import * as S from '../MainPage/style';
+import styled from 'styled-components';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import qs from 'qs';
 
 export default function Crawling() {
   const { keyword } = qs.parse(window.location.search.slice(1));
   const [jobs, setJobs] = useState([]);
 
   const getJob = async (keyword) => {
-    const jobs = await axios.get(
-      `https://chibbo.hislogs.com/crawl?keyword=${keyword}`
-    );
+    const jobs = await axios.get(`https://chibbo.hislogs.com/crawl?keyword=${keyword}`);
     setJobs(jobs.data);
     Promise.resolve();
   };
 
   useEffect(() => {
-    toast.promise(getJob(keyword || "개발"), {
-      loading: "검색중...",
-      success: "검색 완료!",
-      error: "검색 실패!",
+    toast.promise(getJob(keyword || '개발'), {
+      loading: '검색중...',
+      success: '검색 완료!',
+      error: '검색 실패!',
     });
   }, [keyword]);
 
   const truncate = (str, n) => {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+    return str?.length > n ? str.substr(0, n - 1) + '...' : str;
   };
 
   return (
@@ -38,9 +36,9 @@ export default function Crawling() {
           {jobs.map((job) => {
             return (
               <JobInfo>
-                <Title style={{ fontSize: "13px" }}>{job.company}</Title>
+                <Title style={{ fontSize: '13px' }}>{job.company}</Title>
                 <Content>
-                  <div style={{ fontWeight: "700", fontSize: "16px" }}>
+                  <div style={{ fontWeight: '700', fontSize: '16px' }}>
                     {truncate(job.jobTitle, 90)}
                   </div>
                   <Detail>
@@ -51,9 +49,9 @@ export default function Crawling() {
                   </Detail>
                   <div
                     style={{
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {job.etc}

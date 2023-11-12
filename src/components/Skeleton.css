@@ -6,7 +6,7 @@
 }
 
 .skeleton::after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   top: 0;
@@ -14,12 +14,7 @@
   width: 50%;
   height: 100%;
   animation: sweep 2s infinite;
-  background-image: linear-gradient(
-    to left,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background-image: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.4), transparent);
 }
 
 @keyframes sweep {

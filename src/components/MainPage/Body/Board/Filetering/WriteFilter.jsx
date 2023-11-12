@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { hipTag } from 'libs/Constants/tag';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTag, setTag } from 'redux/actions/toggle_action';
+import { setTag } from 'redux/actions/toggle_action';
 import { FilterId } from 'libs/types/filter';
 
 function WriteFilter() {

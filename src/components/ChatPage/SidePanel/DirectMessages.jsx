@@ -1,17 +1,14 @@
-import React, { Component } from "react";
-import { FaRegSmile } from "react-icons/fa";
-import { connect } from "react-redux";
-import {
-  setCurrentChatRoom,
-  setPrivateChatRoom,
-} from "../../../redux/actions/chatRoom_action";
-import { getDatabase, ref, onChildAdded } from "firebase/database";
+import React, { Component } from 'react';
+import { FaRegSmile } from 'react-icons/fa';
+import { connect } from 'react-redux';
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../redux/actions/chatRoom_action';
+import { getDatabase, ref, onChildAdded } from 'firebase/database';
 
 export class DirectMessages extends Component {
   state = {
-    usersRef: ref(getDatabase(), "users"),
+    usersRef: ref(getDatabase(), 'users'),
     users: [],
-    activeChatRoom: "",
+    activeChatRoom: '',
   };
 
   componentDidMount() {
@@ -27,8 +24,8 @@ export class DirectMessages extends Component {
     onChildAdded(usersRef, (DataSnapshot) => {
       if (currentUserId !== DataSnapshot.key) {
         let user = DataSnapshot.val();
-        user["uid"] = DataSnapshot.key;
-        user["status"] = "offline";
+        user['uid'] = DataSnapshot.key;
+        user['status'] = 'offline';
         usersArray.push(user);
         this.setState({ users: usersArray });
       }
@@ -38,9 +35,7 @@ export class DirectMessages extends Component {
   getChatRoomId = (userId) => {
     const currentUserId = this.props.user.uid;
 
-    return userId > currentUserId
-      ? `${userId}/${currentUserId}`
-      : `${currentUserId}/${userId}`;
+    return userId > currentUserId ? `${userId}/${currentUserId}` : `${currentUserId}/${userId}`;
   };
 
   changeChatRoom = (user) => {
@@ -65,8 +60,7 @@ export class DirectMessages extends Component {
       <li
         key={user.uid}
         style={{
-          backgroundColor:
-            user.uid === this.state.activeChatRoom && "#ffffff45",
+          backgroundColor: user.uid === this.state.activeChatRoom && '#ffffff45',
         }}
         onClick={() => this.changeChatRoom(user)}
       >
@@ -78,14 +72,12 @@ export class DirectMessages extends Component {
     const { users } = this.state;
     return (
       <div>
-        <span style={{ display: "flex", alignItems: "center" }}>
+        <span style={{ display: 'flex', alignItems: 'center' }}>
           <FaRegSmile style={{ marginRight: 3 }} /> DIRECT MESSAGES(
           {users.length})
         </span>
 
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {this.renderDirectMessages(users)}
-        </ul>
+        <ul style={{ listStyleType: 'none', padding: 0 }}>{this.renderDirectMessages(users)}</ul>
       </div>
     );
   }

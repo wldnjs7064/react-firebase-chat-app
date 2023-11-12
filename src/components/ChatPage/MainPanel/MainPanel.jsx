@@ -1,30 +1,23 @@
-import React, { Component } from "react";
-import MessageHeader from "./MessageHeader";
-import Message from "./Message";
-import MessageForm from "./MessageForm";
-import { connect } from "react-redux";
-import { setUserPosts } from "../../../redux/actions/chatRoom_action";
-import Skeleton from "../../Skeleton";
-import {
-  getDatabase,
-  ref,
-  onChildAdded,
-  onChildRemoved,
-  child,
-  off,
-} from "firebase/database";
+import React, { Component } from 'react';
+import MessageHeader from './MessageHeader';
+import Message from './Message';
+import MessageForm from './MessageForm';
+import { connect } from 'react-redux';
+import { setUserPosts } from '../../../redux/actions/chatRoom_action';
+import Skeleton from '../../Skeleton';
+import { getDatabase, ref, onChildAdded, onChildRemoved, child, off } from 'firebase/database';
 
 export class MainPanel extends Component {
   messageEndRef = React.createRef();
 
   state = {
     messages: [],
-    messagesRef: ref(getDatabase(), "messages"),
+    messagesRef: ref(getDatabase(), 'messages'),
     messagesLoading: true,
-    searchTerm: "",
+    searchTerm: '',
     searchResults: [],
     searchLoading: false,
-    typingRef: ref(getDatabase(), "typing"),
+    typingRef: ref(getDatabase(), 'typing'),
     typingUsers: [],
     listenerLists: [],
   };
@@ -40,7 +33,7 @@ export class MainPanel extends Component {
 
   componentDidUpdate() {
     if (this.messageEndRef) {
-      this.messageEndRef.scrollIntoView({ behavior: "smooth" });
+      this.messageEndRef.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -69,28 +62,22 @@ export class MainPanel extends Component {
       }
     });
 
-    this.addToListenerLists(chatRoomId, this.state.typingRef, "child_added");
+    this.addToListenerLists(chatRoomId, this.state.typingRef, 'child_added');
 
     onChildRemoved(child(typingRef, chatRoomId), (DataSnapshot) => {
-      const index = typingUsers.findIndex(
-        (user) => user.id === DataSnapshot.key
-      );
+      const index = typingUsers.findIndex((user) => user.id === DataSnapshot.key);
       if (index !== -1) {
-        typingUsers = typingUsers.filter(
-          (user) => user.id !== DataSnapshot.key
-        );
+        typingUsers = typingUsers.filter((user) => user.id !== DataSnapshot.key);
         this.setState({ typingUsers });
       }
     });
 
-    this.addToListenerLists(chatRoomId, this.state.typingRef, "child_removed");
+    this.addToListenerLists(chatRoomId, this.state.typingRef, 'child_removed');
   };
 
   addToListenerLists = (id, ref, event) => {
     const index = this.state.listenerLists.findIndex((listener) => {
-      return (
-        listener.id === id && listener.ref === ref && listener.event === event
-      );
+      return listener.id === id && listener.ref === ref && listener.event === event;
     });
 
     if (index === -1) {
@@ -103,12 +90,9 @@ export class MainPanel extends Component {
 
   handleSearchMessages = () => {
     const chatRoomMessages = [...this.state.messages];
-    const regex = new RegExp(this.state.searchTerm, "gi");
+    const regex = new RegExp(this.state.searchTerm, 'gi');
     const searchResults = chatRoomMessages.reduce((acc, message) => {
-      if (
-        (message.content && message.content.match(regex)) ||
-        message.user.name.match(regex)
-      ) {
+      if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
         acc.push(message);
       }
       return acc;
@@ -122,7 +106,7 @@ export class MainPanel extends Component {
         searchTerm: event.target.value,
         searchLoading: true,
       },
-      () => this.handleSearchMessages()
+      () => this.handleSearchMessages(),
     );
   };
 
@@ -159,18 +143,14 @@ export class MainPanel extends Component {
   renderMessages = (messages) =>
     messages.length > 0 &&
     messages.map((message) => (
-      <Message
-        key={message.timestamp}
-        message={message}
-        user={this.props.user}
-      />
+      <Message key={message.timestamp} message={message} user={this.props.user} />
     ));
 
-  renderTypingUsers = (typingUsers) => {
+  renderTypingUsers = (typingUsers, i) => {
     return (
       typingUsers.length > 0 &&
       typingUsers.map((user) => (
-        <span>{user.name.userUid}님이 채팅을 입력하고 있습니다...</span>
+        <span key={i}>{user.name.userUid}님이 채팅을 입력하고 있습니다...</span>
       ))
     );
   };
@@ -185,33 +165,25 @@ export class MainPanel extends Component {
     );
 
   render() {
-    const {
-      messages,
-      searchTerm,
-      searchResults,
-      typingUsers,
-      messagesLoading,
-    } = this.state;
+    const { messages, searchTerm, searchResults, typingUsers, messagesLoading } = this.state;
     return (
-      <div style={{ padding: "2rem 2rem 0 2rem" }}>
+      <div style={{ padding: '2rem 2rem 0 2rem' }}>
         <MessageHeader handleSearchChange={this.handleSearchChange} />
 
         <div
           style={{
-            width: "100%",
-            height: "450px",
-            border: ".2rem solid #ececec",
-            borderRadius: "4px",
-            padding: "1rem",
-            marginBottom: "1rem",
-            overflowY: "auto",
+            width: '100%',
+            height: '450px',
+            border: '.2rem solid #ececec',
+            borderRadius: '4px',
+            padding: '1rem',
+            marginBottom: '1rem',
+            overflowY: 'auto',
           }}
         >
           {this.renderMessageSkeleton(messagesLoading)}
 
-          {searchTerm
-            ? this.renderMessages(searchResults)
-            : this.renderMessages(messages)}
+          {searchTerm ? this.renderMessages(searchResults) : this.renderMessages(messages)}
 
           {this.renderTypingUsers(typingUsers)}
           <div ref={(node) => (this.messageEndRef = node)} />

@@ -1,17 +1,17 @@
 @font-face {
-  font-family: "SpoqaHanSansNeo-Regular";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff")
-    format("woff");
+  font-family: 'SpoqaHanSansNeo-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
 body {
   background: #0e101c;
-  font-family: "SpoqaHanSansNeo-Regular";
+  font-family: 'SpoqaHanSansNeo-Regular';
 }
 .auth-wrapper {
   display: flex;
-  font-family: "SpoqaHanSansNeo-Regular";
+  font-family: 'SpoqaHanSansNeo-Regular';
   flex-direction: column;
   min-height: 80vh;
   justify-content: center;
@@ -43,7 +43,7 @@ body {
 }
 .auth-wrapper p::before {
   display: inline;
-  content: "⚠ ";
+  content: '⚠ ';
 }
 .auth-wrapper label {
   line-height: 2;
@@ -76,8 +76,8 @@ body {
   letter-spacing: 2px;
   border-radius: 25px;
 }
-.auth-wrapper button[type="submit"],
-.auth-wrapper input[type="submit"] {
+.auth-wrapper button[type='submit'],
+.auth-wrapper input[type='submit'] {
   background: #7a84eb;
   color: #f0f0f0;
   text-transform: uppercase;
@@ -90,8 +90,8 @@ body {
   border-radius: 25px;
 }
 
-.auth-wrapper button[type="submit"]:hover,
-.auth-wrapper input[type="submit"]:hover {
+.auth-wrapper button[type='submit']:hover,
+.auth-wrapper input[type='submit']:hover {
   background: #636ee6;
 }
 .auth-wrapper img {

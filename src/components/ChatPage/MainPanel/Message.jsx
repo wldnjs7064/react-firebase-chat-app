@@ -1,11 +1,12 @@
-import React from "react";
-import moment from "moment";
+import React from 'react';
+import moment from 'moment';
 
 function Message({ message, user }) {
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
   const isImage = (message) => {
     return (
-      message.hasOwnProperty("image") && !message.hasOwnProperty("content")
+      Object.prototype.hasOwnProperty.call(message, 'image') &&
+      !Object.prototype.hasOwnProperty.call(message, 'content')
     );
   };
   const isMessageMine = (message, user) => {
@@ -14,9 +15,9 @@ function Message({ message, user }) {
     }
   };
   return (
-    <div style={{ marginBottom: "3px", display: "flex" }}>
+    <div style={{ marginBottom: '3px', display: 'flex' }}>
       <img
-        style={{ borderRadius: "10px" }}
+        style={{ borderRadius: '10px' }}
         width={48}
         height={48}
         className="mr-3"
@@ -25,17 +26,15 @@ function Message({ message, user }) {
       />
       <div
         style={{
-          backgroundColor: isMessageMine(message, user) && "#ECECEC",
+          backgroundColor: isMessageMine(message, user) && '#ECECEC',
         }}
       >
         <h6>
           {message.user.name}
-          <span style={{ fontSize: "10px", color: "gray" }}>
-            {timeFromNow(message.timestamp)}
-          </span>
+          <span style={{ fontSize: '10px', color: 'gray' }}>{timeFromNow(message.timestamp)}</span>
         </h6>
         {isImage(message) ? (
-          <img style={{ maxWidth: "300px" }} alt="이미지" src={message.image} />
+          <img style={{ maxWidth: '300px' }} alt="이미지" src={message.image} />
         ) : (
           <p>{message.content}</p>
         )}

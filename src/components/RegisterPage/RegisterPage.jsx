@@ -1,14 +1,10 @@
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import md5 from "md5";
-import Logo from "../../assets/svg/ColoredLogo.svg";
-import { useNavigate } from "react-router-dom";
-import { getDatabase, ref, set } from "firebase/database";
+import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import md5 from 'md5';
+import Logo from '../../assets/svg/ColoredLogo.svg';
+import { useNavigate } from 'react-router-dom';
+import { getDatabase, ref, set } from 'firebase/database';
 
 function RegisterPage() {
   const {
@@ -17,12 +13,12 @@ function RegisterPage() {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const [errorFromSubmit, setErrorFromSubmit] = useState("");
+  const [errorFromSubmit, setErrorFromSubmit] = useState('');
 
   const [loading, setLoading] = useState(false);
 
   const password = useRef();
-  password.current = watch("password");
+  password.current = watch('password');
 
   const navigate = useNavigate();
   const onSubmit = async (data) => {
@@ -30,17 +26,11 @@ function RegisterPage() {
       setLoading(true);
       const auth = getAuth();
 
-      let createdUser = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
+      let createdUser = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
       await updateProfile(auth.currentUser, {
         displayName: data.name,
-        photoURL: `http://gravatar.com/avatar/${md5(
-          createdUser.user.email
-        )}?d=identicon`,
+        photoURL: `http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon`,
       });
 
       //firebase DB에 저장해주기
@@ -48,14 +38,14 @@ function RegisterPage() {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
       });
-      alert("회원가입이 완료되었습니다.");
-      navigate("/login");
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
       setLoading(false);
       setTimeout(() => {
-        setErrorFromSubmit("");
+        setErrorFromSubmit('');
       }, 5000);
     }
   };
@@ -73,53 +63,44 @@ function RegisterPage() {
         <input
           name="email"
           type="email"
-          {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+          {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
         />
         {errors.email && <p>This email field is required</p>}
         <label>Name</label>
-        <input
-          name="name"
-          {...register("name", { required: true, maxLength: 10 })}
-        />
-        {errors.name && errors.name.type === "required" && (
-          <p>This name field is required</p>
-        )}
-        {errors.name && errors.name.type === "maxLength" && (
-          <p>Your input exceed maximum length</p>
-        )}
+        <input name="name" {...register('name', { required: true, maxLength: 10 })} />
+        {errors.name && errors.name.type === 'required' && <p>This name field is required</p>}
+        {errors.name && errors.name.type === 'maxLength' && <p>Your input exceed maximum length</p>}
         <label>Password</label>
         <input
           name="password"
           type="password"
-          {...register("password", { required: true, minLength: 6 })}
+          {...register('password', { required: true, minLength: 6 })}
         />
-        {errors.password && errors.password.type === "required" && (
+        {errors.password && errors.password.type === 'required' && (
           <p>This password field is required</p>
         )}
-        {errors.password && errors.password.type === "minLength" && (
+        {errors.password && errors.password.type === 'minLength' && (
           <p>Password must have at least 6 characters</p>
         )}
         <label>Password Confirm</label>
         <input
           name="password_confirm"
           type="password"
-          {...register("password_confirm", {
+          {...register('password_confirm', {
             required: true,
             validate: (value) => value === password.current,
           })}
         />
-        {errors.password_confirm &&
-          errors.password_confirm.type === "required" && (
-            <p>This password confirm field is required</p>
-          )}
-        {errors.password_confirm &&
-          errors.password_confirm.type === "validate" && (
-            <p>The passwords do not match </p>
-          )}
+        {errors.password_confirm && errors.password_confirm.type === 'required' && (
+          <p>This password confirm field is required</p>
+        )}
+        {errors.password_confirm && errors.password_confirm.type === 'validate' && (
+          <p>The passwords do not match </p>
+        )}
 
         {errorFromSubmit && <p>{errorFromSubmit}</p>}
         <input type="submit" value="이메일로 계속하기" disabled={loading} />
-        <div style={{ textAlign: "center", marginTop: 70 }}>
+        <div style={{ textAlign: 'center', marginTop: 70 }}>
           <a href="../login">이미 계정이 있으시나요? </a>
         </div>
       </form>
