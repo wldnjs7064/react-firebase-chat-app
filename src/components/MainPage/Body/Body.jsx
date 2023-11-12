@@ -13,8 +13,9 @@ function Body() {
   const navigateLogin = () => {
     navigate("/login");
   };
-  const goToRecruit = () => {
-    navigate("/crawling");
+  const goToRecruit = (selectedTag) => {
+    navigate(`/crawling?keyword=${selectedTag}`);
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const setTages = useSelector((state) => state.tag.selectedTag);
@@ -38,7 +39,7 @@ function Body() {
         <BodyHeader />
         <BoardMain />
         {selectedTag && (
-          <ApplyInfoBtn onClick={goToRecruit}>
+          <ApplyInfoBtn onClick={() => goToRecruit(selectedTag)}>
             선택한 {selectedTag} 공고 보러가기
           </ApplyInfoBtn>
         )}
