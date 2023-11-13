@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 function Chat() {
-  return <Chats>채팅방</Chats>;
+  const navigate = useNavigate();
+  const goTochat = () => {
+    navigate('/chat');
+  }
+  return <Chats onClick={goTochat}>채팅방</Chats>;
 }
 const Chats = styled.div`
   border: solid;
