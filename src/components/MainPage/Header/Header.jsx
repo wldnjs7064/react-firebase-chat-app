@@ -21,7 +21,7 @@ function Header() {
     navigate('/login');
   };
   const navigateRecruit = () => {
-    navigate('/recruit');
+    navigate('/crawling');
   };
   return (
     <S.Wrapper>
