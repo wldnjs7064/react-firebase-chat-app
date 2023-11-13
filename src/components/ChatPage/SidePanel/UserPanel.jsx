@@ -2,17 +2,20 @@ import React, { useRef } from 'react';
 import { IoIosChatboxes } from 'react-icons/io';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Image from 'react-bootstrap/Image';
+import ChatLogo from '../../../assets/svg/ChatLogo.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPhotoURL } from '../../../redux/actions/user_action';
 import { getDatabase, ref, child, update } from 'firebase/database';
 import { getAuth, signOut, updateProfile } from 'firebase/auth';
 import { getStorage, ref as strRef, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
 
 function UserPanel() {
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
   const inputOpenImageRef = useRef();
-
+  const navigate = useNavigate();
+  
   const handleLogout = () => {
     const auth = getAuth();
     signOut(auth)
@@ -24,6 +27,9 @@ function UserPanel() {
       });
   };
 
+  const goTomain = () => {
+    navigate('/mainpage');
+  }
   const handleOpenImageRef = () => {
     inputOpenImageRef.current.click();
   };
@@ -104,7 +110,7 @@ function UserPanel() {
     <div>
       {/* Logo */}
       <h3 style={{ color: 'white' }}>
-        <IoIosChatboxes /> Chat App
+        <img src={ChatLogo} onClick={goTomain}/>
       </h3>
 
       <div style={{ display: 'flex', marginBottom: '1rem' }}>
