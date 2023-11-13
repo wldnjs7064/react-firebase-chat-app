@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import BoardList from "./BoardList";
+import styled from 'styled-components';
+import BoardList from './BoardList';
 
 function BoardMain() {
   return (

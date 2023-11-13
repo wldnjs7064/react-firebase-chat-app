@@ -1,4 +1,4 @@
-const { useEffect, useRef } = require("react");
+const { useEffect, useRef } = require('react');
 
 export const useDidMountEffect = (func, deps) => {
   const didMount = useRef(false);

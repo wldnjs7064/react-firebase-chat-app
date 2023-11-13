@@ -1,25 +1,27 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ForwardArrow, ProfileIcon } from "../../../assets";
-import * as S from "../style";
-import Chat from "./Chat/Chat";
-import styled from "styled-components";
-import BodyHeader from "./BodyHeader/BodyHeader";
-import BoardMain from "./Board/BoardMain";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ForwardArrow, ProfileIcon } from '../../../assets';
+import * as S from '../style';
+import Chat from './Chat/Chat';
+import styled from 'styled-components';
+import BodyHeader from './BodyHeader/BodyHeader';
+import BoardMain from './Board/BoardMain';
+import { useSelector } from 'react-redux';
 
 function Body() {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const navigateLogin = () => {
-    navigate("/login");
+    navigate('/login');
   };
-  const goToRecruit = () => {
-    navigate("/crawling");
+  const goToRecruit = (selectedTag) => {
+    navigate(`/crawling?keyword=${selectedTag}`);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const setTages = useSelector((state) => state.tag.selectedTag);
 
-  let selectedTag = "";
+  let selectedTag = '';
   setTages.forEach((tag) => {
     if (tag.selected) selectedTag = tag.name;
   });
@@ -27,18 +29,27 @@ function Body() {
   return (
     <S.Body>
       <WrapperLoginChat>
-        <S.Login onClick={navigateLogin}>
-          <ProfileIcon />
-          로그인해주세요
-          <ForwardArrow />
-        </S.Login>
+        {currentUser ? (
+          <S.Login>
+            <img style={{ borderRadius: '100%' }} src={currentUser.photoURL} alt="" />
+            <p>{currentUser.displayName}</p>
+            <ForwardArrow />
+          </S.Login>
+        ) : (
+          <S.Login onClick={navigateLogin}>
+            <ProfileIcon />
+            로그인해주세요
+            <ForwardArrow />
+          </S.Login>
+        )}
+
         <Chat />
       </WrapperLoginChat>
       <RightWrapper>
         <BodyHeader />
         <BoardMain />
         {selectedTag && (
-          <ApplyInfoBtn onClick={goToRecruit}>
+          <ApplyInfoBtn onClick={() => goToRecruit(selectedTag)}>
             선택한 {selectedTag} 공고 보러가기
           </ApplyInfoBtn>
         )}

@@ -1,21 +1,21 @@
-import { boardDB } from "../../../../firebase.js";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { write } from "redux/actions/write_action.js";
-import MDEditor from "@uiw/react-md-editor";
+import { boardDB } from '../../../../firebase.js';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { write } from 'redux/actions/write_action.js';
+import MDEditor from '@uiw/react-md-editor';
 
 function BoardList() {
   const [DBData, setDBData] = useState([]);
-  const [selectTag, setSelectTag] = useState("");
+  const [selectTag, setSelectTag] = useState('');
   const navigate = useNavigate();
   const selector = useSelector((state) => state.tag.selectedTag);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setSelectTag("");
+    setSelectTag('');
     Object.keys(selector).forEach((tagKey) => {
       const tag = selector[tagKey];
       if (tag.selected && tag.name !== selectTag) {
@@ -27,22 +27,18 @@ function BoardList() {
   useEffect(() => {
     // Avoid infinite loop by checking if selectTag has changed
     getContents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectTag]);
 
   const getContents = async () => {
-    if (selectTag === "") {
-      const boardRef = query(
-        collection(boardDB, "Board"),
-        orderBy("date", "desc")
-      );
+    if (selectTag === '') {
+      const boardRef = query(collection(boardDB, 'Board'), orderBy('date', 'desc'));
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
     } else {
       const boardRef = query(
-        collection(boardDB, "Board"),
-        orderBy("date", "desc"),
-        where("tag", "==", selectTag)
+        collection(boardDB, 'Board'),
+        orderBy('date', 'desc'),
+        where('tag', '==', selectTag),
       );
       const boardSnapshot = await getDocs(boardRef);
       setDBData(boardSnapshot.docs);
@@ -57,7 +53,7 @@ function BoardList() {
   };
 
   return (
-    <ContentList style={{ overflowY: "scroll", overflowX: "hidden" }}>
+    <ContentList style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
       {DBData.map((doc) => (
         <Contents
           key={doc.id}
@@ -71,11 +67,11 @@ function BoardList() {
             data-color-mode="light"
             style={{
               padding: 15,
-              width: "100%",
-              height: "50px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              width: '100%',
+              height: '50px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             <MDEditor.Markdown source={doc.data().content} />
@@ -106,6 +102,7 @@ const Title = styled.h3`
   font-weight: bold;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const Content = styled.p`
   font-size: 15px;
   width: 100%;
@@ -124,7 +121,7 @@ const Contents = styled.div`
     display: none; /* 크롬, 사파리, 오페라 브라우저 */
   }
   &::after {
-    content: "";
+    content: '';
     width: 80px;
     height: 2px;
     background-color: rebeccapurple;

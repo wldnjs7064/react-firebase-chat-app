@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../../Header/Header";
-import styled from "styled-components";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
-import { boardDB } from "../../../../firebase";
-import CommentWrite from "./Comment/CommentWrite";
-import Comment from "./Comment/Comment";
-import MDEditor from "@uiw/react-md-editor";
-import toast from "react-hot-toast";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { set } from "lodash";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../Header/Header';
+import styled from 'styled-components';
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { boardDB } from '../../../../firebase';
+import CommentWrite from './Comment/CommentWrite';
+import Comment from './Comment/Comment';
+import MDEditor from '@uiw/react-md-editor';
+import toast from 'react-hot-toast';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { set } from 'lodash';
 
 function BoardDetail() {
   const navigate = useNavigate();
@@ -21,9 +21,9 @@ function BoardDetail() {
   const [newLike, setNewLike] = useState(data.like);
 
   const handleDelete = async () => {
-    console.log("delete");
-    await deleteDoc(doc(boardDB, "Board", id));
-    alert("삭제되었습니다.");
+    console.log('delete');
+    await deleteDoc(doc(boardDB, 'Board', id));
+    alert('삭제되었습니다.');
     navigate(-1);
   };
 
@@ -38,27 +38,27 @@ function BoardDetail() {
     setNewLike(updatedLike);
     try {
       await toast.promise(
-        updateDoc(doc(boardDB, "Board", id), {
+        updateDoc(doc(boardDB, 'Board', id), {
           like: updatedLike,
         }),
         {
-          loading: "좋아요를 누르는 중...",
-          success: "좋아요를 눌렀습니다.",
-          error: "좋아요를 누르는데 실패했습니다.",
-        }
+          loading: '좋아요를 누르는 중...',
+          success: '좋아요를 눌렀습니다.',
+          error: '좋아요를 누르는데 실패했습니다.',
+        },
       );
       // 데이터베이스에서 문서 다시 가져오기
-      const docSnapshot = await getDoc(doc(boardDB, "Board", id));
+      const docSnapshot = await getDoc(doc(boardDB, 'Board', id));
       setNewLike(docSnapshot.data().like);
-      console.log("Updated like count: ", docSnapshot.data().like);
+      console.log('Updated like count: ', docSnapshot.data().like);
     } catch (error) {
-      console.error("Error updating document: ", error);
+      console.error('Error updating document: ', error);
     }
   };
 
   useEffect(() => {
     async function getNewData() {
-      const newData = await getDoc(doc(boardDB, "Board", id));
+      const newData = await getDoc(doc(boardDB, 'Board', id));
       setNewTitle(newData.data().title);
       setNewContent(newData.data().content);
       setNewLike(newData.data().like);
@@ -69,8 +69,8 @@ function BoardDetail() {
   return (
     <div
       style={{
-        height: "100vh",
-        backgroundColor: "#fafafae1",
+        height: '100vh',
+        backgroundColor: '#fafafae1',
       }}
     >
       <Header />
@@ -80,21 +80,21 @@ function BoardDetail() {
           <ButtonWrapper>
             <StyledButton
               style={{
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "row",
-                gap: "10px",
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '10px',
               }}
               onClick={handleLike}
             >
               좋아요
               <div
                 style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  whiteSpace: "nowrap",
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 <span>{newLike}</span>
@@ -102,9 +102,9 @@ function BoardDetail() {
             </StyledButton>
             <StyledButton
               style={{
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleEdit}
             >
@@ -112,9 +112,9 @@ function BoardDetail() {
             </StyledButton>
             <StyledButton
               style={{
-                width: "fit-content",
-                whiteSpace: "nowrap",
-                textAlign: "center",
+                width: 'fit-content',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
               onClick={handleDelete}
             >
@@ -127,14 +127,14 @@ function BoardDetail() {
             style={{
               padding: 15,
               marginTop: 20,
-              height: "100%",
-              overflow: "scroll",
+              height: '100%',
+              overflow: 'scroll',
             }}
           >
             <MDEditor.Markdown source={newContent} />
           </div>
         </UniContents>
-        <div style={{ width: "905px", paddingTop: "25px" }}>
+        <div style={{ width: '905px', paddingTop: '25px' }}>
           <CommentWrite id={id} />
           <Comment id={id} />
         </div>

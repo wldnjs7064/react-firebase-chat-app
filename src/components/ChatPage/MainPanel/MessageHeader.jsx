@@ -1,32 +1,23 @@
-import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import Image from "react-bootstrap/Image";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { FaLock, FaLockOpen } from "react-icons/fa";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-import { AiOutlineSearch } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  child,
-  update,
-  remove,
-} from "firebase/database";
+import React, { useState, useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import Image from 'react-bootstrap/Image';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import { FaLock, FaLockOpen } from 'react-icons/fa';
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
+import { getDatabase, ref, onValue, child, update, remove } from 'firebase/database';
 
 function MessageHeader({ handleSearchChange }) {
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
-  const isPrivateChatRoom = useSelector(
-    (state) => state.chatRoom.isPrivateChatRoom
-  );
-  const usersRef = ref(getDatabase(), "users");
+  const isPrivateChatRoom = useSelector((state) => state.chatRoom.isPrivateChatRoom);
+  const usersRef = ref(getDatabase(), 'users');
   const user = useSelector((state) => state.user.currentUser);
   const [isFavorited, setIsFavorited] = useState(false);
   const userPosts = useSelector((state) => state.chatRoom.userPosts);
@@ -68,7 +59,7 @@ function MessageHeader({ handleSearchChange }) {
     Object.entries(userPosts)
       .sort((a, b) => b[1].count - a[1].count)
       .map(([key, val], i) => (
-        <div key={i} style={{ display: "flex" }}>
+        <div key={i} style={{ display: 'flex' }}>
           <img
             style={{ borderRadius: 25 }}
             width={48}
@@ -87,12 +78,12 @@ function MessageHeader({ handleSearchChange }) {
   return (
     <div
       style={{
-        width: "100%",
-        height: "190px",
-        border: ".2rem solid #ececec",
-        borderRadius: "4px",
-        padding: "1rem",
-        marginBottom: "1rem",
+        width: '100%',
+        height: '190px',
+        border: '.2rem solid #ececec',
+        borderRadius: '4px',
+        padding: '1rem',
+        marginBottom: '1rem',
       }}
     >
       <Container>
@@ -100,17 +91,17 @@ function MessageHeader({ handleSearchChange }) {
           <Col>
             <h2>
               {isPrivateChatRoom ? (
-                <FaLock style={{ marginBottom: "10px" }} />
+                <FaLock style={{ marginBottom: '10px' }} />
               ) : (
-                <FaLockOpen style={{ marginBottom: "10px" }} />
+                <FaLockOpen style={{ marginBottom: '10px' }} />
               )}
               {chatRoom && chatRoom.name}
               {!isPrivateChatRoom && (
-                <span style={{ cursor: "pointer" }} onClick={handleFavorite}>
+                <span style={{ cursor: 'pointer' }} onClick={handleFavorite}>
                   {isFavorited ? (
-                    <MdFavorite style={{ marginBottom: "10px" }} />
+                    <MdFavorite style={{ marginBottom: '10px' }} />
                   ) : (
-                    <MdFavoriteBorder style={{ marginBottom: "10px" }} />
+                    <MdFavoriteBorder style={{ marginBottom: '10px' }} />
                   )}
                 </span>
               )}
@@ -131,13 +122,13 @@ function MessageHeader({ handleSearchChange }) {
           </Col>
         </Row>
         {!isPrivateChatRoom && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <p>
               <Image
                 src={chatRoom && chatRoom.createdBy.image}
                 roundedCircle
-                style={{ width: "30px", height: "30px" }}
-              />{" "}
+                style={{ width: '30px', height: '30px' }}
+              />{' '}
               {chatRoom && chatRoom.createdBy.name}
             </p>
           </div>
@@ -158,9 +149,7 @@ function MessageHeader({ handleSearchChange }) {
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Chat Count</Accordion.Header>
                 <Accordion.Collapse eventKey="0">
-                  <Card.Body>
-                    {userPosts && renderUserPosts(userPosts)}
-                  </Card.Body>
+                  <Card.Body>{userPosts && renderUserPosts(userPosts)}</Card.Body>
                 </Accordion.Collapse>
               </Accordion.Item>
             </Accordion>

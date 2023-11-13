@@ -1,15 +1,12 @@
-import React, { Component } from "react";
-import { FaRegSmileWink } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Badge from "react-bootstrap/Badge";
-import { connect } from "react-redux";
-import {
-  setCurrentChatRoom,
-  setPrivateChatRoom,
-} from "../../../redux/actions/chatRoom_action";
+import React, { Component } from 'react';
+import { FaRegSmileWink } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Badge from 'react-bootstrap/Badge';
+import { connect } from 'react-redux';
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../redux/actions/chatRoom_action';
 import {
   getDatabase,
   ref,
@@ -19,18 +16,18 @@ import {
   child,
   update,
   off,
-} from "firebase/database";
+} from 'firebase/database';
 
 export class ChatRooms extends Component {
   state = {
     show: false,
-    name: "",
-    description: "",
-    chatRoomsRef: ref(getDatabase(), "chatRooms"),
-    messagesRef: ref(getDatabase(), "messages"),
+    name: '',
+    description: '',
+    chatRoomsRef: ref(getDatabase(), 'chatRooms'),
+    messagesRef: ref(getDatabase(), 'messages'),
     chatRooms: [],
     firstLoad: true,
-    activeChatRoomId: "",
+    activeChatRoomId: '',
     notifications: [],
   };
 
@@ -56,9 +53,7 @@ export class ChatRooms extends Component {
 
     onChildAdded(this.state.chatRoomsRef, (DataSnapshot) => {
       chatRoomsArray.push(DataSnapshot.val());
-      this.setState({ chatRooms: chatRoomsArray }, () =>
-        this.setFirstChatRoom()
-      );
+      this.setState({ chatRooms: chatRoomsArray }, () => this.setFirstChatRoom());
       this.addNotificationListener(DataSnapshot.key);
     });
   };
@@ -71,23 +66,16 @@ export class ChatRooms extends Component {
           chatRoomId,
           this.props.chatRoom.id,
           this.state.notifications,
-          DataSnapshot
+          DataSnapshot,
         );
       }
     });
   };
 
-  handleNotification = (
-    chatRoomId,
-    currentChatRoomId,
-    notifications,
-    DataSnapshot
-  ) => {
+  handleNotification = (chatRoomId, currentChatRoomId, notifications, DataSnapshot) => {
     let lastTotal = 0;
 
-    let index = notifications.findIndex(
-      (notification) => notification.id === chatRoomId
-    );
+    let index = notifications.findIndex((notification) => notification.id === chatRoomId);
 
     if (index === -1) {
       notifications.push({
@@ -137,8 +125,8 @@ export class ChatRooms extends Component {
     try {
       await update(child(this.state.chatRoomsRef, key), newChatRoom);
       this.setState({
-        name: "",
-        description: "",
+        name: '',
+        description: '',
         show: false,
       });
     } catch (error) {
@@ -171,13 +159,12 @@ export class ChatRooms extends Component {
       <li
         key={room.id}
         style={{
-          backgroundColor:
-            room.id === this.state.activeChatRoomId && "#ffffff45",
+          backgroundColor: room.id === this.state.activeChatRoomId && '#ffffff45',
         }}
         onClick={() => this.changeChatRoom(room)}
       >
         # {room.name}
-        <Badge style={{ float: "right", marginTop: "4px" }} variant="danger">
+        <Badge style={{ float: 'right', marginTop: '4px' }} variant="danger">
           {this.getNotificationCount(room)}
         </Badge>
       </li>
@@ -188,10 +175,10 @@ export class ChatRooms extends Component {
       <div>
         <div
           style={{
-            position: "relative",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
+            position: 'relative',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <FaRegSmileWink style={{ marginRight: 3 }} />
@@ -199,14 +186,14 @@ export class ChatRooms extends Component {
           <FaPlus
             onClick={this.handleShow}
             style={{
-              position: "absolute",
+              position: 'absolute',
               right: 0,
-              cursor: "pointer",
+              cursor: 'pointer',
             }}
           />
         </div>
 
-        <ul style={{ listStyleType: "none", padding: 0 }}>
+        <ul style={{ listStyleType: 'none', padding: 0 }}>
           {this.renderChatRooms(this.state.chatRooms)}
         </ul>
 
@@ -228,9 +215,7 @@ export class ChatRooms extends Component {
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>방 설명</Form.Label>
                 <Form.Control
-                  onChange={(e) =>
-                    this.setState({ description: e.target.value })
-                  }
+                  onChange={(e) => this.setState({ description: e.target.value })}
                   type="text"
                   placeholder="Enter a chat room description"
                 />

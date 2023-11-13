@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Profile = styled.div`
   border-radius: 50%;
@@ -21,7 +21,7 @@ export const Login = styled.div`
   border-width: thin;
   border-color: #cccccc;
   /* margin-left: 340px; */
-  font-family: "pretendard";
+  font-family: 'pretendard';
   font-size: 20px;
   color: #404040;
   gap: 12px;
@@ -63,7 +63,7 @@ export const Category = styled.span`
   align-items: center;
   width: fit-content;
   height: 100%;
-  font-family: "pretendard";
+  font-family: 'pretendard';
   white-space: nowrap;
   min-width: fit-content;
   &:hover {
@@ -96,7 +96,7 @@ export const SigninButton = styled.div`
   background-color: white;
   border-color: #438afc;
   padding: 7px 25px;
-  font-family: "pretendard";
+  font-family: 'pretendard';
   color: #438afc;
   min-width: 162px;
   height: 40px;

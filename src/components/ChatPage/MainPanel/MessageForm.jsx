@@ -1,34 +1,27 @@
-import React, { useState, useRef } from "react";
-import Form from "react-bootstrap/Form";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { getDatabase, ref, set, remove, push, child } from "firebase/database";
-import { useSelector } from "react-redux";
-import {
-  getStorage,
-  ref as strRef,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import React, { useState, useRef } from 'react';
+import Form from 'react-bootstrap/Form';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { getDatabase, ref, set, remove, push, child } from 'firebase/database';
+import { useSelector } from 'react-redux';
+import { getStorage, ref as strRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 function MessageForm() {
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const user = useSelector((state) => state.user.currentUser);
   const [percentage, setPercentage] = useState(0);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const messagesRef = ref(getDatabase(), "messages");
-  const typingRef = ref(getDatabase(), "typing");
+  const messagesRef = ref(getDatabase(), 'messages');
+  const typingRef = ref(getDatabase(), 'typing');
   const inputOpenImageRef = useRef();
   // const storageRef = strRef(getStorage());
   const handleChange = (event) => {
     setContent(event.target.value);
   };
-  const isPrivateChatRoom = useSelector(
-    (state) => state.chatRoom.isPrivateChatRoom
-  );
+  const isPrivateChatRoom = useSelector((state) => state.chatRoom.isPrivateChatRoom);
   const createMessage = (fileUrl = null) => {
     const message = {
       timestamp: new Date(),
@@ -40,16 +33,16 @@ function MessageForm() {
     };
 
     if (fileUrl !== null) {
-      message["image"] = fileUrl;
+      message['image'] = fileUrl;
     } else {
-      message["content"] = content;
+      message['content'] = content;
     }
 
     return message;
   };
   const handleSubmit = async () => {
     if (!content) {
-      setErrors((prev) => prev.concat("Type contents first"));
+      setErrors((prev) => prev.concat('Type contents first'));
       return;
     }
     setLoading(true);
@@ -58,7 +51,7 @@ function MessageForm() {
       await set(push(child(messagesRef, chatRoom.id)), createMessage());
       await remove(child(typingRef, `${chatRoom.id}/${user.uid}`));
       setLoading(false);
-      setContent("");
+      setContent('');
       setErrors([]);
     } catch (error) {
       setErrors((pre) => pre.concat(error.message));
@@ -83,7 +76,7 @@ function MessageForm() {
     const storage = getStorage();
 
     const filePath = `${getPath()}/${file.name}`;
-    console.log("filePath", filePath);
+    console.log('filePath', filePath);
     const metadata = { contentType: file.type };
     setLoading(true);
     try {
@@ -94,18 +87,17 @@ function MessageForm() {
 
       // Listen for state changes, errors, and completion of the upload.
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot) => {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
+            case 'paused':
+              console.log('Upload is paused');
               break;
-            case "running":
-              console.log("Upload is running");
+            case 'running':
+              console.log('Upload is running');
               break;
           }
         },
@@ -113,16 +105,16 @@ function MessageForm() {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
           switch (error.code) {
-            case "storage/unauthorized":
+            case 'storage/unauthorized':
               // User doesn't have permission to access the object
               break;
-            case "storage/canceled":
+            case 'storage/canceled':
               // User canceled the upload
               break;
 
             // ...
 
-            case "storage/unknown":
+            case 'storage/unknown':
               // Unknown error occurred, inspect error.serverResponse
               break;
           }
@@ -131,13 +123,10 @@ function MessageForm() {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             // console.log('File available at', downloadURL);
-            set(
-              push(child(messagesRef, chatRoom.id)),
-              createMessage(downloadURL)
-            );
+            set(push(child(messagesRef, chatRoom.id)), createMessage(downloadURL));
             setLoading(false);
           });
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -172,16 +161,12 @@ function MessageForm() {
         </Form.Group>
       </Form>
       {!(percentage === 0 || percentage === 100) && (
-        <ProgressBar
-          variant="warning"
-          label={`${percentage}%`}
-          now={percentage}
-        />
+        <ProgressBar variant="warning" label={`${percentage}%`} now={percentage} />
       )}
 
       <div>
         {errors.map((errorMsg) => (
-          <p style={{ color: "red" }} key={errorMsg}>
+          <p style={{ color: 'red' }} key={errorMsg}>
             {errorMsg}
           </p>
         ))}
@@ -191,7 +176,7 @@ function MessageForm() {
           <button
             onClick={handleSubmit}
             className="message-form-button"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             disabled={loading ? true : false}
           >
             SEND
@@ -201,7 +186,7 @@ function MessageForm() {
           <button
             onClick={handleOpenImageRef}
             className="message-form-button"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             disabled={loading ? true : false}
           >
             UPLOAD
@@ -210,7 +195,7 @@ function MessageForm() {
       </Row>
       <input
         accept="image/jpeg, image/png"
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         type="file"
         ref={inputOpenImageRef}
         onChange={handleUploadImage}

@@ -1,8 +1,8 @@
-import { WRITE } from "../actions/types";
+import { WRITE } from '../actions/types';
 
 const InitializeWriteState = {
-  title: "",
-  content: "",
+  title: '',
+  content: '',
   like: 0,
 };
 

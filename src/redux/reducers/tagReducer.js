@@ -1,31 +1,31 @@
 // reducers.js
 
-import { SELECT_TAG } from "redux/actions/types";
+import { SELECT_TAG } from 'redux/actions/types';
 
 const initialState = {
   selectedTag: [
     {
-      name: "FE",
+      name: 'FE',
       selected: false,
     },
     {
-      name: "BE",
+      name: 'BE',
       selected: false,
     },
     {
-      name: "AI",
+      name: 'AI',
       selected: false,
     },
     {
-      name: "GAME",
+      name: 'GAME',
       selected: false,
     },
     {
-      name: "PM",
+      name: 'PM',
       selected: false,
     },
     {
-      name: "ETC",
+      name: 'ETC',
       selected: false,
     },
   ],
@@ -39,7 +39,7 @@ const tagReducer = (state = initialState, action) => {
         selectedTag: state.selectedTag.map((tag) =>
           tag.name === action.payload
             ? { ...tag, selected: !tag.selected }
-            : { ...tag, selected: false }
+            : { ...tag, selected: false },
         ),
       };
 

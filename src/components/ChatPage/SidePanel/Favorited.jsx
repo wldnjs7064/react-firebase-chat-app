@@ -1,25 +1,15 @@
-import React, { Component } from "react";
-import { FaRegSmileBeam } from "react-icons/fa";
-import { connect } from "react-redux";
-import {
-  setCurrentChatRoom,
-  setPrivateChatRoom,
-} from "../../../redux/actions/chatRoom_action";
+import React, { Component } from 'react';
+import { FaRegSmileBeam } from 'react-icons/fa';
+import { connect } from 'react-redux';
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../redux/actions/chatRoom_action';
 
-import {
-  child,
-  getDatabase,
-  ref,
-  onChildAdded,
-  onChildRemoved,
-  off,
-} from "firebase/database";
+import { child, getDatabase, ref, onChildAdded, onChildRemoved, off } from 'firebase/database';
 
 export class Favorited extends Component {
   state = {
     favoritedChatRooms: [],
-    activeChatRoomId: "",
-    userRef: ref(getDatabase(), "users"),
+    activeChatRoomId: '',
+    userRef: ref(getDatabase(), 'users'),
   };
 
   componentDidMount() {
@@ -45,20 +35,15 @@ export class Favorited extends Component {
     onChildAdded(child(userRef, `${userId}/favorited`), (DataSnapshot) => {
       const favoritedChatRoom = { id: DataSnapshot.key, ...DataSnapshot.val() };
       this.setState({
-        favoritedChatRooms: [
-          ...this.state.favoritedChatRooms,
-          favoritedChatRoom,
-        ],
+        favoritedChatRooms: [...this.state.favoritedChatRooms, favoritedChatRoom],
       });
     });
 
     onChildRemoved(child(userRef, `${userId}/favorited`), (DataSnapshot) => {
       const chatRoomToRemove = { id: DataSnapshot.key, ...DataSnapshot.val() };
-      const filteredChatRooms = this.state.favoritedChatRooms.filter(
-        (chatRoom) => {
-          return chatRoom.id !== chatRoomToRemove.id;
-        }
-      );
+      const filteredChatRooms = this.state.favoritedChatRooms.filter((chatRoom) => {
+        return chatRoom.id !== chatRoomToRemove.id;
+      });
       this.setState({ favoritedChatRooms: filteredChatRooms });
     });
   };
@@ -76,8 +61,7 @@ export class Favorited extends Component {
         key={chatRoom.id}
         onClick={() => this.changeChatRoom(chatRoom)}
         style={{
-          backgroundColor:
-            chatRoom.id === this.state.activeChatRoomId && "#ffffff45",
+          backgroundColor: chatRoom.id === this.state.activeChatRoomId && '#ffffff45',
         }}
       >
         # {chatRoom.name}
@@ -88,11 +72,11 @@ export class Favorited extends Component {
     const { favoritedChatRooms } = this.state;
     return (
       <div>
-        <span style={{ display: "flex", alignItems: "center" }}>
-          <FaRegSmileBeam style={{ marginRight: "3px" }} />
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+          <FaRegSmileBeam style={{ marginRight: '3px' }} />
           FAVORITED ({favoritedChatRooms.length})
         </span>
-        <ul style={{ listStyleType: "none", padding: "0" }}>
+        <ul style={{ listStyleType: 'none', padding: '0' }}>
           {this.renderFavoritedChatRooms(favoritedChatRooms)}
         </ul>
       </div>

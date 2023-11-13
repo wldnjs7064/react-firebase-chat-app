@@ -1,4 +1,4 @@
-import { WRITE } from "./types";
+import { WRITE } from './types';
 
 export function write(data) {
   return {
